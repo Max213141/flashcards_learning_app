@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:flashcards_learning_app/flashcard_side.dart';
+import 'package:flashcards_learning_app/screens/test_screen/widgets/flashcard_side.dart';
 import 'package:flashcards_learning_app/rotation_widget/widget_flipper.dart';
-import 'package:flashcards_learning_app/word.dart';
+import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

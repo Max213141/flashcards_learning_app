@@ -70,11 +70,11 @@ class _WidgetFlipperState extends State<WidgetFlipper>
     _updateRotations(true);
   }
 
-  void _leftRotation() {
+  void _topRotation() {
     _toggleSide(false);
   }
 
-  void _rightRotation() {
+  void _bottomRotation() {
     _toggleSide(true);
   }
 
@@ -115,21 +115,21 @@ class _WidgetFlipperState extends State<WidgetFlipper>
       fit: StackFit.expand,
       children: <Widget>[
         GestureDetector(
-          onTap: _leftRotation,
+          onTap: _topRotation,
           child: FractionallySizedBox(
-            widthFactor: 0.5,
-            heightFactor: 1.0,
-            alignment: Alignment.topLeft,
-            child: Container(color: Colors.transparent),
+            widthFactor: 1.0,
+            heightFactor: 0.5,
+            alignment: Alignment.bottomCenter,
+            child: Container(color: const Color.fromARGB(0, 255, 255, 255)),
           ),
         ),
         GestureDetector(
-          onTap: _rightRotation,
+          onTap: _bottomRotation,
           child: FractionallySizedBox(
-            widthFactor: 0.5,
-            heightFactor: 1.0,
-            alignment: Alignment.topRight,
-            child: Container(color: Colors.transparent),
+            widthFactor: 1.0,
+            heightFactor: 0.5,
+            alignment: Alignment.topCenter,
+            child: Container(color: const Color.fromARGB(0, 255, 255, 255)),
           ),
         ),
       ],

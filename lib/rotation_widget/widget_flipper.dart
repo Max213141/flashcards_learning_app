@@ -97,8 +97,8 @@ class _WidgetFlipperState extends State<WidgetFlipper>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.sizeOf(context).height * .5,
+    return ConstrainedBox(
+      constraints: BoxConstraints.expand(width: 355, height: 475),
       child: Stack(
         fit: StackFit.expand,
         children: [

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flashcards_learning_app/screens/test_screen/test_screen.dart';
 import 'package:flashcards_learning_app/screens/test_screen/widgets/flashcard_side.dart';
 import 'package:flashcards_learning_app/rotation_widget/widget_flipper.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: TestScreen(),
     );
   }
 }
@@ -30,50 +31,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Word> wordsList = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    getData();
-  }
-
-  Future<void> getData() async {
-    String response = await rootBundle.loadString('assets/mock_data.json');
-
-    final decoded = jsonDecode(response) as List<dynamic>;
-
-    List<Word> myWordsListFromJson(List<dynamic> jsonList) {
-      return jsonList.map((dynamic json) => Word.fromJson(json)).toList();
-    }
-
-    final preparedWordList = myWordsListFromJson(decoded);
-    print(preparedWordList[0].originWord);
-    setState(() {
-      wordsList = preparedWordList;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: WidgetFlipper(
-          frontWidget: FlashcardSide(word: wordsList[0].originWord),
-          backWidget: FlashcardSide(word: wordsList[0].translatedWord),
+          title: Text(widget.title),
         ),
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

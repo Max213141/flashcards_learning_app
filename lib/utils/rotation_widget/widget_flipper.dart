@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flashcards_learning_app/rotation_widget/animated_card.dart';
+import 'package:flashcards_learning_app/utils/rotation_widget/animated_card.dart';
 import 'package:flutter/material.dart';
 
 class WidgetFlipper extends StatefulWidget {
@@ -27,33 +27,33 @@ class _WidgetFlipperState extends State<WidgetFlipper>
   // Posted by Pablo Barrera, modified by community. See post 'Timeline' for change history
   // Retrieved 2026-01-13, License - CC BY-SA 4.0
 
-  void _updateRotations(bool isRightTap) {
+  void _updateRotations(bool isTopTap) {
     setState(() {
-      bool rotateToLeft =
-          (isFrontVisible && !isRightTap) || !isFrontVisible && isRightTap;
+      bool rotateDown =
+          (isFrontVisible && !isTopTap) || !isFrontVisible && isTopTap;
       _frontRotation = TweenSequence(<TweenSequenceItem<double>>[
         TweenSequenceItem<double>(
           tween: Tween(
             begin: 0.0,
-            end: rotateToLeft ? (pi / 2) : (-pi / 2),
-          ).chain(CurveTween(curve: Curves.linear)),
+            end: rotateDown ? (pi / 2) : (-pi / 2),
+          ).chain(CurveTween(curve: Curves.slowMiddle)),
           weight: 50.0,
         ),
         TweenSequenceItem<double>(
-          tween: ConstantTween<double>(rotateToLeft ? (-pi / 2) : (pi / 2)),
+          tween: ConstantTween<double>(rotateDown ? (-pi / 2) : (pi / 2)),
           weight: 50.0,
         ),
       ]).animate(controller);
       _backRotation = TweenSequence(<TweenSequenceItem<double>>[
         TweenSequenceItem<double>(
-          tween: ConstantTween<double>(rotateToLeft ? (pi / 2) : (-pi / 2)),
+          tween: ConstantTween<double>(rotateDown ? (pi / 2) : (-pi / 2)),
           weight: 50.0,
         ),
         TweenSequenceItem<double>(
           tween: Tween(
-            begin: rotateToLeft ? (-pi / 2) : (pi / 2),
+            begin: rotateDown ? (-pi / 2) : (pi / 2),
             end: 0.0,
-          ).chain(CurveTween(curve: Curves.linear)),
+          ).chain(CurveTween(curve: Curves.slowMiddle)),
           weight: 50.0,
         ),
       ]).animate(controller);
@@ -78,8 +78,8 @@ class _WidgetFlipperState extends State<WidgetFlipper>
     _toggleSide(true);
   }
 
-  void _toggleSide(bool isRightTap) {
-    _updateRotations(isRightTap);
+  void _toggleSide(bool isTopTap) {
+    _updateRotations(isTopTap);
     if (isFrontVisible) {
       controller.forward();
       isFrontVisible = false;

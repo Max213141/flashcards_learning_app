@@ -16,11 +16,25 @@ class FlashcardSide extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(18),
         ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(75.0),
-            child: Text(word, maxLines: 5, textAlign: TextAlign.center),
-          ),
+
+        child: Column(
+          children: [
+            Spacer(flex: 1),
+
+            Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 30.0, top: 5),
+                child: Icon(Icons.access_alarm_outlined),
+              ),
+            ),
+            Spacer(flex: 15),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 75.0),
+              child: Text(word, maxLines: 5, textAlign: TextAlign.center),
+            ),
+            Spacer(flex: 15),
+          ],
         ),
       ),
     );

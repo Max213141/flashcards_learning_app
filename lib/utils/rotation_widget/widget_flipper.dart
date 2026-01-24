@@ -36,7 +36,7 @@ class _WidgetFlipperState extends State<WidgetFlipper>
           tween: Tween(
             begin: 0.0,
             end: rotateDown ? (pi / 2) : (-pi / 2),
-          ).chain(CurveTween(curve: Curves.slowMiddle)),
+          ).chain(CurveTween(curve: Curves.linear)),
           weight: 50.0,
         ),
         TweenSequenceItem<double>(
@@ -53,7 +53,7 @@ class _WidgetFlipperState extends State<WidgetFlipper>
           tween: Tween(
             begin: rotateDown ? (-pi / 2) : (pi / 2),
             end: 0.0,
-          ).chain(CurveTween(curve: Curves.slowMiddle)),
+          ).chain(CurveTween(curve: Curves.linear)),
           weight: 50.0,
         ),
       ]).animate(controller);

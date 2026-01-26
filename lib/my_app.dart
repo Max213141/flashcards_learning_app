@@ -1,3 +1,4 @@
+import 'package:flashcards_learning_app/screens/edit_word_screen/edit_word_screen.dart';
 import 'package:flashcards_learning_app/screens/screens.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: TestScreen(),
+      home: EditWordScreen(),
     );
   }
 }

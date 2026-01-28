@@ -1,4 +1,6 @@
+import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class FlashcardFrontSide extends StatelessWidget {
   final String word;
@@ -17,10 +19,7 @@ class FlashcardFrontSide extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 12,
-            color: Color.fromRGBO(174, 192, 111, 100),
-          ),
+          border: Border.all(width: 12, color: AppConst.primary),
           borderRadius: BorderRadius.circular(18),
         ),
         child: Center(
@@ -29,12 +28,16 @@ class FlashcardFrontSide extends StatelessWidget {
             children: [
               Spacer(flex: 1),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(lexicalCategory ?? ''),
-                    Icon(Icons.access_alarm_outlined),
+                    SvgPicture.asset(
+                      'assets/iconss/edit.svg',
+                      width: 24,
+                      height: 24,
+                    ),
                   ],
                 ),
               ),

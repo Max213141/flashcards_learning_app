@@ -108,11 +108,26 @@ class _EditWordScreenState extends State<EditWordScreen> {
                   ),
                 ),
                 Spacer(),
-                FilledButton(
-                  onPressed: () {
-                    print(learningWordController.text);
-                  },
-                  child: Text('Сохранить', style: AppConst.text),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  child: SizedBox(
+                    width: 300,
+                    height: 55,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppConst.buttonBackground,
+                        foregroundColor: AppConst.black,
+                        side: BorderSide(color: AppConst.primary, width: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(35),
+                        ),
+                      ),
+                      onPressed: () {
+                        print(learningWordController.text);
+                      },
+                      child: Text('Сохранить', style: AppConst.text),
+                    ),
+                  ),
                 ),
               ],
             ),

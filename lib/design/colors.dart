@@ -9,7 +9,8 @@ class AppConst {
   static const Color lavender = Color(0xFFA89DEF);
   static const Color blue = Color(0xFF99EDF3);
   static const Color transparent = Color(0x35FFFFFF);
-  static const Color background = Color(0xFFFDFFED);
+  static const Color background = Color(0xFFF4F2F0);
+  static const Color buttonBackground = Color(0x60FDFFED);
 
   static const TextStyle h1 = TextStyle(
     fontFamily: 'Jost',

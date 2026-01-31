@@ -15,11 +15,13 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppConst.background,
         appBarTheme: AppBarTheme(backgroundColor: AppConst.background),
       ),
-      home: WordDefinitionScreen(
-        word: 'lkgr',
-        translatedWord: 'lkgrw',
-        topic: 'nkgrkgrkl',
-      ),
+      home: TopicScreen(),
+
+      // WordDefinitionScreen(
+      //   word: 'lkgr',
+      //   translatedWord: 'lkgrw',
+      //   topic: 'nkgrkgrkl',
+      // ),
     );
   }
 }

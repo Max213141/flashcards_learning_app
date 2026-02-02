@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 
 class RotatingFab extends StatefulWidget {
@@ -49,6 +50,9 @@ class _RotatingFabState extends State<RotatingFab>
         height: 55,
         width: 55,
         child: FloatingActionButton(
+          elevation: 0,
+          backgroundColor: AppConst.primary,
+          shape: const CircleBorder(),
           onPressed: _handleTap,
           child: AnimatedBuilder(
             animation: _controller,
@@ -58,7 +62,7 @@ class _RotatingFabState extends State<RotatingFab>
                 child: child,
               );
             },
-            child: const Icon(Icons.add, size: 28),
+            child: const Icon(Icons.add, size: 28, color: AppConst.black),
           ),
         ),
       ),

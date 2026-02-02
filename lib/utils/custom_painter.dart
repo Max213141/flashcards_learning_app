@@ -1,3 +1,4 @@
+import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 
 class MyPainter extends CustomPainter {
@@ -7,12 +8,12 @@ class MyPainter extends CustomPainter {
     Paint stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
-      ..color = Colors.red;
+      ..color = AppConst.black;
     Path path = Path();
 
     // Path number 1
 
-    paint.color = Color.fromARGB(255, 153, 237, 243);
+    paint.color = AppConst.lavender;
     path = Path();
     // print(size.width);
     // print(size.height);

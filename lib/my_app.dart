@@ -13,6 +13,11 @@ class MyApp extends StatelessWidget {
       routerConfig: appRouter.config(),
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: const TextTheme(
+          bodySmall: TextStyle(color: AppConst.black),
+          bodyMedium: TextStyle(color: AppConst.black),
+          bodyLarge: TextStyle(color: AppConst.black),
+        ),
         scaffoldBackgroundColor: AppConst.background,
         appBarTheme: AppBarTheme(backgroundColor: AppConst.background),
       ),

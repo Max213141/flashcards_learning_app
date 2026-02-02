@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
+import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/router/app_router.dart' as appRouter;
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
@@ -15,7 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   static const double cardHeight = 175;
-  static const double overlap = 70;
+  static const double overlap = 100;
   static const int itemCount = 10;
 
   bool buttonsHidden = true;
@@ -24,7 +25,12 @@ class _MainScreenState extends State<MainScreen> {
     final totalHeight = cardHeight + (itemCount - 1) * (cardHeight - overlap);
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      appBar: AppBar(
+        backgroundColor: AppConst.primary,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
+      backgroundColor: AppConst.background,
       floatingActionButton: RotatingFab(
         onPressed: () {
           setState(() {
@@ -65,14 +71,34 @@ class _MainScreenState extends State<MainScreen> {
                                           vertical: 20,
                                         ),
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text('140 слов'),
-                                                Text('Глаголы действия'),
-                                              ],
+                                            SizedBox(
+                                              height: 40,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '140 слов',
+                                                    style:
+                                                        AppConst.additionalText,
+                                                  ),
+                                                  Text(
+                                                    'Глаголы действия',
+                                                    style: AppConst.h2,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            CircularProgressBar(
+                                              width: 40,
+                                              height: 40,
+                                              indicatorColor: AppConst.lavender,
+                                              backgroundColor: Color(
+                                                0x60ffffff,
+                                              ),
                                             ),
                                           ],
                                         ),

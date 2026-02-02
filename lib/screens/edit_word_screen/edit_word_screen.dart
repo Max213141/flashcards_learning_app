@@ -118,6 +118,7 @@ class _EditWordScreenState extends State<EditWordScreen> {
                   child: CustomActionButton(
                     buttonText: 'Сохранить',
                     width: 300,
+                    onTap: () {},
                   ),
                 ),
               ],

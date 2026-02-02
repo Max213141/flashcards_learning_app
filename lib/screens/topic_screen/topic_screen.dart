@@ -1,13 +1,16 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/circle_custom_action_button.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/slidable_word_widget.dart';
+import 'package:flashcards_learning_app/router/app_router.dart' as appRouter;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+@RoutePage()
 class TopicScreen extends StatefulWidget {
   const TopicScreen({super.key});
 
@@ -125,8 +128,20 @@ class _TopicScreenState extends State<TopicScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CustomActionButton(buttonText: 'Практика', width: 145),
-                    CustomActionButton(buttonText: 'Экзамен', width: 145),
+                    CustomActionButton(
+                      buttonText: 'Практика',
+                      width: 145,
+                      onTap: () => AutoRouter.of(
+                        context,
+                      ).push(const appRouter.TestRoute()),
+                    ),
+                    CustomActionButton(
+                      buttonText: 'Экзамен',
+                      width: 145,
+                      onTap: () => AutoRouter.of(
+                        context,
+                      ).push(const appRouter.TestRoute()),
+                    ),
                   ],
                 ),
               ),
@@ -136,6 +151,7 @@ class _TopicScreenState extends State<TopicScreen> {
                     bottom: MediaQuery.of(context).padding.bottom + 85,
                   ),
                   child: ListView.builder(
+                    //TODO after deletion on Word item scrollable doesnt changes and breaking while scrolling
                     itemCount: words.length,
                     itemBuilder: (context, index) {
                       return SlidableWordWidget(

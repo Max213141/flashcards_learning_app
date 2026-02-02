@@ -87,3 +87,19 @@ class TestRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [TopicScreen]
+class TopicRoute extends PageRouteInfo<void> {
+  const TopicRoute({List<PageRouteInfo>? children})
+    : super(TopicRoute.name, initialChildren: children);
+
+  static const String name = 'TopicRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TopicScreen();
+    },
+  );
+}

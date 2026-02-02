@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class CustomActionButton extends StatelessWidget {
   final String buttonText;
   final double width;
+  final VoidCallback onTap;
 
   const CustomActionButton({
     super.key,
     required this.buttonText,
     required this.width,
+    required this.onTap,
   });
 
   @override
@@ -25,9 +27,7 @@ class CustomActionButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {
-          print('s');
-        },
+        onPressed: onTap,
         child: Text(buttonText, style: AppConst.text),
       ),
     );

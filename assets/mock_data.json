@@ -1,41 +1,64 @@
 [
     {
-        "originWord":"Минутку,подожди немного, секундочку",
-        "translatedWord": "잠깐만",
+        "translation":"Минутку,подожди немного, секундочку",
+        "word": "잠깐만",
+        "topic": "Basics"
+    },
+
+    {
+        "translation":"Минутку,подожди немного, секундочку",
+        "word": "잠깐만",
+        "topic": "Basics"
+    },{
+        "translation":"Минутку,подожди немного, секундочку",
+        "word": "잠깐만",
+        "topic": "Basics"
+    },{
+        "translation":"Минутку,подожди немного, секундочку",
+        "word": "잠깐만",
+        "topic": "Basics"
+    },
+    {
+        "translation":"Минутку,подожди немного, секундочку",
+        "word": "잠깐만",
+        "topic": "Basics"
+    },{
+        "translation":"Минутку,подожди немного, секундочкуasfasfsafasfasfasf",
+        "word": "잠깐만",
         "topic": "Basics"
     },
      {
-        "originWord":"Язык",
-        "translatedWord": "Language",
+        "translation":"Язык",
+        "word": "Language",
         "topic": "Basics"
     },
     {
-        "originWord":"Язык",
-        "translatedWord": "Language",
+        "translation":"Язык",
+        "word": "Language",
         "topic": "Basics"
     },
     {
-        "originWord":"Язык",
-        "translatedWord": "Language",
+        "translation":"Язык",
+        "word": "Language",
         "topic": "Basics"
     },
     {
-        "originWord":"Язык",
-        "translatedWord": "Language",
+        "translation":"Язык",
+        "word": "Language",
         "topic": "Basics"
     },
     {
-        "originWord":"Язык",
-        "translatedWord": "Language",
+        "translation":"Язык",
+        "word": "Language",
         "topic": "Basics"
     },
     {
-        "originWord":"Язык",
-        "translatedWord": "Language",
+        "translation":"Язык",
+        "word": "Language",
         "topic": "Basics"
     },
     {
-        "originWord":"Язык",
-        "translatedWord": "Language"
+        "translation":"Язык",
+        "word": "Language"
     }
 ]

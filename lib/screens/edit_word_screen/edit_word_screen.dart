@@ -1,9 +1,14 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/edit_word_screen/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage()
 class EditWordScreen extends StatefulWidget {
-  const EditWordScreen({super.key});
+  const EditWordScreen({super.key, this.word});
+  final Word? word;
 
   @override
   State<EditWordScreen> createState() => _EditWordScreenState();
@@ -110,23 +115,9 @@ class _EditWordScreenState extends State<EditWordScreen> {
                 Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
-                  child: SizedBox(
+                  child: CustomActionButton(
+                    buttonText: 'Сохранить',
                     width: 300,
-                    height: 55,
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppConst.buttonBackground,
-                        foregroundColor: AppConst.black,
-                        side: BorderSide(color: AppConst.primary, width: 2),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(35),
-                        ),
-                      ),
-                      onPressed: () {
-                        print(learningWordController.text);
-                      },
-                      child: Text('Сохранить', style: AppConst.text),
-                    ),
                   ),
                 ),
               ],

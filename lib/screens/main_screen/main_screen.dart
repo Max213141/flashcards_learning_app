@@ -1,92 +1,118 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
+import 'package:flashcards_learning_app/router/app_router.dart' as appRouter;
+import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatelessWidget {
+@RoutePage()
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
-  static const double overlap = 70;
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
 
+class _MainScreenState extends State<MainScreen> {
+  static const double cardHeight = 175;
+  static const double overlap = 70;
+  static const int itemCount = 10;
+
+  bool buttonsHidden = true;
   @override
   Widget build(BuildContext context) {
+    final totalHeight = cardHeight + (itemCount - 1) * (cardHeight - overlap);
+
     return Scaffold(
-      body: Center(
-        child: DecoratedBox(
-          decoration: BoxDecoration(color: Colors.yellow),
-          child: CustomPaint(
-            painter: MyPainter(),
-            child: Container(
-              height: 300,
-              width: 400,
-              padding: EdgeInsets.only(
-                left: 15,
-                right: 15,
-                bottom: 20,
-                top: 20,
-              ),
-              child: Align(
-                alignment: AlignmentGeometry.topCenter,
-                child: Text(
-                  "Some content",
-                  style: TextStyle(color: Colors.black),
+      backgroundColor: Colors.blue,
+      floatingActionButton: RotatingFab(
+        onPressed: () {
+          setState(() {
+            buttonsHidden = !buttonsHidden;
+          });
+        },
+      ),
+      body: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadiusGeometry.circular(20),
+                    child: SizedBox(
+                      height: MediaQuery.sizeOf(context).height * .7,
+                      child: SingleChildScrollView(
+                        child: SizedBox(
+                          height: totalHeight,
+                          child: Stack(
+                            children: List.generate(itemCount, (index) {
+                              return Positioned(
+                                top: index * (cardHeight - overlap),
+                                left: 0,
+                                right: 0,
+                                child: CustomPaint(
+                                  painter: MyPainter(),
+                                  child: const SizedBox(
+                                    height: cardHeight,
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Padding(
+                                        padding: EdgeInsetsGeometry.symmetric(
+                                          horizontal: 25,
+                                          vertical: 20,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text('140 слов'),
+                                                Text('Глаголы действия'),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  AutoRouter.of(context).push(const appRouter.TestRoute());
+                },
+                child: Text('To Test Screen'),
+              ),
+            ],
+          ),
+          Positioned(
+            right: 0,
+            bottom: MediaQuery.of(context).padding.bottom + 85,
+            child: Offstage(
+              offstage: buttonsHidden,
+              child: Column(
+                children: [
+                  CustomActionButton(buttonText: 'Новая тема', width: 200),
+                  CustomActionButton(buttonText: 'Импорт', width: 200),
+                ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
-
-//  return Scaffold(
-//       body: SafeArea(
-//         child: Center(
-//           child: SizedBox(
-//             height: MediaQuery.sizeOf(context).height * .7,
-//             child: CustomScrollView(
-//               slivers: [
-//                 SliverList(
-//                   delegate: SliverChildBuilderDelegate((context, index) {
-//                     return Transform.translate(
-//                       offset: Offset(0, -index * overlap),
-//                       child: Transform.scale(
-//                         scale:
-//                             1 -
-//                             (index == 0 ? 1 : index) *
-//                                 (index == 0
-//                                     ? 0.06
-//                                     : index < 3
-//                                     ? 0.04
-//                                     : 0.02),
-//                         child: Container(
-//                           margin: const EdgeInsets.symmetric(horizontal: 16),
-//                           child: SizedBox(
-//                             height: 175,
-//                             width: MediaQuery.sizeOf(context).width - 48,
-//                             child: DecoratedBox(
-//                               decoration: BoxDecoration(
-//                                 color: Colors.red,
-//                                 boxShadow: [
-//                                   BoxShadow(
-//                                     blurRadius: 12,
-//                                     color: Colors.black.withOpacity(0.08),
-//                                   ),
-//                                 ],
-//                                 border: Border.all(
-//                                   width: 5,
-//                                   color: Colors.blue,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     );
-//                   }, childCount: 7),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );

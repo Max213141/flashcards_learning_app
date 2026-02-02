@@ -1,13 +1,12 @@
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart' as edit;
 
 class WordDefinitionScreen extends StatefulWidget {
   final String word;
   final String? transcription;
   final String? lexicalCategory;
-  final String translatedWord;
+  final String tranlation;
   final String? usage;
   final String topic;
   const WordDefinitionScreen({
@@ -15,7 +14,7 @@ class WordDefinitionScreen extends StatefulWidget {
     required this.word,
     this.transcription,
     this.lexicalCategory,
-    required this.translatedWord,
+    required this.tranlation,
     this.usage,
     required this.topic,
   });

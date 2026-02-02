@@ -1,8 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FlashcardFrontSide extends StatelessWidget {
+  final Word wordPair;
   final String word;
   final String? transcription;
   final String? lexicalCategory;
@@ -11,6 +15,7 @@ class FlashcardFrontSide extends StatelessWidget {
     required this.word,
     this.transcription,
     this.lexicalCategory,
+    required this.wordPair,
   });
 
   @override
@@ -33,10 +38,15 @@ class FlashcardFrontSide extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(lexicalCategory ?? ''),
-                    SvgPicture.asset(
-                      'assets/iconss/edit.svg',
-                      width: 24,
-                      height: 24,
+                    GestureDetector(
+                      onTap: () => AutoRouter.of(
+                        context,
+                      ).push(EditWordRoute(word: wordPair)),
+                      child: SvgPicture.asset(
+                        'assets/iconss/edit.svg',
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
                   ],
                 ),

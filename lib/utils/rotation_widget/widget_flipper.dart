@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flashcards_learning_app/utils/rotation_widget/animated_card.dart';
+import 'package:flashcards_learning_app/utils/shaped_decorated_box.dart';
 import 'package:flutter/material.dart';
 
 class WidgetFlipper extends StatefulWidget {
@@ -129,7 +130,14 @@ class _WidgetFlipperState extends State<WidgetFlipper>
             widthFactor: 1.0,
             heightFactor: 0.5,
             alignment: Alignment.topCenter,
-            child: Container(color: const Color.fromARGB(0, 255, 255, 255)),
+            child: DecoratedBox(
+              decoration: const ShapeDecoration(
+                shape: SwTicketBorder(
+                  fillColor: Colors.transparent,
+                  borderWidth: 4,
+                ),
+              ),
+            ),
           ),
         ),
       ],

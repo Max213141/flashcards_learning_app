@@ -1,27 +1,19 @@
 class Word {
-  final String originWord;
-  final String translatedWord;
+  final String translation;
+  final String word;
   final String? topic;
 
-  const Word({
-    required this.originWord,
-    required this.translatedWord,
-    this.topic = '',
-  });
+  const Word({required this.translation, required this.word, this.topic = ''});
 
   factory Word.fromJson(Map<String, dynamic> json) {
     return Word(
-      originWord: json['originWord'] as String,
-      translatedWord: json['translatedWord'] as String,
+      translation: json['translation'] as String,
+      word: json['word'] as String,
       topic: json["topic"],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'originWord': originWord,
-      'translatedWord': translatedWord,
-      'topic': topic ?? '',
-    };
+    return {'translation': translation, 'word': word, 'topic': topic ?? ''};
   }
 }

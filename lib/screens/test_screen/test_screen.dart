@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/utils/rotation_widget/widget_flipper.dart';
 import 'package:flashcards_learning_app/screens/test_screen/widgets/flashcard_backside.dart';
@@ -7,6 +8,7 @@ import 'package:flashcards_learning_app/screens/test_screen/widgets/flashcard_fr
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+@RoutePage()
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 
@@ -58,11 +60,12 @@ class _TestScreenState extends State<TestScreen> {
                   children: [
                     WidgetFlipper(
                       frontWidget: FlashcardFrontSide(
-                        word: words[0].translatedWord,
+                        wordPair: words[0],
+                        word: words[0].word,
                         transcription: 'jam-kkan-man',
                         lexicalCategory: '동사',
                       ),
-                      backWidget: FlashcardSide(word: words[0].originWord),
+                      backWidget: FlashcardSide(word: words[0].translation),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(32.0),

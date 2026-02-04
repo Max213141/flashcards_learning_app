@@ -21,7 +21,7 @@ class TopicsListWidget extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadiusGeometry.circular(20),
           child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * .6,
+            height: MediaQuery.sizeOf(context).height * .45,
             child: SingleChildScrollView(
               child: SizedBox(
                 height: totalHeight,
@@ -71,6 +71,10 @@ class TopicsListWidget extends StatelessWidget {
                                       height: 40,
                                       indicatorColor: AppConst.lavender,
                                       backgroundColor: Color(0x60ffffff),
+                                      accomplishment: Text(
+                                        '50%',
+                                        style: AppConst.additionalText,
+                                      ),
                                     ),
                                   ],
                                 ),

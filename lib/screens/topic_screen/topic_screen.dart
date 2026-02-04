@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/common_widgets/app_bar.dart';
+import 'package:flashcards_learning_app/common_widgets/circular_progress_bar.dart';
 import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
@@ -59,67 +61,28 @@ class _TopicScreenState extends State<TopicScreen> {
           }
           return Column(
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppConst.primary,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(35),
-                    bottomRight: Radius.circular(35),
-                  ),
+              AppBarWidget(
+                firstPart: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Глаголы действия', style: AppConst.h2),
+                    Text('140 слов', style: AppConst.additionalText),
+                  ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: AppConst.transparent,
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 28.0,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Глаголы действия', style: AppConst.h2),
-                              Text('140 слов', style: AppConst.additionalText),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xffffffff),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(7.0),
-                                child: Stack(
-                                  alignment: AlignmentGeometry.center,
-                                  children: [
-                                    CircularProgressIndicator(
-                                      value: 0.5,
-                                      strokeWidth: 4,
-                                      strokeCap: StrokeCap.round,
 
-                                      color: AppConst.lavender,
-                                    ),
-                                    Text('50%', style: AppConst.additionalText),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text('Общий \nпрогресс', style: AppConst.text),
-                        ],
+                secondPart: Row(
+                  children: [
+                    CircularProgressBar(
+                      width: 50,
+                      height: 50,
+                      indicatorColor: AppConst.lavender,
+                      accomplishment: Text(
+                        '50%',
+                        style: AppConst.additionalText,
                       ),
                     ),
-                  ),
+                    Text('Общий \nпрогресс', style: AppConst.text),
+                  ],
                 ),
               ),
 
@@ -130,14 +93,14 @@ class _TopicScreenState extends State<TopicScreen> {
                   children: [
                     CustomActionButton(
                       buttonText: 'Практика',
-                      width: 145,
+
                       onTap: () => AutoRouter.of(
                         context,
                       ).push(const appRouter.TestRoute()),
                     ),
                     CustomActionButton(
                       buttonText: 'Экзамен',
-                      width: 145,
+
                       onTap: () => AutoRouter.of(
                         context,
                       ).push(const appRouter.TestRoute()),

@@ -117,7 +117,7 @@ class _EditWordScreenState extends State<EditWordScreen> {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: CustomActionButton(
                     buttonText: 'Сохранить',
-                    width: 300,
+
                     onTap: () {},
                   ),
                 ),

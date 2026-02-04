@@ -6,12 +6,14 @@ class CircularProgressBar extends StatelessWidget {
   final double height;
   final Color? backgroundColor;
   final Color indicatorColor;
+  final Widget accomplishment;
   const CircularProgressBar({
     super.key,
     required this.width,
     required this.height,
     this.backgroundColor = Colors.white,
     required this.indicatorColor,
+    required this.accomplishment,
   });
 
   @override
@@ -36,7 +38,7 @@ class CircularProgressBar extends StatelessWidget {
 
                 color: indicatorColor,
               ),
-              Text('50%', style: AppConst.additionalText),
+              accomplishment,
             ],
           ),
         ),

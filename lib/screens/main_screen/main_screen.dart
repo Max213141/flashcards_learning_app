@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/common_widgets/app_bar.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
@@ -30,31 +31,70 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Align(
-            alignment: AlignmentGeometry.topCenter,
-            child: TopicsListWidget(),
+          AppBarWidget(
+            firstPart: Row(
+              children: [
+                CircularProgressBar(
+                  width: 50,
+                  height: 50,
+                  indicatorColor: AppConst.lavender,
+                  accomplishment: Text('50%', style: AppConst.additionalText),
+                ),
+                SizedBox(width: 10),
+                Text('Общий \nпрогресс', style: AppConst.text),
+              ],
+            ),
+
+            secondPart: Row(
+              children: [
+                CircularProgressBar(
+                  width: 50,
+                  height: 50,
+                  indicatorColor: AppConst.primary,
+                  accomplishment: Text('5/10', style: AppConst.additionalText),
+                ),
+                SizedBox(width: 10),
+                Text('Дневная \nцель', style: AppConst.text),
+              ],
+            ),
           ),
-          Positioned(
-            right: 0,
-            bottom: MediaQuery.of(context).padding.bottom + 85,
-            child: Offstage(
-              offstage: buttonsHidden,
-              child: Column(
-                children: [
-                  CustomActionButton(
-                    buttonText: 'Новая тема',
-                    width: 200,
-                    onTap: () {},
+          Expanded(
+            child: Stack(
+              children: [
+                Align(
+                  alignment: AlignmentGeometry.topCenter,
+                  child: TopicsListWidget(),
+                ),
+                Positioned(
+                  right: 30,
+                  bottom: MediaQuery.of(context).padding.bottom + 85,
+                  child: Offstage(
+                    offstage: buttonsHidden,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: CustomActionButton(
+                            buttonText: 'Создание резервной копии',
+
+                            icon: 'assets/iconss/archive.svg',
+                            onTap: () {},
+                          ),
+                        ),
+                        CustomActionButton(
+                          buttonText: 'Новая тема',
+                          icon: 'assets/iconss/plus.svg',
+
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
                   ),
-                  CustomActionButton(
-                    buttonText: 'Импорт',
-                    width: 200,
-                    onTap: () {},
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

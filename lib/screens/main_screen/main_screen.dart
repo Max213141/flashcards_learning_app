@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/app_bar.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/screens/main_screen/widgets/pop_up.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,12 @@ class _MainScreenState extends State<MainScreen> {
                           buttonText: 'Новая тема',
                           icon: 'assets/iconss/plus.svg',
 
-                          onTap: () {},
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => PopUp(),
+                            );
+                          },
                         ),
                       ],
                     ),

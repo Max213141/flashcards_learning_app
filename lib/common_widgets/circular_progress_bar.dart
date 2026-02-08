@@ -1,4 +1,3 @@
-import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 
 class CircularProgressBar extends StatelessWidget {
@@ -7,6 +6,7 @@ class CircularProgressBar extends StatelessWidget {
   final Color? backgroundColor;
   final Color indicatorColor;
   final Widget accomplishment;
+  final double progress;
   const CircularProgressBar({
     super.key,
     required this.width,
@@ -14,6 +14,7 @@ class CircularProgressBar extends StatelessWidget {
     this.backgroundColor = Colors.white,
     required this.indicatorColor,
     required this.accomplishment,
+    this.progress = 0.5,
   });
 
   @override
@@ -32,7 +33,7 @@ class CircularProgressBar extends StatelessWidget {
             alignment: AlignmentGeometry.center,
             children: [
               CircularProgressIndicator(
-                value: 0.5,
+                value: progress,
                 strokeWidth: 4,
                 strokeCap: StrokeCap.round,
 

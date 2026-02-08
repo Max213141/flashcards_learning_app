@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RotatingFab extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -62,7 +63,11 @@ class _RotatingFabState extends State<RotatingFab>
                 child: child,
               );
             },
-            child: const Icon(Icons.add, size: 28, color: AppConst.black),
+            child: SvgPicture.asset(
+              'assets/iconss/plus.svg',
+              width: 30,
+              color: AppConst.black,
+            ),
           ),
         ),
       ),

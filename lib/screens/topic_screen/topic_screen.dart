@@ -6,6 +6,7 @@ import 'package:flashcards_learning_app/common_widgets/circular_progress_bar.dar
 import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/circle_custom_action_button.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/slidable_word_widget.dart';
 import 'package:flashcards_learning_app/router/app_router.dart' as appRouter;
@@ -117,10 +118,19 @@ class _TopicScreenState extends State<TopicScreen> {
                     //TODO after deletion on Word item scrollable doesnt changes and breaking while scrolling
                     itemCount: words.length,
                     itemBuilder: (context, index) {
-                      return SlidableWordWidget(
-                        index: index,
-                        word: words[index].word,
-                        translation: words[index].translation,
+                      return InkWell(
+                        onTap: () {
+                          print('TAP');
+
+                          AutoRouter.of(
+                            context,
+                          ).push(WordDefinitionRoute(wordData: words[index]));
+                        },
+                        child: SlidableWordWidget(
+                          index: index,
+                          word: words[index].word,
+                          translation: words[index].translation,
+                        ),
                       );
                     },
                   ),

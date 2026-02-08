@@ -2,18 +2,21 @@ import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 
 class MyPainter extends CustomPainter {
+  final Color initialColor;
+  const MyPainter({required this.initialColor});
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
     Paint stroke = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
+      ..strokeWidth = .5
       ..color = AppConst.black;
     Path path = Path();
 
     // Path number 1
 
-    paint.color = AppConst.lavender;
+    paint.color = initialColor;
     path = Path();
     // print(size.width);
     // print(size.height);

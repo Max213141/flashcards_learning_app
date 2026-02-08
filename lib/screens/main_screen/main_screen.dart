@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flashcards_learning_app/common_widgets/app_bar.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
+import 'package:flashcards_learning_app/data/local/app_database.dart';
+import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
-import 'package:flashcards_learning_app/screens/main_screen/widgets/pop_up.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +16,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool buttonsHidden = true;
+  late final Stream<List<TopicSummary>> _topicsStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _topicsStream = appDatabase.watchTopicSummaries();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +52,9 @@ class _MainScreenState extends State<MainScreen> {
                   accomplishment: Text('50%', style: AppConst.additionalText),
                 ),
                 SizedBox(width: 10),
-                Text('Общий \nпрогресс', style: AppConst.text),
+                FittedBox(
+                  child: Text('Общий \nпрогресс', style: AppConst.text),
+                ),
               ],
             ),
 
@@ -57,16 +67,17 @@ class _MainScreenState extends State<MainScreen> {
                   accomplishment: Text('5/10', style: AppConst.additionalText),
                 ),
                 SizedBox(width: 10),
-                Text('Дневная \nцель', style: AppConst.text),
+                FittedBox(child: Text('Дневная \nцель', style: AppConst.text)),
               ],
             ),
           ),
+
           Expanded(
             child: Stack(
               children: [
                 Align(
                   alignment: AlignmentGeometry.topCenter,
-                  child: TopicsListWidget(),
+                  child: TopicsListWidget(topicsStream: _topicsStream),
                 ),
                 Positioned(
                   right: 30,
@@ -80,7 +91,6 @@ class _MainScreenState extends State<MainScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: CustomActionButton(
                             buttonText: 'Создание резервной копии',
-
                             icon: 'assets/iconss/archive.svg',
                             onTap: () {},
                           ),
@@ -92,7 +102,7 @@ class _MainScreenState extends State<MainScreen> {
                           onTap: () {
                             showDialog(
                               context: context,
-                              builder: (_) => PopUp(),
+                              builder: (context) => PopUp(),
                             );
                           },
                         ),

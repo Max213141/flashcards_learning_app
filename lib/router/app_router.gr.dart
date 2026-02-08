@@ -103,3 +103,50 @@ class TopicRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [WordDefinitionScreen]
+class WordDefinitionRoute extends PageRouteInfo<WordDefinitionRouteArgs> {
+  WordDefinitionRoute({
+    Key? key,
+    required Word wordData,
+    List<PageRouteInfo>? children,
+  }) : super(
+         WordDefinitionRoute.name,
+         args: WordDefinitionRouteArgs(key: key, wordData: wordData),
+         initialChildren: children,
+       );
+
+  static const String name = 'WordDefinitionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<WordDefinitionRouteArgs>();
+      return WordDefinitionScreen(key: args.key, wordData: args.wordData);
+    },
+  );
+}
+
+class WordDefinitionRouteArgs {
+  const WordDefinitionRouteArgs({this.key, required this.wordData});
+
+  final Key? key;
+
+  final Word wordData;
+
+  @override
+  String toString() {
+    return 'WordDefinitionRouteArgs{key: $key, wordData: $wordData}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! WordDefinitionRouteArgs) return false;
+    return key == other.key && wordData == other.wordData;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ wordData.hashCode;
+}

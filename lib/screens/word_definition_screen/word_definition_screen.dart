@@ -1,23 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+@RoutePage()
 class WordDefinitionScreen extends StatefulWidget {
-  final String word;
-  final String? transcription;
-  final String? lexicalCategory;
-  final String tranlation;
-  final String? usage;
-  final String topic;
-  const WordDefinitionScreen({
-    super.key,
-    required this.word,
-    this.transcription,
-    this.lexicalCategory,
-    required this.tranlation,
-    this.usage,
-    required this.topic,
-  });
+  final Word wordData;
+  const WordDefinitionScreen({super.key, required this.wordData});
 
   @override
   State<WordDefinitionScreen> createState() => _WordDefinitionScreenState();

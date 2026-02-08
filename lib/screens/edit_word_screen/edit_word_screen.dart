@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/screens/edit_word_screen/custom_textfield.dart';
+
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -115,10 +115,13 @@ class _EditWordScreenState extends State<EditWordScreen> {
                 Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
-                  child: CustomActionButton(
-                    buttonText: 'Сохранить',
+                  child: SizedBox(
+                    width: 300,
+                    child: CustomActionButton(
+                      buttonText: 'Сохранить',
 
-                    onTap: () {},
+                      onTap: () {},
+                    ),
                   ),
                 ),
               ],

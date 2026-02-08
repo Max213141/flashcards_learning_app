@@ -13,5 +13,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: EditWordRoute.page),
     AutoRoute(page: TestRoute.page),
     AutoRoute(page: TopicRoute.page),
+    AutoRoute(page: WordDefinitionRoute.page),
   ];
 }

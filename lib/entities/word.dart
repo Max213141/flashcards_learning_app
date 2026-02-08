@@ -1,19 +1,53 @@
 class Word {
-  final String translation;
+  final int? id;
+  final int? topicId;
   final String word;
+  final String translation;
   final String? topic;
+  final bool learned;
 
-  const Word({required this.translation, required this.word, this.topic = ''});
+  const Word({
+    this.id,
+    this.topicId,
+    required this.word,
+    required this.translation,
+    this.topic,
+    this.learned = false,
+  });
+
+  Word copyWith({
+    int? id,
+    int? topicId,
+    String? word,
+    String? translation,
+    String? topic,
+    bool? learned,
+  }) {
+    return Word(
+      id: id ?? this.id,
+      topicId: topicId ?? this.topicId,
+      word: word ?? this.word,
+      translation: translation ?? this.translation,
+      topic: topic ?? this.topic,
+      learned: learned ?? this.learned,
+    );
+  }
 
   factory Word.fromJson(Map<String, dynamic> json) {
     return Word(
-      translation: json['translation'] as String,
       word: json['word'] as String,
-      topic: json["topic"],
+      translation: json['translation'] as String,
+      topic: json['topic'] as String?,
+      learned: (json['learned'] as bool?) ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'translation': translation, 'word': word, 'topic': topic ?? ''};
+    return {
+      'word': word,
+      'translation': translation,
+      if (topic != null) 'topic': topic,
+      'learned': learned,
+    };
   }
 }

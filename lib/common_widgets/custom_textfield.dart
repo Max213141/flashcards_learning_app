@@ -9,12 +9,13 @@ class CustomTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      style: AppConst.text,
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Color(0xffD7D7D7)),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppConst.black),
+          borderSide: BorderSide(color: AppConst.black.withValues(alpha: .3)),
         ),
         // errorBorder: UnderlineInputBorder(
         // borderSide: BorderSide(color: Color(0xffD7D7D7))

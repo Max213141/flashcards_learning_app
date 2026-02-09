@@ -67,6 +67,7 @@ Data / Persistence:
   - `watchTopicSummaries()` returns a stream for the main topics list.
 - `lib/data/local/topic_summary.dart`
   - DTO for topic list aggregation (total/learned words).
+- Detailed DB description: `/Users/maksimkupcov/Projects/flashcards_learning_app/APP_DATABASE.md`
 
 Shared UI:
 - `lib/design/colors.dart`: color palette + text styles.

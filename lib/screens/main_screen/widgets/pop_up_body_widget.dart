@@ -98,6 +98,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
     try {
       final topic = Topic(topicName: name, colorValue: _selectedColorValue);
       final words = _importedWords.map((w) => w.copyWith(topic: name)).toList();
+      words.map((word) => print('${word.id}/${word.topicId}: ${word.topic}'));
       await appDatabase.createTopicWithWords(topic: topic, words: words);
       if (!mounted) return;
       Navigator.of(context).pop(true);

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +8,40 @@ import 'package:flutter_svg/flutter_svg.dart';
 @RoutePage()
 class WordDefinitionScreen extends StatefulWidget {
   final Word wordData;
-  const WordDefinitionScreen({super.key, required this.wordData});
+  final String topicName;
+  const WordDefinitionScreen({
+    super.key,
+    required this.wordData,
+    required this.topicName,
+  });
 
   @override
   State<WordDefinitionScreen> createState() => _WordDefinitionScreenState();
 }
 
 class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
-  bool know = false;
+  late bool know = widget.wordData.learned;
+
+  Future<void> _deleteWord() async {
+    final id = widget.wordData.id;
+    if (id == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Невозможно удалить слово')));
+      return;
+    }
+    try {
+      await appDatabase.deleteWordById(id);
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Не удалось удалить слово')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +54,10 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
             ),
             SvgPicture.asset('assets/iconss/edit.svg', width: 24),
             SizedBox(width: 15),
-            SvgPicture.asset('assets/iconss/delete.svg', width: 24),
+            GestureDetector(
+              onTap: _deleteWord,
+              child: SvgPicture.asset('assets/iconss/delete.svg', width: 24),
+            ),
           ],
         ),
       ),
@@ -38,7 +68,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '잠깐만',
+              widget.wordData.word,
               style: TextStyle(
                 fontSize: 56,
                 fontWeight: FontWeight.bold,
@@ -64,10 +94,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                         Text('동사', style: AppConst.text),
                         SizedBox(height: 15),
                         Text('Перевод', style: AppConst.h2),
-                        Text(
-                          'Минутку, подожди немного, секундочку',
-                          style: AppConst.text,
-                        ),
+                        Text(widget.wordData.translation, style: AppConst.text),
                         SizedBox(height: 15),
                         Text('Слово в употреблении', style: AppConst.h2),
                         Text(
@@ -79,7 +106,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text('Глаголы действия', style: AppConst.h2),
+                            Text(widget.topicName, style: AppConst.h2),
                             GestureDetector(
                               onTap: () {
                                 setState(() {

@@ -56,8 +56,12 @@ class TopicsListWidget extends StatelessWidget {
                           left: 0,
                           right: 0,
                           child: GestureDetector(
-                            onTap: () =>
-                                AutoRouter.of(context).push( TopicRoute(topicName: topic.topicName, words:   )),
+                            onTap: () => AutoRouter.of(context).push(
+                              TopicRoute(
+                                topicName: topic.topicName,
+                                topicId: topic.id,
+                              ),
+                            ),
                             child: CustomPaint(
                               painter: MyPainter(initialColor: color),
                               child: SizedBox(
@@ -80,7 +84,9 @@ class TopicsListWidget extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                '${topic.totalWords} слов',
+                                                formatRussianWordCount(
+                                                  topic.totalWords,
+                                                ),
                                                 style: AppConst.additionalText,
                                               ),
                                               Text(

@@ -69,22 +69,22 @@ class AppDatabase extends _$AppDatabase {
     );
 
     return query.watch().map(
-          (rows) => rows.map((row) {
-            return TopicSummary(
-              id: row.read<int>('id'),
-              topicName: row.read<String>('name'),
-              colorValue: row.read<int?>('colorValue'),
-              totalWords: row.read<int>('totalWords'),
-              learnedWords: row.read<int?>('learnedWords') ?? 0,
-            );
-          }).toList(),
+      (rows) => rows.map((row) {
+        return TopicSummary(
+          id: row.read<int>('id'),
+          topicName: row.read<String>('name'),
+          colorValue: row.read<int?>('colorValue'),
+          totalWords: row.read<int>('totalWords'),
+          learnedWords: row.read<int?>('learnedWords') ?? 0,
         );
+      }).toList(),
+    );
   }
 
   Future<int> createTopicIfMissing(String topicName) async {
-    final existing = await (select(topics)
-          ..where((tbl) => tbl.name.equals(topicName)))
-        .getSingleOrNull();
+    final existing = await (select(
+      topics,
+    )..where((tbl) => tbl.name.equals(topicName))).getSingleOrNull();
     if (existing != null) {
       return existing.id;
     }
@@ -135,6 +135,34 @@ class AppDatabase extends _$AppDatabase {
       map.putIfAbsent(key, () => []).add(word);
     }
     return map;
+  }
+
+  Future<String?> getTopicName(int topicId) async {
+    final topic = await (select(topics)
+          ..where((tbl) => tbl.id.equals(topicId)))
+        .getSingleOrNull();
+    return topic?.name;
+  }
+
+  Future<List<Word>> getWordsForTopic(int topicId) async {
+    final rows = await (select(
+      words,
+    )..where((tbl) => tbl.topicId.equals(topicId))).get();
+    return rows
+        .map(
+          (row) => Word(
+            id: row.id,
+            topicId: row.topicId,
+            word: row.word,
+            translation: row.translation,
+            learned: row.learned,
+          ),
+        )
+        .toList();
+  }
+
+  Future<int> deleteWordById(int id) async {
+    return (delete(words)..where((word) => word.id.equals(id))).go();
   }
 }
 

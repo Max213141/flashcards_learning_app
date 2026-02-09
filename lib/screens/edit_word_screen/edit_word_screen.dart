@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class EditWordScreen extends StatefulWidget {
-  const EditWordScreen({super.key, this.word});
   final Word? word;
+
+  const EditWordScreen({super.key, this.word});
 
   @override
   State<EditWordScreen> createState() => _EditWordScreenState();
@@ -21,6 +22,7 @@ class _EditWordScreenState extends State<EditWordScreen> {
   final TextEditingController transcriptionController = TextEditingController();
   final TextEditingController partofSpeechController = TextEditingController();
   final TextEditingController usageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

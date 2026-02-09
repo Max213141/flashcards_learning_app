@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 class TopicsExpansionTile extends StatelessWidget {
   final void Function(String) onTap;
   final List<String> topicSuggestions;
+  final double maxListHeight;
+  final double itemExtent;
   const TopicsExpansionTile({
     super.key,
     required this.onTap,
     required this.topicSuggestions,
+    this.maxListHeight = 180,
+    this.itemExtent = 48,
   });
 
   @override
@@ -31,16 +35,33 @@ class TopicsExpansionTile extends StatelessWidget {
         //   color: AppConst.black,
         // ),
         childrenPadding: EdgeInsets.all(0),
-        children: topicSuggestions
-            .map(
-              (t) => ListTile(
-                dense: true,
-                title: Text(t, style: AppConst.text),
-                onTap: () => onTap(t),
+        children: [
+          SizedBox(
+            height: _listHeight(),
+            child: Scrollbar(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemExtent: itemExtent,
+                itemCount: topicSuggestions.length,
+                itemBuilder: (context, index) {
+                  final t = topicSuggestions[index];
+                  return ListTile(
+                    dense: true,
+                    title: Text(t, style: AppConst.text),
+                    onTap: () => onTap(t),
+                  );
+                },
               ),
-            )
-            .toList(),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  double _listHeight() {
+    final total = topicSuggestions.length * itemExtent;
+    if (total < itemExtent) return itemExtent;
+    return total > maxListHeight ? maxListHeight : total;
   }
 }

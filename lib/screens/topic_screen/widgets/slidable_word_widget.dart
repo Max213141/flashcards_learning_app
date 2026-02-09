@@ -2,41 +2,38 @@ import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class SlidableWordWidget extends StatefulWidget {
+class SlidableWordWidget extends StatelessWidget {
   final int index;
+  final int wordId;
   final String word;
   final String translation;
+  final VoidCallback onDelete;
+  final VoidCallback? onEdit;
   const SlidableWordWidget({
     super.key,
     required this.index,
+    required this.wordId,
     required this.word,
     required this.translation,
+    required this.onDelete,
+    this.onEdit,
   });
 
   @override
-  State<SlidableWordWidget> createState() => _SlidableWordWidgetState();
-}
-
-class _SlidableWordWidgetState extends State<SlidableWordWidget> {
-  @override
   Widget build(BuildContext context) {
     return Slidable(
-      // Specify a key if the Slidable is dismissible.
-      key: ValueKey(widget.index),
+      key: ValueKey(wordId),
 
       // The start action pane is the one at the left or the top side.
       startActionPane: ActionPane(
         // A motion is a widget used to control how the pane animates.
         motion: const ScrollMotion(),
 
-        // A pane can dismiss the Slidable.
-        dismissible: DismissiblePane(onDismissed: () {}),
-
         // All actions are defined in the children parameter.
-        children: const [
+        children: [
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
-            onPressed: null,
+            onPressed: (_) => onDelete(),
             backgroundColor: AppConst.primary,
             foregroundColor: AppConst.black,
             icon: Icons.delete, //TODO use icon from assets
@@ -46,13 +43,13 @@ class _SlidableWordWidgetState extends State<SlidableWordWidget> {
       ),
 
       // The end action pane is the one at the right or the bottom side.
-      endActionPane: const ActionPane(
-        motion: ScrollMotion(),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
         children: [
           SlidableAction(
             // An action can be bigger than the others.
             flex: 2,
-            onPressed: null,
+            onPressed: onEdit == null ? null : (_) => onEdit?.call(),
             backgroundColor: AppConst.primary,
             foregroundColor: AppConst.black,
             icon: Icons.archive, //TODO use icon from assets
@@ -65,7 +62,7 @@ class _SlidableWordWidgetState extends State<SlidableWordWidget> {
       // component is not dragged.
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: (widget.index + 1).isEven
+          color: (index + 1).isEven
               ? AppConst.background
               : Color(0xffF0F0ED),
         ),
@@ -76,13 +73,13 @@ class _SlidableWordWidgetState extends State<SlidableWordWidget> {
 
             children: [
               Expanded(
-                child: Center(child: Text(widget.word, style: AppConst.h2)),
+                child: Center(child: Text(word, style: AppConst.h2)),
               ),
               VerticalDivider(thickness: 1, color: Color(0xffDFDFDF)),
               Expanded(
                 child: Center(
                   child: Text(
-                    widget.translation,
+                    translation,
                     style: AppConst.h2,
                     maxLines: 2,
                     textAlign: TextAlign.center,

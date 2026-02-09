@@ -94,11 +94,11 @@ class TopicRoute extends PageRouteInfo<TopicRouteArgs> {
   TopicRoute({
     Key? key,
     required String topicName,
-    required List<Word> words,
+    required int topicId,
     List<PageRouteInfo>? children,
   }) : super(
          TopicRoute.name,
-         args: TopicRouteArgs(key: key, topicName: topicName, words: words),
+         args: TopicRouteArgs(key: key, topicName: topicName, topicId: topicId),
          initialChildren: children,
        );
 
@@ -111,7 +111,7 @@ class TopicRoute extends PageRouteInfo<TopicRouteArgs> {
       return TopicScreen(
         key: args.key,
         topicName: args.topicName,
-        words: args.words,
+        topicId: args.topicId,
       );
     },
   );
@@ -121,18 +121,18 @@ class TopicRouteArgs {
   const TopicRouteArgs({
     this.key,
     required this.topicName,
-    required this.words,
+    required this.topicId,
   });
 
   final Key? key;
 
   final String topicName;
 
-  final List<Word> words;
+  final int topicId;
 
   @override
   String toString() {
-    return 'TopicRouteArgs{key: $key, topicName: $topicName, words: $words}';
+    return 'TopicRouteArgs{key: $key, topicName: $topicName, topicId: $topicId}';
   }
 
   @override
@@ -141,14 +141,11 @@ class TopicRouteArgs {
     if (other is! TopicRouteArgs) return false;
     return key == other.key &&
         topicName == other.topicName &&
-        const ListEquality<Word>().equals(words, other.words);
+        topicId == other.topicId;
   }
 
   @override
-  int get hashCode =>
-      key.hashCode ^
-      topicName.hashCode ^
-      const ListEquality<Word>().hash(words);
+  int get hashCode => key.hashCode ^ topicName.hashCode ^ topicId.hashCode;
 }
 
 /// generated route for
@@ -157,10 +154,15 @@ class WordDefinitionRoute extends PageRouteInfo<WordDefinitionRouteArgs> {
   WordDefinitionRoute({
     Key? key,
     required Word wordData,
+    required String topicName,
     List<PageRouteInfo>? children,
   }) : super(
          WordDefinitionRoute.name,
-         args: WordDefinitionRouteArgs(key: key, wordData: wordData),
+         args: WordDefinitionRouteArgs(
+           key: key,
+           wordData: wordData,
+           topicName: topicName,
+         ),
          initialChildren: children,
        );
 
@@ -170,30 +172,42 @@ class WordDefinitionRoute extends PageRouteInfo<WordDefinitionRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<WordDefinitionRouteArgs>();
-      return WordDefinitionScreen(key: args.key, wordData: args.wordData);
+      return WordDefinitionScreen(
+        key: args.key,
+        wordData: args.wordData,
+        topicName: args.topicName,
+      );
     },
   );
 }
 
 class WordDefinitionRouteArgs {
-  const WordDefinitionRouteArgs({this.key, required this.wordData});
+  const WordDefinitionRouteArgs({
+    this.key,
+    required this.wordData,
+    required this.topicName,
+  });
 
   final Key? key;
 
   final Word wordData;
 
+  final String topicName;
+
   @override
   String toString() {
-    return 'WordDefinitionRouteArgs{key: $key, wordData: $wordData}';
+    return 'WordDefinitionRouteArgs{key: $key, wordData: $wordData, topicName: $topicName}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! WordDefinitionRouteArgs) return false;
-    return key == other.key && wordData == other.wordData;
+    return key == other.key &&
+        wordData == other.wordData &&
+        topicName == other.topicName;
   }
 
   @override
-  int get hashCode => key.hashCode ^ wordData.hashCode;
+  int get hashCode => key.hashCode ^ wordData.hashCode ^ topicName.hashCode;
 }

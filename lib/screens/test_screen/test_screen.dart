@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/utils/rotation_widget/widget_flipper.dart';
-import 'package:flashcards_learning_app/screens/test_screen/widgets/flashcard_backside.dart';
-import 'package:flashcards_learning_app/screens/test_screen/widgets/flashcard_frontside.dart';
+import 'package:flashcards_learning_app/screens/test_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 @RoutePage()
 class TestScreen extends StatefulWidget {
@@ -18,6 +18,13 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   late final Future<List<Word>> _wordsFuture;
+  final CardSwiperController controller = CardSwiperController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -51,6 +58,20 @@ class _TestScreenState extends State<TestScreen> {
             return const Center(child: Text('No words found'));
           }
 
+          List<Widget> wordsWidgetList = words
+              .map(
+                (word) => WidgetFlipper(
+                  frontWidget: FlashcardFrontSide(
+                    wordPair: word,
+                    word: word.word,
+                    transcription: 'jam-kkan-man',
+                    lexicalCategory: '동사',
+                  ),
+                  backWidget: FlashcardSide(word: words[0].translation),
+                ),
+              )
+              .toList();
+
           return Align(
             alignment: AlignmentDirectional.topCenter,
             child: Padding(
@@ -58,57 +79,27 @@ class _TestScreenState extends State<TestScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    WidgetFlipper(
-                      frontWidget: FlashcardFrontSide(
-                        wordPair: words[0],
-                        word: words[0].word,
-                        transcription: 'jam-kkan-man',
-                        lexicalCategory: '동사',
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * .6,
+                      child: CardSwiper(
+                        controller: controller,
+                        cardsCount: words.length,
+                        onSwipe: _onSwipe,
+                        onUndo: _onUndo,
+                        isLoop: false,
+                        numberOfCardsDisplayed: 1,
+                        padding: const EdgeInsets.all(24.0),
+                        cardBuilder:
+                            (
+                              context,
+                              index,
+                              horizontalThresholdPercentage,
+                              verticalThresholdPercentage,
+                            ) => wordsWidgetList[index],
                       ),
-                      backWidget: FlashcardSide(word: words[0].translation),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(240, 234, 255, 60),
-                          borderRadius: BorderRadius.circular(35),
-                          border: Border.all(
-                            color: Color.fromRGBO(168, 157, 239, 100),
-                          ),
-                        ),
 
-                        child: Theme(
-                          data: Theme.of(context).copyWith(
-                            splashFactory: NoSplash.splashFactory,
-                            highlightColor: Colors.transparent,
-                          ),
-                          child: ExpansionTile(
-                            title: Text('Слово в употреблении'),
-                            leading: Icon(
-                              Icons.lightbulb_outlined,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            shape: Border.all(color: Colors.transparent),
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: 58,
-                                  right: 15,
-                                  bottom: 15,
-                                ),
-                                child: Align(
-                                  alignment: AlignmentGeometry.centerLeft,
-                                  child: Text(
-                                    'используется, чтобы попросить кого-то подождать короткий миг, или как вежливое «Извините»/«Прошу прощения», чтобы привлечь внимание или пройти.',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    WordDescriptionWidget(),
                   ],
                 ),
               ),
@@ -117,5 +108,25 @@ class _TestScreenState extends State<TestScreen> {
         },
       ),
     );
+  }
+
+  bool _onSwipe(
+    int previousIndex,
+    int? currentIndex,
+    CardSwiperDirection direction,
+  ) {
+    debugPrint(
+      'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
+    );
+    return true;
+  }
+
+  bool _onUndo(
+    int? previousIndex,
+    int currentIndex,
+    CardSwiperDirection direction,
+  ) {
+    debugPrint('The card $currentIndex was undod from the ${direction.name}');
+    return true;
   }
 }

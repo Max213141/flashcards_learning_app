@@ -23,7 +23,10 @@ class TopicsListWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (topics.isEmpty) {
-          return const Center(child: Text('No topics yet'));
+          return Padding(
+            padding: const EdgeInsets.only(top: 250.0),
+            child: Text('Нет ни одной темы', style: AppConst.text),
+          );
         }
 
         final totalHeight =
@@ -54,7 +57,7 @@ class TopicsListWidget extends StatelessWidget {
                           right: 0,
                           child: GestureDetector(
                             onTap: () =>
-                                AutoRouter.of(context).push(const TopicRoute()),
+                                AutoRouter.of(context).push( TopicRoute(topicName: topic.topicName, words:   )),
                             child: CustomPaint(
                               painter: MyPainter(initialColor: color),
                               child: SizedBox(

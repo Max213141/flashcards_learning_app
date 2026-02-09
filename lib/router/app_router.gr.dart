@@ -90,18 +90,65 @@ class TestRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TopicScreen]
-class TopicRoute extends PageRouteInfo<void> {
-  const TopicRoute({List<PageRouteInfo>? children})
-    : super(TopicRoute.name, initialChildren: children);
+class TopicRoute extends PageRouteInfo<TopicRouteArgs> {
+  TopicRoute({
+    Key? key,
+    required String topicName,
+    required List<Word> words,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TopicRoute.name,
+         args: TopicRouteArgs(key: key, topicName: topicName, words: words),
+         initialChildren: children,
+       );
 
   static const String name = 'TopicRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const TopicScreen();
+      final args = data.argsAs<TopicRouteArgs>();
+      return TopicScreen(
+        key: args.key,
+        topicName: args.topicName,
+        words: args.words,
+      );
     },
   );
+}
+
+class TopicRouteArgs {
+  const TopicRouteArgs({
+    this.key,
+    required this.topicName,
+    required this.words,
+  });
+
+  final Key? key;
+
+  final String topicName;
+
+  final List<Word> words;
+
+  @override
+  String toString() {
+    return 'TopicRouteArgs{key: $key, topicName: $topicName, words: $words}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TopicRouteArgs) return false;
+    return key == other.key &&
+        topicName == other.topicName &&
+        const ListEquality<Word>().equals(words, other.words);
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      topicName.hashCode ^
+      const ListEquality<Word>().hash(words);
 }
 
 /// generated route for

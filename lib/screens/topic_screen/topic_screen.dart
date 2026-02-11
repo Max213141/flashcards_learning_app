@@ -1,13 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flashcards_learning_app/common_widgets/app_bar.dart';
-import 'package:flashcards_learning_app/common_widgets/circular_progress_bar.dart';
-import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/screens/topic_screen/widgets/circle_custom_action_button.dart';
-import 'package:flashcards_learning_app/screens/topic_screen/widgets/slidable_word_widget.dart';
-import 'package:flashcards_learning_app/router/app_router.dart' as appRouter;
+import 'package:flashcards_learning_app/screens/edit_word_screen/edit_word_form.dart';
+import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/pluralization.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +38,29 @@ class _TopicScreenState extends State<TopicScreen> {
     setState(() {
       _wordsFuture = appDatabase.getWordsForTopic(widget.topicId);
     });
+  }
+
+  void _reoloadDB() {
+    setState(() {
+      _wordsFuture = appDatabase.getWordsForTopic(widget.topicId);
+    });
+  }
+
+  void _onEdit(Word wordInfo) async {
+    final wordId = wordInfo.id ?? -1;
+    if (wordId < 0) return;
+    final fresh = await appDatabase.getWordById(wordId);
+    if (!mounted || fresh == null) return;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => EditWordDialog(
+        word: fresh,
+        onSave: () => Navigator.of(context).pop(true),
+      ),
+    );
+    if (result == true && mounted) {
+      _reoloadDB();
+    }
   }
 
   @override
@@ -97,74 +117,15 @@ class _TopicScreenState extends State<TopicScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: 145,
-                      child: CustomActionButton(
-                        buttonText: 'Практика',
-                        onTap: () => AutoRouter.of(
-                          context,
-                        ).push(const appRouter.TestRoute()),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 145,
 
-                      child: CustomActionButton(
-                        buttonText: 'Экзамен',
-                        onTap: () => AutoRouter.of(
-                          context,
-                        ).push(const appRouter.TestRoute()),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom + 85,
-                  ),
-                  child: words.isEmpty
-                      ? const Center(child: Text('Нет слов'))
-                      : Scrollbar(
-                          child: ListView.builder(
-                            // TODO: After deletion on Word item scrollable doesn't change and breaks while scrolling.
-                            itemCount: words.length,
-                            itemBuilder: (context, index) {
-                              final word = words[index];
-                              return InkWell(
-                                onTap: () async {
-                                  final result = await AutoRouter.of(context)
-                                      .push(
-                                        appRouter.WordDefinitionRoute(
-                                          topicName: widget.topicName,
-                                          wordData: word,
-                                        ),
-                                      );
-                                  if (result == true && mounted) {
-                                    setState(() {
-                                      _wordsFuture = appDatabase
-                                          .getWordsForTopic(widget.topicId);
-                                    });
-                                  }
-                                },
-                                child: SlidableWordWidget(
-                                  index: index,
-                                  wordId: word.id ?? word.hashCode,
-                                  word: word.word,
-                                  translation: word.translation,
-                                  onDelete: () => _deleteWord(word.id ?? -1),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                ),
+              ButtonsRow(topicId: widget.topicId),
+
+              TopicWordsListWidget(
+                wordsList: words,
+                topicName: widget.topicName,
+                deleteWord: _deleteWord,
+                editWord: _onEdit,
+                reloadDB: _reoloadDB,
               ),
             ],
           );

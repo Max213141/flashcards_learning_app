@@ -1,8 +1,14 @@
+import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 
-class FlashcardSide extends StatelessWidget {
-  final String word;
-  const FlashcardSide({super.key, required this.word});
+class FlashcardBackside extends StatelessWidget {
+  final Word wordPair;
+  final String translation;
+  const FlashcardBackside({
+    super.key,
+    required this.wordPair,
+    required this.translation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,11 @@ class FlashcardSide extends StatelessWidget {
             Spacer(flex: 15),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 75.0),
-              child: Text(word, maxLines: 5, textAlign: TextAlign.center),
+              child: Text(
+                translation,
+                maxLines: 5,
+                textAlign: TextAlign.center,
+              ),
             ),
             Spacer(flex: 15),
           ],

@@ -1,7 +1,8 @@
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
-class TopicsExpansionTile extends StatelessWidget {
+class TopicsExpansionTile extends StatefulWidget {
   final void Function(String) onTap;
   final List<String> topicSuggestions;
   final double maxListHeight;
@@ -13,6 +14,13 @@ class TopicsExpansionTile extends StatelessWidget {
     this.maxListHeight = 180,
     this.itemExtent = 48,
   });
+
+  @override
+  State<TopicsExpansionTile> createState() => _TopicsExpansionTileState();
+}
+
+class _TopicsExpansionTileState extends State<TopicsExpansionTile> {
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +36,17 @@ class TopicsExpansionTile extends StatelessWidget {
 
         tilePadding: EdgeInsets.all(0),
         shape: Border(),
-
-        // trailing: SvgPicture.asset(
-        //   'assets/iconss/unfold.svg',
-        //   height: 28,
-        //   color: AppConst.black,
-        // ),
+        onExpansionChanged: (value) => setState(() => _expanded = value),
+        trailing: AnimatedRotation(
+          turns: _expanded ? 0.5 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: SvgPicture.asset(
+            'assets/iconss/unfold.svg',
+            height: 28,
+            color: AppConst.black,
+          ),
+        ),
         childrenPadding: EdgeInsets.all(0),
         children: [
           SizedBox(
@@ -41,14 +54,16 @@ class TopicsExpansionTile extends StatelessWidget {
             child: Scrollbar(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
-                itemExtent: itemExtent,
-                itemCount: topicSuggestions.length,
+                itemExtent: widget.itemExtent,
+                itemCount: widget.topicSuggestions.length,
                 itemBuilder: (context, index) {
-                  final t = topicSuggestions[index];
+                  final t = widget.topicSuggestions[index];
                   return ListTile(
                     dense: true,
-                    title: Text(t, style: AppConst.text),
-                    onTap: () => onTap(t),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 18),
+                    minVerticalPadding: 0,
+                    title: Text(t, style: AppConst.text.copyWith(height: 1)),
+                    onTap: () => widget.onTap(t),
                   );
                 },
               ),
@@ -60,8 +75,8 @@ class TopicsExpansionTile extends StatelessWidget {
   }
 
   double _listHeight() {
-    final total = topicSuggestions.length * itemExtent;
-    if (total < itemExtent) return itemExtent;
-    return total > maxListHeight ? maxListHeight : total;
+    final total = widget.topicSuggestions.length * widget.itemExtent;
+    if (total < widget.itemExtent) return widget.itemExtent;
+    return total > widget.maxListHeight ? widget.maxListHeight : total;
   }
 }

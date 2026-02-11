@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 @RoutePage()
 class MainScreen extends StatefulWidget {
@@ -22,6 +27,41 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _topicsStream = appDatabase.watchTopicSummaries();
+  }
+
+  Future<void> _exportBackup() async {
+    try {
+      final words = await appDatabase.getAllWordsWithTopicName();
+      final jsonList = words.map((w) => w.toJson()).toList();
+      final jsonString = const JsonEncoder.withIndent('  ').convert(jsonList);
+
+      final fileName =
+          'flashcards_backup_${DateTime.now().toIso8601String().replaceAll(':', '-')}.json';
+      final path = await FilePicker.platform.saveFile(
+        dialogTitle: 'Сохранить резервную копию',
+        fileName: fileName,
+        type: FileType.custom,
+        bytes: utf8.encode(jsonString),
+        allowedExtensions: const ['json'],
+      );
+      if (path == null) return;
+      final filePath = path.endsWith('.json') ? path : '$path.json';
+      await File(filePath).writeAsString(jsonString);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Резервная копия сохранена')),
+      );
+    } on PlatformException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка доступа к файлам: ${e.message}')),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Не удалось создать резервную копию')),
+      );
+    }
   }
 
   @override
@@ -64,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
                   width: 50,
                   height: 50,
                   indicatorColor: AppConst.primary,
-                  accomplishment: Text('5/10', style: AppConst.additionalText),
+                  accomplishment: FancyAccomplishmentText(),
                 ),
                 SizedBox(width: 10),
                 FittedBox(child: Text('Дневная \nцель', style: AppConst.text)),
@@ -87,12 +127,17 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        CustomActionButton(
+                          buttonText: 'Восстановление из копии',
+                          icon: 'assets/iconss/archive.svg',
+                          onTap: () {},
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: CustomActionButton(
                             buttonText: 'Создание резервной копии',
                             icon: 'assets/iconss/archive.svg',
-                            onTap: () {},
+                            onTap: _exportBackup,
                           ),
                         ),
                         CustomActionButton(
@@ -102,7 +147,8 @@ class _MainScreenState extends State<MainScreen> {
                           onTap: () {
                             showDialog(
                               context: context,
-                              builder: (context) => PopUp(),
+                              builder: (context) =>
+                                  PopUpBox(popupContent: PopUpBodyWidget()),
                             );
                           },
                         ),

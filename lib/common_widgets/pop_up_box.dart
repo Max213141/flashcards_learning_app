@@ -1,14 +1,9 @@
-import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class PopUp extends StatefulWidget {
-  const PopUp({super.key});
+class PopUpBox extends StatelessWidget {
+  final Widget popupContent;
+  const PopUpBox({super.key, required this.popupContent});
 
-  @override
-  State<PopUp> createState() => _PopUpState();
-}
-
-class _PopUpState extends State<PopUp> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -20,7 +15,7 @@ class _PopUpState extends State<PopUp> {
         child: IntrinsicHeight(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
-            child: PopUpBodyWidget(),
+            child: popupContent,
           ),
         ),
       ),

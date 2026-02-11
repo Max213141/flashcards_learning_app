@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 class CustomTextfield extends StatelessWidget {
   final TextEditingController controller;
-  const CustomTextfield({super.key, required this.controller});
+  final int? maxLength;
+  const CustomTextfield({super.key, required this.controller, this.maxLength});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       style: AppConst.text,
+      maxLength: maxLength,
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Color(0xffD7D7D7)),

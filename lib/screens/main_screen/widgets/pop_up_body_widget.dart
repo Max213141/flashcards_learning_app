@@ -118,87 +118,94 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(child: Text('Новая тема', style: AppConst.h1)),
-        SizedBox(height: 40),
-        Text('Название', style: AppConst.text),
-        Row(
-          children: [
-            Expanded(child: CustomTextfield(controller: _topicController)),
-          ],
-        ),
-        if (_topicSuggestions.isNotEmpty) ...[
-          const SizedBox(height: 8),
-
-          TopicsExpansionTile(
-            onTap: (String topicSuggestion) {
-              setState(() => _topicController.text = topicSuggestion);
-            },
-            topicSuggestions: _topicSuggestions,
-          ),
-        ],
-        SizedBox(height: 40),
-        Text('Цвет темы', style: AppConst.text),
-        ColorSelector(
-          selectedColor: _selectedColor,
-          onColorChange: (colorValue, color) {
-            setState(() {
-              _selectedColorValue = colorValue;
-              _selectedColor = color;
-            });
-          },
-        ),
-
-        SizedBox(height: 40),
-        TextButton(
-          onPressed: _loading ? null : _pickJson,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(child: Text('Новая тема', style: AppConst.h1)),
+          SizedBox(height: 40),
+          Text('Название', style: AppConst.text),
+          Row(
             children: [
-              SvgPicture.asset(
-                'assets/iconss/file_export.svg',
-                height: 24,
-                color: AppConst.black,
+              Expanded(
+                child: CustomTextfield(
+                  controller: _topicController,
+                  maxLength: 30,
+                ),
               ),
-              SizedBox(width: 5),
-              Text('Загрузить файл JSON', style: AppConst.text),
             ],
           ),
-        ),
-        SizedBox(height: 20),
-        Center(
-          child: SizedBox(
-            width: 350,
-            height: 55,
-            child: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _topicController,
-              builder: (_, value, _) {
-                bool canCreate =
-                    _topicController.text.trim().isNotEmpty && !_loading;
+          if (_topicSuggestions.isNotEmpty) ...[
+            const SizedBox(height: 8),
 
-                return FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppConst.buttonBackground,
-                    foregroundColor: AppConst.black,
-                    disabledBackgroundColor: Color(0x40D7D7D7),
-                    side: canCreate
-                        ? BorderSide(color: AppConst.primary, width: 2)
-                        : BorderSide.none,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                  ),
-
-                  onPressed: canCreate ? _createTopic : null,
-                  child: Text('Создать тему', style: AppConst.text),
-                );
+            TopicsExpansionTile(
+              onTap: (String topicSuggestion) {
+                setState(() => _topicController.text = topicSuggestion);
               },
+              topicSuggestions: _topicSuggestions,
+            ),
+          ],
+          SizedBox(height: 40),
+          Text('Цвет темы', style: AppConst.text),
+          ColorSelector(
+            selectedColor: _selectedColor,
+            onColorChange: (colorValue, color) {
+              setState(() {
+                _selectedColorValue = colorValue;
+                _selectedColor = color;
+              });
+            },
+          ),
+
+          SizedBox(height: 40),
+          TextButton(
+            onPressed: _loading ? null : _pickJson,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/iconss/file_export.svg',
+                  height: 24,
+                  color: AppConst.black,
+                ),
+                SizedBox(width: 5),
+                Text('Загрузить файл JSON', style: AppConst.text),
+              ],
             ),
           ),
-        ),
-      ],
+          SizedBox(height: 20),
+          Center(
+            child: SizedBox(
+              width: 350,
+              height: 55,
+              child: ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _topicController,
+                builder: (_, value, _) {
+                  bool canCreate =
+                      _topicController.text.trim().isNotEmpty && !_loading;
+
+                  return FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppConst.buttonBackground,
+                      foregroundColor: AppConst.black,
+                      disabledBackgroundColor: Color(0x40D7D7D7),
+                      side: canCreate
+                          ? BorderSide(color: AppConst.primary, width: 2)
+                          : BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                    ),
+
+                    onPressed: canCreate ? _createTopic : null,
+                    child: Text('Создать тему', style: AppConst.text),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

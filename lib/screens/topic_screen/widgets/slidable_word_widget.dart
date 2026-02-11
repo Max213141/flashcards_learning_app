@@ -8,7 +8,7 @@ class SlidableWordWidget extends StatelessWidget {
   final String word;
   final String translation;
   final VoidCallback onDelete;
-  final VoidCallback? onEdit;
+  final VoidCallback onEdit;
   const SlidableWordWidget({
     super.key,
     required this.index,
@@ -16,7 +16,7 @@ class SlidableWordWidget extends StatelessWidget {
     required this.word,
     required this.translation,
     required this.onDelete,
-    this.onEdit,
+    required this.onEdit,
   });
 
   @override
@@ -49,7 +49,9 @@ class SlidableWordWidget extends StatelessWidget {
           SlidableAction(
             // An action can be bigger than the others.
             flex: 2,
-            onPressed: onEdit == null ? null : (_) => onEdit?.call(),
+            onPressed: (_) {
+              onEdit();
+            },
             backgroundColor: AppConst.primary,
             foregroundColor: AppConst.black,
             icon: Icons.archive, //TODO use icon from assets
@@ -62,9 +64,7 @@ class SlidableWordWidget extends StatelessWidget {
       // component is not dragged.
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: (index + 1).isEven
-              ? AppConst.background
-              : Color(0xffF0F0ED),
+          color: (index + 1).isEven ? AppConst.background : Color(0xffF0F0ED),
         ),
         child: SizedBox(
           height: 60,

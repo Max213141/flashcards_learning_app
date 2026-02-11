@@ -138,10 +138,40 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<String?> getTopicName(int topicId) async {
-    final topic = await (select(topics)
-          ..where((tbl) => tbl.id.equals(topicId)))
-        .getSingleOrNull();
+    final topic = await (select(
+      topics,
+    )..where((tbl) => tbl.id.equals(topicId))).getSingleOrNull();
     return topic?.name;
+  }
+
+  Future<Word?> getWordById(int wordId) async {
+    final query = customSelect(
+      '''
+      SELECT
+        w.id as id,
+        w.topic_id as topicId,
+        w.word as word,
+        w.translation as translation,
+        w.learned as learned,
+        t.name as topicName
+      FROM words w
+      LEFT JOIN topics t ON t.id = w.topic_id
+      WHERE w.id = ?
+      LIMIT 1
+      ''',
+      variables: [Variable.withInt(wordId)],
+      readsFrom: {words, topics},
+    );
+    final row = await query.getSingleOrNull();
+    if (row == null) return null;
+    return Word(
+      id: row.read<int>('id'),
+      topicId: row.read<int?>('topicId'),
+      word: row.read<String>('word'),
+      translation: row.read<String>('translation'),
+      learned: row.read<int>('learned') == 1,
+      topic: row.read<String?>('topicName'),
+    );
   }
 
   Future<List<Word>> getWordsForTopic(int topicId) async {
@@ -156,6 +186,37 @@ class AppDatabase extends _$AppDatabase {
             word: row.word,
             translation: row.translation,
             learned: row.learned,
+          ),
+        )
+        .toList();
+  }
+
+  Future<List<Word>> getAllWordsWithTopicName() async {
+    final query = customSelect(
+      '''
+      SELECT
+        w.id as id,
+        w.topic_id as topicId,
+        w.word as word,
+        w.translation as translation,
+        w.learned as learned,
+        t.name as topicName
+      FROM words w
+      LEFT JOIN topics t ON t.id = w.topic_id
+      ORDER BY w.id DESC
+      ''',
+      readsFrom: {words, topics},
+    );
+    final rows = await query.get();
+    return rows
+        .map(
+          (row) => Word(
+            id: row.read<int>('id'),
+            topicId: row.read<int?>('topicId'),
+            word: row.read<String>('word'),
+            translation: row.read<String>('translation'),
+            learned: row.read<int>('learned') == 1,
+            topic: row.read<String?>('topicName'),
           ),
         )
         .toList();

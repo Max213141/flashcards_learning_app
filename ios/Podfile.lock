@@ -94,14 +94,14 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
+  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  path_provider_foundation: 0b743cbb62d8e47eab856f09262bb8c1ddcfe6ba
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   sqlite3: 8d708bc63e9f4ce48f0ad9d6269e478c5ced1d9b
-  sqlite3_flutter_libs: c7b32a4d17d2cbad19895873ccc815f276b1f125
+  sqlite3_flutter_libs: d13b8b3003f18f596e542bcb9482d105577eff41
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
 
 PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

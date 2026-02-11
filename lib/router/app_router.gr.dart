@@ -74,18 +74,46 @@ class MainRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TestScreen]
-class TestRoute extends PageRouteInfo<void> {
-  const TestRoute({List<PageRouteInfo>? children})
-    : super(TestRoute.name, initialChildren: children);
+class TestRoute extends PageRouteInfo<TestRouteArgs> {
+  TestRoute({Key? key, required int topicId, List<PageRouteInfo>? children})
+    : super(
+        TestRoute.name,
+        args: TestRouteArgs(key: key, topicId: topicId),
+        initialChildren: children,
+      );
 
   static const String name = 'TestRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const TestScreen();
+      final args = data.argsAs<TestRouteArgs>();
+      return TestScreen(key: args.key, topicId: args.topicId);
     },
   );
+}
+
+class TestRouteArgs {
+  const TestRouteArgs({this.key, required this.topicId});
+
+  final Key? key;
+
+  final int topicId;
+
+  @override
+  String toString() {
+    return 'TestRouteArgs{key: $key, topicId: $topicId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TestRouteArgs) return false;
+    return key == other.key && topicId == other.topicId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ topicId.hashCode;
 }
 
 /// generated route for

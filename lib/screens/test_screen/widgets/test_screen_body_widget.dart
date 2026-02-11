@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 class TestScreenBodyWidget extends StatefulWidget {
-  const TestScreenBodyWidget({super.key});
+  final List<Word> wordList;
+  const TestScreenBodyWidget({super.key, required this.wordList});
 
   @override
   State<TestScreenBodyWidget> createState() => _TestScreenBodyWidgetState();
@@ -17,23 +18,23 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
 
   @override
   void initState() {
-    wordsWidgetList =
-        [] //There must be data
-            .map(
-              (word) => WidgetFlipper(
-                frontWidget: FlashcardFrontSide(
-                  wordPair: word,
-                  word: word.word,
-                  transcription: 'jam-kkan-man',
-                  lexicalCategory: '동사',
-                ),
-                backWidget: FlashcardBackside(
-                  translation: word.translation,
-                  wordPair: word,
-                ),
-              ),
-            )
-            .toList();
+    wordsWidgetList = widget
+        .wordList //There must be data
+        .map(
+          (word) => WidgetFlipper(
+            frontWidget: FlashcardFrontSide(
+              wordPair: word,
+              word: word.word,
+              transcription: 'jam-kkan-man',
+              lexicalCategory: '동사',
+            ),
+            backWidget: FlashcardBackside(
+              translation: word.translation,
+              wordPair: word,
+            ),
+          ),
+        )
+        .toList();
     super.initState();
   }
 

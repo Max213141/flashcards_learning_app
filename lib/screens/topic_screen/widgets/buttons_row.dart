@@ -18,7 +18,9 @@ class ButtonsRow extends StatelessWidget {
             width: 145,
             child: CustomActionButton(
               buttonText: 'Практика',
-              onTap: () => AutoRouter.of(context).push(appRouter.TestRoute()),
+              onTap: () => AutoRouter.of(
+                context,
+              ).push(appRouter.TestRoute(topicId: topicId)),
             ),
           ),
           SizedBox(
@@ -26,7 +28,9 @@ class ButtonsRow extends StatelessWidget {
 
             child: CustomActionButton(
               buttonText: 'Экзамен',
-              onTap: () => AutoRouter.of(context).push(appRouter.TestRoute()),
+              onTap: () => AutoRouter.of(
+                context,
+              ).push(appRouter.TestRoute(topicId: topicId)),
             ),
           ),
         ],

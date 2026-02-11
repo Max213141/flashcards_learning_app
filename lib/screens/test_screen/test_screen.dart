@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class TestScreen extends StatefulWidget {
-  const TestScreen({super.key});
+  final int topicId;
+  const TestScreen({super.key, required this.topicId});
 
   @override
   State<TestScreen> createState() => _TestScreenState();
@@ -18,13 +19,29 @@ class _TestScreenState extends State<TestScreen> {
   @override
   void initState() {
     super.initState();
+    _wordsFuture = appDatabase.getWordsForTopic(widget.topicId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Практика')),
-      body: TestScreenBodyWidget(),
+      body: FutureBuilder<List<Word>>(
+        future: _wordsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final words = snapshot.data ?? [];
+          final totalWords = words.length;
+
+          return TestScreenBodyWidget(wordList: words);
+        },
+      ),
     );
   }
 }

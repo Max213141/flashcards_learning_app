@@ -4,6 +4,8 @@ import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/edit_word_screen/edit_word_form.dart';
+import 'package:flashcards_learning_app/screens/main_screen/widgets/pop_up_body_widget.dart';
+import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/pluralization.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class TopicScreen extends StatefulWidget {
 }
 
 class _TopicScreenState extends State<TopicScreen> {
+  bool buttonsHidden = true;
   late Future<List<Word>> _wordsFuture;
 
   @override
@@ -71,7 +74,13 @@ class _TopicScreenState extends State<TopicScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
-      floatingActionButton: CircleCustomActionButton(),
+      floatingActionButton: RotatingFab(
+        onPressed: () {
+          setState(() {
+            buttonsHidden = !buttonsHidden;
+          });
+        },
+      ),
       body: FutureBuilder<List<Word>>(
         future: _wordsFuture,
         builder: (context, snapshot) {
@@ -87,45 +96,79 @@ class _TopicScreenState extends State<TopicScreen> {
           final learnedWords = words.where((w) => w.learned).length;
           final progress = totalWords == 0 ? 0.0 : learnedWords / totalWords;
 
-          return Column(
+          return Stack(
             children: [
-              AppBarWidget(
-                firstPart: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.topicName, style: AppConst.h2),
-                    Text(
-                      formatRussianWordCount(totalWords),
-                      style: AppConst.additionalText,
+              Column(
+                children: [
+                  AppBarWidget(
+                    firstPart: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.topicName, style: AppConst.h2),
+                        Text(
+                          formatRussianWordCount(totalWords),
+                          style: AppConst.additionalText,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                secondPart: Row(
-                  children: [
-                    CircularProgressBar(
-                      width: 50,
-                      height: 50,
-                      indicatorColor: AppConst.lavender,
-                      progress: progress,
-                      accomplishment: Text(
-                        '${(progress * 100).round()}%',
-                        style: AppConst.additionalText,
-                      ),
+                    secondPart: Row(
+                      children: [
+                        CircularProgressBar(
+                          width: 50,
+                          height: 50,
+                          indicatorColor: AppConst.lavender,
+                          progress: progress,
+                          accomplishment: Text(
+                            '${(progress * 100).round()}%',
+                            style: AppConst.additionalText,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text('Общий \nпрогресс', style: AppConst.text),
+                      ],
                     ),
-                    SizedBox(width: 10),
-                    Text('Общий \nпрогресс', style: AppConst.text),
-                  ],
-                ),
+                  ),
+
+                  ButtonsRow(topicId: widget.topicId),
+
+                  TopicWordsListWidget(
+                    wordsList: words,
+                    topicName: widget.topicName,
+                    deleteWord: _deleteWord,
+                    editWord: _onEdit,
+                    reloadDB: _reoloadDB,
+                  ),
+                ],
               ),
+              Positioned(
+                right: 30,
+                bottom: MediaQuery.of(context).padding.bottom + 85,
+                child: Offstage(
+                  offstage: buttonsHidden,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      CustomActionButton(
+                        buttonText: 'Добавить файл JSON',
+                        icon: 'assets/iconss/file_export.svg',
+                        onTap: () {},
+                      ),
+                      SizedBox(height: 10),
+                      CustomActionButton(
+                        buttonText: 'Добавить слово',
+                        icon: 'assets/iconss/plus.svg',
 
-              ButtonsRow(topicId: widget.topicId),
-
-              TopicWordsListWidget(
-                wordsList: words,
-                topicName: widget.topicName,
-                deleteWord: _deleteWord,
-                editWord: _onEdit,
-                reloadDB: _reoloadDB,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                PopUpBox(popupContent: PopUpBodyWidget()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           );

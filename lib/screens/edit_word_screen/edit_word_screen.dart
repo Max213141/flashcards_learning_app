@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/screens/edit_word_screen/edit_word_form.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -25,9 +25,7 @@ class _EditWordScreenState extends State<EditWordScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: EditWordForm(word: widget.word),
-        ),
+        child: Center(child: EditWordForm(word: widget.word)),
       ),
     );
   }

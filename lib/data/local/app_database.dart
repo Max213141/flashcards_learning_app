@@ -225,6 +225,32 @@ class AppDatabase extends _$AppDatabase {
   Future<int> deleteWordById(int id) async {
     return (delete(words)..where((word) => word.id.equals(id))).go();
   }
+
+  Future<bool> updateWord(Word updatedWord) async {
+    final id = updatedWord.id;
+    if (id == null) return false;
+    final updatedCount =
+        await (update(words)..where((word) => word.id.equals(id))).write(
+          WordsCompanion(
+            topicId: Value(updatedWord.topicId),
+            word: Value(updatedWord.word),
+            translation: Value(updatedWord.translation),
+            learned: Value(updatedWord.learned),
+          ),
+        );
+    return updatedCount > 0;
+  }
+
+  Future<bool> deleteTopicWithWords(int topicId) async {
+    if (topicId < 0) return false;
+    return transaction(() async {
+      await (delete(words)..where((word) => word.topicId.equals(topicId))).go();
+      final deletedTopics = await (delete(
+        topics,
+      )..where((tbl) => tbl.id.equals(topicId))).go();
+      return deletedTopics > 0;
+    });
+  }
 }
 
 final AppDatabase appDatabase = AppDatabase();

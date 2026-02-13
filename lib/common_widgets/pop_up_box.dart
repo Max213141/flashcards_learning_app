@@ -1,3 +1,4 @@
+import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 
 class PopUpBox extends StatelessWidget {
@@ -11,7 +12,7 @@ class PopUpBox extends StatelessWidget {
       child: Dialog(
         shadowColor: Colors.black.withValues(alpha: 0.2),
         insetPadding: EdgeInsets.symmetric(horizontal: 14),
-        backgroundColor: Color(0xffF7F9E6),
+        backgroundColor: AppConst.dialogbackground,
         child: IntrinsicHeight(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),

@@ -3,12 +3,13 @@ import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/screens/edit_word_screen/edit_word_form.dart';
+import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/pop_up_body_widget.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/pluralization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 @RoutePage()
 class TopicScreen extends StatefulWidget {
@@ -52,18 +53,40 @@ class _TopicScreenState extends State<TopicScreen> {
   void _onEdit(Word wordInfo) async {
     final wordId = wordInfo.id ?? -1;
     if (wordId < 0) return;
-    final fresh = await appDatabase.getWordById(wordId);
-    if (!mounted || fresh == null) return;
+    final obtainedWord = await appDatabase.getWordById(wordId);
+    if (!mounted || obtainedWord == null) return;
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => EditWordDialog(
-        word: fresh,
-        onSave: () => Navigator.of(context).pop(true),
+        word: obtainedWord,
+        onSave: (Word updatedWord) async {
+          final updated = await appDatabase.updateWord(updatedWord);
+          if (!context.mounted) return;
+          Navigator.of(context).pop(updated);
+        },
       ),
     );
     if (result == true && mounted) {
       _reoloadDB();
     }
+  }
+
+  Future<void> _confirmDeleteTopic() async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => PopUpBox(popupContent: Text(')')),
+    );
+
+    if (shouldDelete != true) return;
+    final deleted = await appDatabase.deleteTopicWithWords(widget.topicId);
+    if (!mounted) return;
+    if (!deleted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Не удалось удалить тему')));
+      return;
+    }
+    context.router.replaceAll([const MainRoute()]);
   }
 
   @override
@@ -73,6 +96,19 @@ class _TopicScreenState extends State<TopicScreen> {
         backgroundColor: AppConst.primary,
         elevation: 0,
         scrolledUnderElevation: 0,
+        actions: [
+          GestureDetector(
+            onTap: _confirmDeleteTopic,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: SvgPicture.asset(
+                'assets/iconss/delete.svg',
+                height: 22,
+                width: 22,
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: RotatingFab(
         onPressed: () {

@@ -40,7 +40,11 @@ class AppBarWidget extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [firstPart, SizedBox(width: 20), secondPart],
+                    children: [
+                      Expanded(child: firstPart),
+                      SizedBox(width: 20),
+                      Expanded(child: secondPart),
+                    ],
                   ),
                 ),
               ),

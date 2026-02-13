@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SlidableWordWidget extends StatelessWidget {
   final int index;
@@ -31,13 +32,23 @@ class SlidableWordWidget extends StatelessWidget {
 
         // All actions are defined in the children parameter.
         children: [
-          // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
+          CustomSlidableAction(
             onPressed: (_) => onDelete(),
             backgroundColor: AppConst.primary,
-            foregroundColor: AppConst.black,
-            icon: Icons.delete, //TODO use icon from assets
-            label: 'Удалить',
+            child: Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/iconss/delete.svg',
+                    height: 22,
+                    width: 22,
+                  ),
+                  const SizedBox(height: 4),
+                  Text('Удалить', style: AppConst.text),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -46,16 +57,24 @@ class SlidableWordWidget extends StatelessWidget {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
-          SlidableAction(
-            // An action can be bigger than the others.
+          CustomSlidableAction(
             flex: 2,
-            onPressed: (_) {
-              onEdit();
-            },
+            onPressed: (_) => onEdit(),
             backgroundColor: AppConst.primary,
-            foregroundColor: AppConst.black,
-            icon: Icons.archive, //TODO use icon from assets
-            label: 'Редактировать',
+            child: Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/iconss/edit.svg',
+                    height: 22,
+                    width: 22,
+                  ),
+                  const SizedBox(height: 4),
+                  Text('Редактировать', style: AppConst.text),
+                ],
+              ),
+            ),
           ),
         ],
       ),

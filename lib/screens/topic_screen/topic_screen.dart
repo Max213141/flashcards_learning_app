@@ -6,6 +6,7 @@ import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/pop_up_body_widget.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
+import 'package:flashcards_learning_app/screens/topic_screen/widgets/deletion_acceptance_body.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/pluralization.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,9 @@ class _TopicScreenState extends State<TopicScreen> {
   Future<void> _confirmDeleteTopic() async {
     final shouldDelete = await showDialog<bool>(
       context: context,
-      builder: (context) => PopUpBox(popupContent: Text(')')),
+      builder: (context) => PopUpBox(
+        popupContent: DeletionAcceptanceBody(topicName: widget.topicName),
+      ),
     );
 
     if (shouldDelete != true) return;
@@ -100,11 +103,11 @@ class _TopicScreenState extends State<TopicScreen> {
           GestureDetector(
             onTap: _confirmDeleteTopic,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: SvgPicture.asset(
                 'assets/iconss/delete.svg',
-                height: 22,
-                width: 22,
+                height: 28,
+                width: 28,
               ),
             ),
           ),

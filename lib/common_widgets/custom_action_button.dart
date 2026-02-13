@@ -4,16 +4,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomActionButton extends StatelessWidget {
   final String buttonText;
-  // final double width;
+  final Color? color;
+  final Color? borderColor;
+  final double? borderWidth;
   final VoidCallback onTap;
   final String? icon;
 
   const CustomActionButton({
     super.key,
     required this.buttonText,
+
     // required this.width,
     required this.onTap,
     this.icon,
+    this.color = AppConst.buttonBackground,
+    this.borderColor = AppConst.primary,
+    this.borderWidth = 2,
   });
 
   @override
@@ -24,9 +30,9 @@ class CustomActionButton extends StatelessWidget {
         height: 55,
         child: FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: AppConst.buttonBackground,
+            backgroundColor: color,
             foregroundColor: AppConst.black,
-            side: BorderSide(color: AppConst.primary, width: 2),
+            side: BorderSide(color: borderColor!, width: borderWidth!),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(35),
             ),

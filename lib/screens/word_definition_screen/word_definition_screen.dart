@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,10 +21,19 @@ class WordDefinitionScreen extends StatefulWidget {
 }
 
 class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
-  late bool know = widget.wordData.learned;
+  late Word _wordData;
+  late bool know;
+  bool _hasChanges = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _wordData = widget.wordData;
+    know = _wordData.learned;
+  }
 
   Future<void> _deleteWord() async {
-    final id = widget.wordData.id;
+    final id = _wordData.id;
     if (id == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -43,16 +53,61 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
     }
   }
 
+  Future<void> _editWord() async {
+    final result = await context.router.push<bool>(
+      EditWordRoute(word: _wordData),
+    );
+    if (result != true) return;
+    final id = _wordData.id;
+    if (id == null) return;
+    final freshWord = await appDatabase.getWordById(id);
+    if (!mounted || freshWord == null) return;
+    setState(() {
+      _wordData = freshWord;
+      know = _wordData.learned;
+      _hasChanges = true;
+    });
+  }
+
+  Future<void> _toggleLearned() async {
+    final id = _wordData.id;
+    if (id == null) return;
+    final nextValue = !know;
+    final updatedWord = _wordData.copyWith(learned: nextValue);
+    final updated = await appDatabase.updateWord(updatedWord);
+    if (!mounted) return;
+    if (!updated) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Не удалось обновить статус слова')),
+      );
+      return;
+    }
+    setState(() {
+      know = nextValue;
+      _wordData = updatedWord;
+      _hasChanges = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.of(context).pop(_hasChanges);
+      },
+      child: Scaffold(
+        appBar: AppBar(
         title: Row(
           children: [
             Expanded(
               child: Center(child: Text('Определение', style: AppConst.h2)),
             ),
-            SvgPicture.asset('assets/iconss/edit.svg', width: 24),
+            GestureDetector(
+              onTap: _editWord,
+              child: SvgPicture.asset('assets/iconss/edit.svg', width: 24),
+            ),
             SizedBox(width: 15),
             GestureDetector(
               onTap: _deleteWord,
@@ -60,15 +115,15 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
             ),
           ],
         ),
-      ),
-      body: Padding(
+        ),
+        body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.wordData.word,
+              _wordData.word,
               style: TextStyle(
                 fontSize: 56,
                 fontWeight: FontWeight.bold,
@@ -94,7 +149,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                         Text('동사', style: AppConst.text),
                         SizedBox(height: 15),
                         Text('Перевод', style: AppConst.h2),
-                        Text(widget.wordData.translation, style: AppConst.text),
+                        Text(_wordData.translation, style: AppConst.text),
                         SizedBox(height: 15),
                         Text('Слово в употреблении', style: AppConst.h2),
                         Text(
@@ -108,18 +163,17 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                           children: [
                             Text(widget.topicName, style: AppConst.h2),
                             GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  know = !know;
-                                });
-                              },
+                              onTap: _toggleLearned,
                               child: SvgPicture.asset(
                                 'assets/iconss/knowledge_button.svg',
                                 width: 65,
                                 height: 65,
-                                color: know
-                                    ? AppConst.primary
-                                    : AppConst.background,
+                                colorFilter: ColorFilter.mode(
+                                  know
+                                      ? AppConst.primary
+                                      : AppConst.background,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ],
@@ -131,6 +185,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

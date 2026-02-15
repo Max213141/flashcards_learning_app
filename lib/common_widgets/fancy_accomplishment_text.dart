@@ -2,7 +2,8 @@ import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
 
 class FancyAccomplishmentText extends StatelessWidget {
-  const FancyAccomplishmentText({super.key});
+  final int dailyGoal;
+  const FancyAccomplishmentText({super.key, required this.dailyGoal});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class FancyAccomplishmentText extends StatelessWidget {
             child: Transform.translate(
               offset: const Offset(0, -2),
               child: Text(
-                '10',
+                '0',
                 style: AppConst.additionalText.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -30,7 +31,7 @@ class FancyAccomplishmentText extends StatelessWidget {
             alignment: PlaceholderAlignment.middle,
             child: Transform.translate(
               offset: const Offset(0, 0),
-              child: Text('10', style: AppConst.additionalText),
+              child: Text('$dailyGoal', style: AppConst.additionalText),
             ),
           ),
         ],

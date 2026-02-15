@@ -3,12 +3,8 @@ import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget {
   final Widget firstPart;
-  final Widget secondPart;
-  const AppBarWidget({
-    super.key,
-    required this.firstPart,
-    required this.secondPart,
-  });
+  final Widget? secondPart;
+  const AppBarWidget({super.key, required this.firstPart, this.secondPart});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,7 @@ class AppBarWidget extends StatelessWidget {
                     children: [
                       Expanded(child: firstPart),
                       SizedBox(width: 20),
-                      Expanded(child: secondPart),
+                      if (secondPart != null) Expanded(child: secondPart!),
                     ],
                   ),
                 ),

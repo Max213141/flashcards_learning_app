@@ -47,102 +47,101 @@ class _EditWordFormState extends State<EditWordForm> {
       key: formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: AlignmentGeometry.topLeft,
-              child: Text('Изучаемое слово', style: AppConst.h2),
-            ),
-            TextfieldPaddingWrapper(
-              textField: CustomTextfield(controller: learningWordController),
-            ),
-            SizedBox(height: 20),
-            Text('Перевод', style: AppConst.h2),
-            TextfieldPaddingWrapper(
-              textField: CustomTextfield(controller: translationController),
-            ),
-            SizedBox(height: 15),
-
-            Theme(
-              data: Theme.of(context).copyWith(
-                splashFactory: NoSplash.splashFactory,
-                highlightColor: Colors.transparent,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: AlignmentGeometry.topLeft,
+                child: Text('Изучаемое слово', style: AppConst.h2),
               ),
-              child: ExpansionTile(
-                title: Text(
-                  'Дополнительно',
-                  style: AppConst.h2,
-                  textAlign: TextAlign.left,
+              TextfieldPaddingWrapper(
+                textField: CustomTextfield(controller: learningWordController),
+              ),
+              SizedBox(height: 20),
+              Text('Перевод', style: AppConst.h2),
+              TextfieldPaddingWrapper(
+                textField: CustomTextfield(controller: translationController),
+              ),
+              SizedBox(height: 15),
+
+              Theme(
+                data: Theme.of(context).copyWith(
+                  splashFactory: NoSplash.splashFactory,
+                  highlightColor: Colors.transparent,
                 ),
-                shape: Border.all(color: Colors.transparent),
-                tilePadding: EdgeInsets.all(0),
-                expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
+                child: ExpansionTile(
+                  title: Text(
+                    'Дополнительно',
+                    style: AppConst.h2,
+                    textAlign: TextAlign.left,
+                  ),
+                  shape: Border.all(color: Colors.transparent),
+                  tilePadding: EdgeInsets.all(0),
+                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20),
 
-                  Text('Транскрипция', style: AppConst.h2),
-                  TextfieldPaddingWrapper(
-                    textField: CustomTextfield(
-                      controller: transcriptionController,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text('Часть речи', style: AppConst.h2),
-                  TextfieldPaddingWrapper(
-                    textField: CustomTextfield(
-                      controller: partofSpeechController,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-
-                  Text('Употребление', style: AppConst.h2),
-                  TextfieldPaddingWrapper(
-                    textField: CustomTextfield(controller: usageController),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Spacer(),
-            SizedBox(
-              width: 300,
-              child: CustomActionButton(
-                buttonText: _saving ? 'Сохранение...' : 'Сохранить',
-                onTap: () async {
-                  final wordValue = learningWordController.text.trim();
-                  final translationValue = translationController.text.trim();
-                  if (wordValue.isEmpty || translationValue.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Заполните слово и перевод'),
+                    Text('Транскрипция', style: AppConst.h2),
+                    TextfieldPaddingWrapper(
+                      textField: CustomTextfield(
+                        controller: transcriptionController,
                       ),
-                    );
-                    return;
-                  }
-                  if (widget.onSave == null) return;
-                  final baseWord =
-                      widget.word ??
-                      Word(
-                        word: wordValue,
-                        translation: translationValue,
-                      );
-                  final updatedWord = baseWord.copyWith(
-                    word: wordValue,
-                    translation: translationValue,
-                  );
-                  setState(() => _saving = true);
-                  try {
-                    await widget.onSave!(updatedWord);
-                  } finally {
-                    if (mounted) {
-                      setState(() => _saving = false);
-                    }
-                  }
-                },
+                    ),
+                    SizedBox(height: 20),
+                    Text('Часть речи', style: AppConst.h2),
+                    TextfieldPaddingWrapper(
+                      textField: CustomTextfield(
+                        controller: partofSpeechController,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+
+                    Text('Употребление', style: AppConst.h2),
+                    TextfieldPaddingWrapper(
+                      textField: CustomTextfield(controller: usageController),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+
+              SizedBox(
+                width: 300,
+                child: CustomActionButton(
+                  buttonText: _saving ? 'Сохранение...' : 'Сохранить',
+                  onTap: () async {
+                    final wordValue = learningWordController.text.trim();
+                    final translationValue = translationController.text.trim();
+                    if (wordValue.isEmpty || translationValue.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Заполните слово и перевод'),
+                        ),
+                      );
+                      return;
+                    }
+                    if (widget.onSave == null) return;
+                    final baseWord =
+                        widget.word ??
+                        Word(word: wordValue, translation: translationValue);
+                    final updatedWord = baseWord.copyWith(
+                      word: wordValue,
+                      translation: translationValue,
+                    );
+                    setState(() => _saving = true);
+                    try {
+                      await widget.onSave!(updatedWord);
+                    } finally {
+                      if (mounted) {
+                        setState(() => _saving = false);
+                      }
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -3,3 +3,8 @@ export 'topics_list_widget.dart';
 export 'color_selector_row.dart';
 export 'pop_up_body_widget.dart';
 export 'topics_expansion_tile.dart';
+export 'filter_button_widget.dart';
+export 'topic_body_widget.dart';
+export 'create_goal_dialog.dart';
+export 'goals_dialog_body_widget.dart';
+export 'app_bar_customized_widget.dart';

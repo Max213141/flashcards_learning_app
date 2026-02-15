@@ -1,17 +1,29 @@
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextfield extends StatelessWidget {
   final TextEditingController controller;
   final int? maxLength;
-  const CustomTextfield({super.key, required this.controller, this.maxLength});
+  final bool digitsOnly;
+  final ValueChanged<String>? onChanged;
+  const CustomTextfield({
+    super.key,
+    required this.controller,
+    this.maxLength,
+    this.digitsOnly = false,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      onChanged: onChanged,
       style: AppConst.text,
       maxLength: maxLength,
+      keyboardType: digitsOnly ? TextInputType.number : TextInputType.text,
+      inputFormatters: digitsOnly ? [FilteringTextInputFormatter.digitsOnly] : null,
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Color(0xffD7D7D7)),

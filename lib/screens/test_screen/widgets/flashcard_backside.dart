@@ -1,3 +1,4 @@
+import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +17,7 @@ class FlashcardBackside extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 12,
-            color: Color.fromRGBO(174, 192, 111, 100),
-          ),
+          border: Border.all(width: 12, color: AppConst.primary),
           borderRadius: BorderRadius.circular(18),
         ),
 

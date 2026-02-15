@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/topic.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,28 +34,11 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
   Future<void> _pickJson() async {
     setState(() => _loading = true);
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: const ['json'],
-        withData: true,
-      );
-      if (result == null || result.files.isEmpty) return;
-
-      final picked = result.files.single;
-      String contents;
-      if (picked.bytes != null) {
-        contents = utf8.decode(picked.bytes!);
-      } else if (picked.path != null) {
-        contents = await File(picked.path!).readAsString();
-      } else {
-        throw const FormatException('No file data available');
-      }
-
-      final decoded = jsonDecode(contents);
-      if (decoded is! List) {
+      final pickedData = await PickerUtil().pickJson();
+      if (pickedData is! List) {
         throw const FormatException('JSON must be a list of words');
       }
-      final words = decoded
+      final words = pickedData
           .cast<Map<String, dynamic>>()
           .map((e) => Word.fromJson(e))
           .toList();

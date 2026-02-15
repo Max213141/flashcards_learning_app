@@ -7,6 +7,7 @@ import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   bool buttonsHidden = true;
   late final Stream<List<TopicSummary>> _topicsStream;
+  late final UserGoals? currentGoals;
 
   @override
   void initState() {
@@ -47,21 +49,19 @@ class _MainScreenState extends State<MainScreen> {
       if (path == null) return;
       final filePath = path.endsWith('.json') ? path : '$path.json';
       await File(filePath).writeAsString(jsonString);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Резервная копия сохранена')),
-      );
+      _showSnack('Резервная копия сохранена');
     } on PlatformException catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка доступа к файлам: ${e.message}')),
-      );
+      _showSnack('Ошибка доступа к файлам: ${e.message}');
     } catch (_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Не удалось создать резервную копию')),
-      );
+      _showSnack('Не удалось создать резервную копию');
     }
+  }
+
+  void _showSnack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -82,35 +82,9 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Column(
         children: [
-          AppBarWidget(
-            firstPart: Row(
-              children: [
-                CircularProgressBar(
-                  width: 50,
-                  height: 50,
-                  indicatorColor: AppConst.lavender,
-                  accomplishment: Text('50%', style: AppConst.additionalText),
-                ),
-                SizedBox(width: 10),
-                FittedBox(
-                  child: Text('Общий \nпрогресс', style: AppConst.text),
-                ),
-              ],
-            ),
+          AppBarCustomizedWidget(),
 
-            secondPart: Row(
-              children: [
-                CircularProgressBar(
-                  width: 50,
-                  height: 50,
-                  indicatorColor: AppConst.primary,
-                  accomplishment: FancyAccomplishmentText(),
-                ),
-                SizedBox(width: 10),
-                FittedBox(child: Text('Дневная \nцель', style: AppConst.text)),
-              ],
-            ),
-          ),
+          FilterButtonWidget(),
 
           Expanded(
             child: Stack(

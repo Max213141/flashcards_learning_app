@@ -2,14 +2,20 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'package:flashcards_learning_app/entities/topic.dart';
+import 'package:flashcards_learning_app/entities/user_goals.dart' as entity;
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 
 part 'app_database.g.dart';
+
+// ignore: unused_element
+void _log(dynamic message) =>
+    Logger.projectLog(message, name: 'UniversePayApp');
 
 @DataClassName('TopicEntry')
 class Topics extends Table {
@@ -24,7 +30,18 @@ class Words extends Table {
   IntColumn get topicId => integer().nullable().references(Topics, #id)();
   TextColumn get word => text()();
   TextColumn get translation => text()();
+  TextColumn get topicName => text()();
   BoolColumn get learned => boolean().withDefault(const Constant(false))();
+}
+
+@DataClassName('UserGoalsEntry')
+class UserGoalsTable extends Table {
+  IntColumn get id => integer()();
+  IntColumn get overallGoal => integer()();
+  IntColumn get dailyGoal => integer()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 LazyDatabase _openConnection() {
@@ -35,12 +52,24 @@ LazyDatabase _openConnection() {
   });
 }
 
-@DriftDatabase(tables: [Topics, Words])
+@DriftDatabase(tables: [Topics, Words, UserGoalsTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
+
+  // @override
+  // MigrationStrategy get migration => MigrationStrategy(
+  //   onCreate: (Migrator m) async {
+  //     await m.createAll();
+  //   },
+  //   onUpgrade: (Migrator m, int from, int to) async {
+  //     if (from < 2) {
+  //       await m.createTable(userGoalsTable);
+  //     }
+  //   },
+  // );
 
   Future<int> createTopic(Topic topic) async {
     return into(topics).insert(
@@ -91,13 +120,18 @@ class AppDatabase extends _$AppDatabase {
     return into(topics).insert(TopicsCompanion.insert(name: topicName));
   }
 
-  Future<void> insertWords(int topicId, List<Word> wordList) async {
+  Future<void> insertWords({
+    required int topicId,
+    required String topicName,
+    required List<Word> wordList,
+  }) async {
     if (wordList.isEmpty) return;
     final entries = wordList
         .map(
           (w) => WordsCompanion.insert(
             topicId: Value(topicId),
             word: w.word,
+            topicName: topicName,
             translation: w.translation,
             learned: Value(w.learned),
           ),
@@ -112,29 +146,13 @@ class AppDatabase extends _$AppDatabase {
   }) async {
     return transaction(() async {
       final topicId = await createTopic(topic);
-      await insertWords(topicId, words);
+      await insertWords(
+        topicId: topicId,
+        topicName: topic.topicName,
+        wordList: words,
+      );
       return topicId;
     });
-  }
-
-  Future<void> insertImportedWords(List<Word> words) async {
-    if (words.isEmpty) return;
-    await transaction(() async {
-      for (final group in _groupByTopicName(words).entries) {
-        final topicId = await createTopicIfMissing(group.key);
-        await insertWords(topicId, group.value);
-      }
-    });
-  }
-
-  Map<String, List<Word>> _groupByTopicName(List<Word> words) {
-    final map = <String, List<Word>>{};
-    for (final word in words) {
-      final topicName = (word.topic ?? '').trim();
-      final key = topicName.isEmpty ? 'Untitled' : topicName;
-      map.putIfAbsent(key, () => []).add(word);
-    }
-    return map;
   }
 
   Future<String?> getTopicName(int topicId) async {
@@ -153,7 +171,7 @@ class AppDatabase extends _$AppDatabase {
         w.word as word,
         w.translation as translation,
         w.learned as learned,
-        t.name as topicName
+        w.topic_name as topicName
       FROM words w
       LEFT JOIN topics t ON t.id = w.topic_id
       WHERE w.id = ?
@@ -184,6 +202,7 @@ class AppDatabase extends _$AppDatabase {
             id: row.id,
             topicId: row.topicId,
             word: row.word,
+            topic: row.topicName,
             translation: row.translation,
             learned: row.learned,
           ),
@@ -200,7 +219,7 @@ class AppDatabase extends _$AppDatabase {
         w.word as word,
         w.translation as translation,
         w.learned as learned,
-        t.name as topicName
+        w.topic_name as topicName
       FROM words w
       LEFT JOIN topics t ON t.id = w.topic_id
       ORDER BY w.id DESC
@@ -224,6 +243,24 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> deleteWordById(int id) async {
     return (delete(words)..where((word) => word.id.equals(id))).go();
+  }
+
+  Future<bool> addWord(Word newWord) async {
+    final topicId = newWord.topicId;
+    if (topicId == null) return false;
+    final resolvedTopicName = (newWord.topic ?? '').trim().isNotEmpty
+        ? newWord.topic!.trim()
+        : (await getTopicName(topicId) ?? '');
+    final insertedId = await into(words).insert(
+      WordsCompanion.insert(
+        topicId: Value(topicId),
+        word: newWord.word.trim(),
+        translation: newWord.translation.trim(),
+        topicName: resolvedTopicName,
+        learned: Value(newWord.learned),
+      ),
+    );
+    return insertedId > 0;
   }
 
   Future<bool> updateWord(Word updatedWord) async {
@@ -250,6 +287,44 @@ class AppDatabase extends _$AppDatabase {
       )..where((tbl) => tbl.id.equals(topicId))).go();
       return deletedTopics > 0;
     });
+  }
+
+  Future<void> saveUserGoals(entity.UserGoals goals) async {
+    await into(userGoalsTable).insertOnConflictUpdate(
+      UserGoalsTableCompanion.insert(
+        id: const Value(1),
+        overallGoal: goals.overallGoal,
+        dailyGoal: goals.dailyGoal,
+      ),
+    );
+  }
+
+  Future<entity.UserGoals?> getUserGoals() async {
+    final row = await (select(
+      userGoalsTable,
+    )..where((tbl) => tbl.id.equals(1))).getSingleOrNull();
+    if (row == null) return null;
+    return entity.UserGoals(
+      overallGoal: row.overallGoal,
+      dailyGoal: row.dailyGoal,
+    );
+  }
+
+  Future<({int totalWords, int learnedWords})> getWordsProgressStats() async {
+    final query = customSelect(
+      '''
+      SELECT
+        COUNT(*) as totalWords,
+        COALESCE(SUM(CASE WHEN learned = 1 THEN 1 ELSE 0 END), 0) as learnedWords
+      FROM words
+      ''',
+      readsFrom: {words},
+    );
+    final row = await query.getSingle();
+    return (
+      totalWords: row.read<int>('totalWords'),
+      learnedWords: row.read<int>('learnedWords'),
+    );
   }
 }
 

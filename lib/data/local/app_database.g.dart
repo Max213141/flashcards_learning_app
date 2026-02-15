@@ -305,6 +305,17 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _topicNameMeta = const VerificationMeta(
+    'topicName',
+  );
+  @override
+  late final GeneratedColumn<String> topicName = GeneratedColumn<String>(
+    'topic_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _learnedMeta = const VerificationMeta(
     'learned',
   );
@@ -326,6 +337,7 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     topicId,
     word,
     translation,
+    topicName,
     learned,
   ];
   @override
@@ -368,6 +380,14 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     } else if (isInserting) {
       context.missing(_translationMeta);
     }
+    if (data.containsKey('topic_name')) {
+      context.handle(
+        _topicNameMeta,
+        topicName.isAcceptableOrUnknown(data['topic_name']!, _topicNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_topicNameMeta);
+    }
     if (data.containsKey('learned')) {
       context.handle(
         _learnedMeta,
@@ -399,6 +419,10 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
         DriftSqlType.string,
         data['${effectivePrefix}translation'],
       )!,
+      topicName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}topic_name'],
+      )!,
       learned: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}learned'],
@@ -417,12 +441,14 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
   final int? topicId;
   final String word;
   final String translation;
+  final String topicName;
   final bool learned;
   const WordEntry({
     required this.id,
     this.topicId,
     required this.word,
     required this.translation,
+    required this.topicName,
     required this.learned,
   });
   @override
@@ -434,6 +460,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     }
     map['word'] = Variable<String>(word);
     map['translation'] = Variable<String>(translation);
+    map['topic_name'] = Variable<String>(topicName);
     map['learned'] = Variable<bool>(learned);
     return map;
   }
@@ -446,6 +473,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           : Value(topicId),
       word: Value(word),
       translation: Value(translation),
+      topicName: Value(topicName),
       learned: Value(learned),
     );
   }
@@ -460,6 +488,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       topicId: serializer.fromJson<int?>(json['topicId']),
       word: serializer.fromJson<String>(json['word']),
       translation: serializer.fromJson<String>(json['translation']),
+      topicName: serializer.fromJson<String>(json['topicName']),
       learned: serializer.fromJson<bool>(json['learned']),
     );
   }
@@ -471,6 +500,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       'topicId': serializer.toJson<int?>(topicId),
       'word': serializer.toJson<String>(word),
       'translation': serializer.toJson<String>(translation),
+      'topicName': serializer.toJson<String>(topicName),
       'learned': serializer.toJson<bool>(learned),
     };
   }
@@ -480,12 +510,14 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     Value<int?> topicId = const Value.absent(),
     String? word,
     String? translation,
+    String? topicName,
     bool? learned,
   }) => WordEntry(
     id: id ?? this.id,
     topicId: topicId.present ? topicId.value : this.topicId,
     word: word ?? this.word,
     translation: translation ?? this.translation,
+    topicName: topicName ?? this.topicName,
     learned: learned ?? this.learned,
   );
   WordEntry copyWithCompanion(WordsCompanion data) {
@@ -496,6 +528,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       translation: data.translation.present
           ? data.translation.value
           : this.translation,
+      topicName: data.topicName.present ? data.topicName.value : this.topicName,
       learned: data.learned.present ? data.learned.value : this.learned,
     );
   }
@@ -507,13 +540,15 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           ..write('topicId: $topicId, ')
           ..write('word: $word, ')
           ..write('translation: $translation, ')
+          ..write('topicName: $topicName, ')
           ..write('learned: $learned')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, topicId, word, translation, learned);
+  int get hashCode =>
+      Object.hash(id, topicId, word, translation, topicName, learned);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -522,6 +557,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           other.topicId == this.topicId &&
           other.word == this.word &&
           other.translation == this.translation &&
+          other.topicName == this.topicName &&
           other.learned == this.learned);
 }
 
@@ -530,12 +566,14 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
   final Value<int?> topicId;
   final Value<String> word;
   final Value<String> translation;
+  final Value<String> topicName;
   final Value<bool> learned;
   const WordsCompanion({
     this.id = const Value.absent(),
     this.topicId = const Value.absent(),
     this.word = const Value.absent(),
     this.translation = const Value.absent(),
+    this.topicName = const Value.absent(),
     this.learned = const Value.absent(),
   });
   WordsCompanion.insert({
@@ -543,14 +581,17 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     this.topicId = const Value.absent(),
     required String word,
     required String translation,
+    required String topicName,
     this.learned = const Value.absent(),
   }) : word = Value(word),
-       translation = Value(translation);
+       translation = Value(translation),
+       topicName = Value(topicName);
   static Insertable<WordEntry> custom({
     Expression<int>? id,
     Expression<int>? topicId,
     Expression<String>? word,
     Expression<String>? translation,
+    Expression<String>? topicName,
     Expression<bool>? learned,
   }) {
     return RawValuesInsertable({
@@ -558,6 +599,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
       if (topicId != null) 'topic_id': topicId,
       if (word != null) 'word': word,
       if (translation != null) 'translation': translation,
+      if (topicName != null) 'topic_name': topicName,
       if (learned != null) 'learned': learned,
     });
   }
@@ -567,6 +609,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     Value<int?>? topicId,
     Value<String>? word,
     Value<String>? translation,
+    Value<String>? topicName,
     Value<bool>? learned,
   }) {
     return WordsCompanion(
@@ -574,6 +617,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
       topicId: topicId ?? this.topicId,
       word: word ?? this.word,
       translation: translation ?? this.translation,
+      topicName: topicName ?? this.topicName,
       learned: learned ?? this.learned,
     );
   }
@@ -593,6 +637,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     if (translation.present) {
       map['translation'] = Variable<String>(translation.value);
     }
+    if (topicName.present) {
+      map['topic_name'] = Variable<String>(topicName.value);
+    }
     if (learned.present) {
       map['learned'] = Variable<bool>(learned.value);
     }
@@ -606,7 +653,260 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
           ..write('topicId: $topicId, ')
           ..write('word: $word, ')
           ..write('translation: $translation, ')
+          ..write('topicName: $topicName, ')
           ..write('learned: $learned')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UserGoalsTableTable extends UserGoalsTable
+    with TableInfo<$UserGoalsTableTable, UserGoalsEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserGoalsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _overallGoalMeta = const VerificationMeta(
+    'overallGoal',
+  );
+  @override
+  late final GeneratedColumn<int> overallGoal = GeneratedColumn<int>(
+    'overall_goal',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dailyGoalMeta = const VerificationMeta(
+    'dailyGoal',
+  );
+  @override
+  late final GeneratedColumn<int> dailyGoal = GeneratedColumn<int>(
+    'daily_goal',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, overallGoal, dailyGoal];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_goals_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserGoalsEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('overall_goal')) {
+      context.handle(
+        _overallGoalMeta,
+        overallGoal.isAcceptableOrUnknown(
+          data['overall_goal']!,
+          _overallGoalMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_overallGoalMeta);
+    }
+    if (data.containsKey('daily_goal')) {
+      context.handle(
+        _dailyGoalMeta,
+        dailyGoal.isAcceptableOrUnknown(data['daily_goal']!, _dailyGoalMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dailyGoalMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserGoalsEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserGoalsEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      overallGoal: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}overall_goal'],
+      )!,
+      dailyGoal: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}daily_goal'],
+      )!,
+    );
+  }
+
+  @override
+  $UserGoalsTableTable createAlias(String alias) {
+    return $UserGoalsTableTable(attachedDatabase, alias);
+  }
+}
+
+class UserGoalsEntry extends DataClass implements Insertable<UserGoalsEntry> {
+  final int id;
+  final int overallGoal;
+  final int dailyGoal;
+  const UserGoalsEntry({
+    required this.id,
+    required this.overallGoal,
+    required this.dailyGoal,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['overall_goal'] = Variable<int>(overallGoal);
+    map['daily_goal'] = Variable<int>(dailyGoal);
+    return map;
+  }
+
+  UserGoalsTableCompanion toCompanion(bool nullToAbsent) {
+    return UserGoalsTableCompanion(
+      id: Value(id),
+      overallGoal: Value(overallGoal),
+      dailyGoal: Value(dailyGoal),
+    );
+  }
+
+  factory UserGoalsEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserGoalsEntry(
+      id: serializer.fromJson<int>(json['id']),
+      overallGoal: serializer.fromJson<int>(json['overallGoal']),
+      dailyGoal: serializer.fromJson<int>(json['dailyGoal']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'overallGoal': serializer.toJson<int>(overallGoal),
+      'dailyGoal': serializer.toJson<int>(dailyGoal),
+    };
+  }
+
+  UserGoalsEntry copyWith({int? id, int? overallGoal, int? dailyGoal}) =>
+      UserGoalsEntry(
+        id: id ?? this.id,
+        overallGoal: overallGoal ?? this.overallGoal,
+        dailyGoal: dailyGoal ?? this.dailyGoal,
+      );
+  UserGoalsEntry copyWithCompanion(UserGoalsTableCompanion data) {
+    return UserGoalsEntry(
+      id: data.id.present ? data.id.value : this.id,
+      overallGoal: data.overallGoal.present
+          ? data.overallGoal.value
+          : this.overallGoal,
+      dailyGoal: data.dailyGoal.present ? data.dailyGoal.value : this.dailyGoal,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserGoalsEntry(')
+          ..write('id: $id, ')
+          ..write('overallGoal: $overallGoal, ')
+          ..write('dailyGoal: $dailyGoal')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, overallGoal, dailyGoal);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserGoalsEntry &&
+          other.id == this.id &&
+          other.overallGoal == this.overallGoal &&
+          other.dailyGoal == this.dailyGoal);
+}
+
+class UserGoalsTableCompanion extends UpdateCompanion<UserGoalsEntry> {
+  final Value<int> id;
+  final Value<int> overallGoal;
+  final Value<int> dailyGoal;
+  const UserGoalsTableCompanion({
+    this.id = const Value.absent(),
+    this.overallGoal = const Value.absent(),
+    this.dailyGoal = const Value.absent(),
+  });
+  UserGoalsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int overallGoal,
+    required int dailyGoal,
+  }) : overallGoal = Value(overallGoal),
+       dailyGoal = Value(dailyGoal);
+  static Insertable<UserGoalsEntry> custom({
+    Expression<int>? id,
+    Expression<int>? overallGoal,
+    Expression<int>? dailyGoal,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (overallGoal != null) 'overall_goal': overallGoal,
+      if (dailyGoal != null) 'daily_goal': dailyGoal,
+    });
+  }
+
+  UserGoalsTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? overallGoal,
+    Value<int>? dailyGoal,
+  }) {
+    return UserGoalsTableCompanion(
+      id: id ?? this.id,
+      overallGoal: overallGoal ?? this.overallGoal,
+      dailyGoal: dailyGoal ?? this.dailyGoal,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (overallGoal.present) {
+      map['overall_goal'] = Variable<int>(overallGoal.value);
+    }
+    if (dailyGoal.present) {
+      map['daily_goal'] = Variable<int>(dailyGoal.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserGoalsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('overallGoal: $overallGoal, ')
+          ..write('dailyGoal: $dailyGoal')
           ..write(')'))
         .toString();
   }
@@ -617,11 +917,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $TopicsTable topics = $TopicsTable(this);
   late final $WordsTable words = $WordsTable(this);
+  late final $UserGoalsTableTable userGoalsTable = $UserGoalsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [topics, words];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    topics,
+    words,
+    userGoalsTable,
+  ];
 }
 
 typedef $$TopicsTableCreateCompanionBuilder =
@@ -881,6 +1186,7 @@ typedef $$WordsTableCreateCompanionBuilder =
       Value<int?> topicId,
       required String word,
       required String translation,
+      required String topicName,
       Value<bool> learned,
     });
 typedef $$WordsTableUpdateCompanionBuilder =
@@ -889,6 +1195,7 @@ typedef $$WordsTableUpdateCompanionBuilder =
       Value<int?> topicId,
       Value<String> word,
       Value<String> translation,
+      Value<String> topicName,
       Value<bool> learned,
     });
 
@@ -935,6 +1242,11 @@ class $$WordsTableFilterComposer extends Composer<_$AppDatabase, $WordsTable> {
 
   ColumnFilters<String> get translation => $composableBuilder(
     column: $table.translation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get topicName => $composableBuilder(
+    column: $table.topicName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -991,6 +1303,11 @@ class $$WordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get topicName => $composableBuilder(
+    column: $table.topicName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get learned => $composableBuilder(
     column: $table.learned,
     builder: (column) => ColumnOrderings(column),
@@ -1039,6 +1356,9 @@ class $$WordsTableAnnotationComposer
     column: $table.translation,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get topicName =>
+      $composableBuilder(column: $table.topicName, builder: (column) => column);
 
   GeneratedColumn<bool> get learned =>
       $composableBuilder(column: $table.learned, builder: (column) => column);
@@ -1099,12 +1419,14 @@ class $$WordsTableTableManager
                 Value<int?> topicId = const Value.absent(),
                 Value<String> word = const Value.absent(),
                 Value<String> translation = const Value.absent(),
+                Value<String> topicName = const Value.absent(),
                 Value<bool> learned = const Value.absent(),
               }) => WordsCompanion(
                 id: id,
                 topicId: topicId,
                 word: word,
                 translation: translation,
+                topicName: topicName,
                 learned: learned,
               ),
           createCompanionCallback:
@@ -1113,12 +1435,14 @@ class $$WordsTableTableManager
                 Value<int?> topicId = const Value.absent(),
                 required String word,
                 required String translation,
+                required String topicName,
                 Value<bool> learned = const Value.absent(),
               }) => WordsCompanion.insert(
                 id: id,
                 topicId: topicId,
                 word: word,
                 translation: translation,
+                topicName: topicName,
                 learned: learned,
               ),
           withReferenceMapper: (p0) => p0
@@ -1186,6 +1510,166 @@ typedef $$WordsTableProcessedTableManager =
       WordEntry,
       PrefetchHooks Function({bool topicId})
     >;
+typedef $$UserGoalsTableTableCreateCompanionBuilder =
+    UserGoalsTableCompanion Function({
+      Value<int> id,
+      required int overallGoal,
+      required int dailyGoal,
+    });
+typedef $$UserGoalsTableTableUpdateCompanionBuilder =
+    UserGoalsTableCompanion Function({
+      Value<int> id,
+      Value<int> overallGoal,
+      Value<int> dailyGoal,
+    });
+
+class $$UserGoalsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $UserGoalsTableTable> {
+  $$UserGoalsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get overallGoal => $composableBuilder(
+    column: $table.overallGoal,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dailyGoal => $composableBuilder(
+    column: $table.dailyGoal,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UserGoalsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserGoalsTableTable> {
+  $$UserGoalsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get overallGoal => $composableBuilder(
+    column: $table.overallGoal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dailyGoal => $composableBuilder(
+    column: $table.dailyGoal,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UserGoalsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserGoalsTableTable> {
+  $$UserGoalsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get overallGoal => $composableBuilder(
+    column: $table.overallGoal,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get dailyGoal =>
+      $composableBuilder(column: $table.dailyGoal, builder: (column) => column);
+}
+
+class $$UserGoalsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserGoalsTableTable,
+          UserGoalsEntry,
+          $$UserGoalsTableTableFilterComposer,
+          $$UserGoalsTableTableOrderingComposer,
+          $$UserGoalsTableTableAnnotationComposer,
+          $$UserGoalsTableTableCreateCompanionBuilder,
+          $$UserGoalsTableTableUpdateCompanionBuilder,
+          (
+            UserGoalsEntry,
+            BaseReferences<_$AppDatabase, $UserGoalsTableTable, UserGoalsEntry>,
+          ),
+          UserGoalsEntry,
+          PrefetchHooks Function()
+        > {
+  $$UserGoalsTableTableTableManager(
+    _$AppDatabase db,
+    $UserGoalsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UserGoalsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserGoalsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserGoalsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> overallGoal = const Value.absent(),
+                Value<int> dailyGoal = const Value.absent(),
+              }) => UserGoalsTableCompanion(
+                id: id,
+                overallGoal: overallGoal,
+                dailyGoal: dailyGoal,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int overallGoal,
+                required int dailyGoal,
+              }) => UserGoalsTableCompanion.insert(
+                id: id,
+                overallGoal: overallGoal,
+                dailyGoal: dailyGoal,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserGoalsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserGoalsTableTable,
+      UserGoalsEntry,
+      $$UserGoalsTableTableFilterComposer,
+      $$UserGoalsTableTableOrderingComposer,
+      $$UserGoalsTableTableAnnotationComposer,
+      $$UserGoalsTableTableCreateCompanionBuilder,
+      $$UserGoalsTableTableUpdateCompanionBuilder,
+      (
+        UserGoalsEntry,
+        BaseReferences<_$AppDatabase, $UserGoalsTableTable, UserGoalsEntry>,
+      ),
+      UserGoalsEntry,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1194,4 +1678,6 @@ class $AppDatabaseManager {
       $$TopicsTableTableManager(_db, _db.topics);
   $$WordsTableTableManager get words =>
       $$WordsTableTableManager(_db, _db.words);
+  $$UserGoalsTableTableTableManager get userGoalsTable =>
+      $$UserGoalsTableTableTableManager(_db, _db.userGoalsTable);
 }

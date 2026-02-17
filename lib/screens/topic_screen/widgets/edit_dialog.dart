@@ -1,5 +1,5 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +20,7 @@ class EditWordDialog extends StatelessWidget {
             children: [
               Text('Изменение слова', style: AppConst.h1),
               const SizedBox(height: 8),
-              Expanded(
-                child: EditWordForm(word: word, onSave: onSave),
-              ),
+              EditWordForm(word: word, onSave: onSave),
             ],
           ),
         ),

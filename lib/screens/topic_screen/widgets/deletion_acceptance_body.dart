@@ -1,5 +1,5 @@
 import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 
 class DeletionAcceptanceBody extends StatelessWidget {

@@ -75,12 +75,20 @@ class MainRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [TestScreen]
 class TestRoute extends PageRouteInfo<TestRouteArgs> {
-  TestRoute({Key? key, required int topicId, List<PageRouteInfo>? children})
-    : super(
-        TestRoute.name,
-        args: TestRouteArgs(key: key, topicId: topicId),
-        initialChildren: children,
-      );
+  TestRoute({
+    Key? key,
+    required int topicId,
+    required Color topicColor,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TestRoute.name,
+         args: TestRouteArgs(
+           key: key,
+           topicId: topicId,
+           topicColor: topicColor,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'TestRoute';
 
@@ -88,32 +96,44 @@ class TestRoute extends PageRouteInfo<TestRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<TestRouteArgs>();
-      return TestScreen(key: args.key, topicId: args.topicId);
+      return TestScreen(
+        key: args.key,
+        topicId: args.topicId,
+        topicColor: args.topicColor,
+      );
     },
   );
 }
 
 class TestRouteArgs {
-  const TestRouteArgs({this.key, required this.topicId});
+  const TestRouteArgs({
+    this.key,
+    required this.topicId,
+    required this.topicColor,
+  });
 
   final Key? key;
 
   final int topicId;
 
+  final Color topicColor;
+
   @override
   String toString() {
-    return 'TestRouteArgs{key: $key, topicId: $topicId}';
+    return 'TestRouteArgs{key: $key, topicId: $topicId, topicColor: $topicColor}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! TestRouteArgs) return false;
-    return key == other.key && topicId == other.topicId;
+    return key == other.key &&
+        topicId == other.topicId &&
+        topicColor == other.topicColor;
   }
 
   @override
-  int get hashCode => key.hashCode ^ topicId.hashCode;
+  int get hashCode => key.hashCode ^ topicId.hashCode ^ topicColor.hashCode;
 }
 
 /// generated route for
@@ -123,10 +143,16 @@ class TopicRoute extends PageRouteInfo<TopicRouteArgs> {
     Key? key,
     required String topicName,
     required int topicId,
+    required Color topicColor,
     List<PageRouteInfo>? children,
   }) : super(
          TopicRoute.name,
-         args: TopicRouteArgs(key: key, topicName: topicName, topicId: topicId),
+         args: TopicRouteArgs(
+           key: key,
+           topicName: topicName,
+           topicId: topicId,
+           topicColor: topicColor,
+         ),
          initialChildren: children,
        );
 
@@ -140,6 +166,7 @@ class TopicRoute extends PageRouteInfo<TopicRouteArgs> {
         key: args.key,
         topicName: args.topicName,
         topicId: args.topicId,
+        topicColor: args.topicColor,
       );
     },
   );
@@ -150,6 +177,7 @@ class TopicRouteArgs {
     this.key,
     required this.topicName,
     required this.topicId,
+    required this.topicColor,
   });
 
   final Key? key;
@@ -158,9 +186,11 @@ class TopicRouteArgs {
 
   final int topicId;
 
+  final Color topicColor;
+
   @override
   String toString() {
-    return 'TopicRouteArgs{key: $key, topicName: $topicName, topicId: $topicId}';
+    return 'TopicRouteArgs{key: $key, topicName: $topicName, topicId: $topicId, topicColor: $topicColor}';
   }
 
   @override
@@ -169,11 +199,16 @@ class TopicRouteArgs {
     if (other is! TopicRouteArgs) return false;
     return key == other.key &&
         topicName == other.topicName &&
-        topicId == other.topicId;
+        topicId == other.topicId &&
+        topicColor == other.topicColor;
   }
 
   @override
-  int get hashCode => key.hashCode ^ topicName.hashCode ^ topicId.hashCode;
+  int get hashCode =>
+      key.hashCode ^
+      topicName.hashCode ^
+      topicId.hashCode ^
+      topicColor.hashCode;
 }
 
 /// generated route for

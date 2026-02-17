@@ -1,4 +1,4 @@
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -29,7 +29,10 @@ class FilterButtonWidget extends StatelessWidget {
                   Expanded(
                     child: SvgPicture.asset(
                       'assets/iconss/sort.svg',
-                      color: AppConst.black,
+                      colorFilter: const ColorFilter.mode(
+                        AppConst.black,
+                        BlendMode.srcIn,
+                      ),
                       height: 20,
                       width: 20,
                     ),

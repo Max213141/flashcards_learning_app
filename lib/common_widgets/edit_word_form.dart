@@ -1,5 +1,5 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 
@@ -99,15 +99,18 @@ class _EditWordFormState extends State<EditWordForm> {
 
                     Text('Употребление', style: AppConst.h2),
                     TextfieldPaddingWrapper(
-                      textField: CustomTextfield(controller: usageController),
+                      textField: CustomTextfield(
+                        controller: usageController,
+                        expands: true,
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 16),
 
-              SizedBox(
-                width: 300,
+              ConstrainedBox(
+                constraints: BoxConstraints(minWidth: 350),
                 child: CustomActionButton(
                   buttonText: _saving ? 'Сохранение...' : 'Сохранить',
                   onTap: () async {

@@ -1,14 +1,16 @@
-import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 
 class FlashcardBackside extends StatelessWidget {
   final Word wordPair;
   final String translation;
+  final Color topicColor;
+
   const FlashcardBackside({
     super.key,
     required this.wordPair,
     required this.translation,
+    required this.topicColor,
   });
 
   @override
@@ -17,7 +19,7 @@ class FlashcardBackside extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(width: 12, color: AppConst.primary),
+          border: Border.all(width: 12, color: topicColor),
           borderRadius: BorderRadius.circular(18),
         ),
 

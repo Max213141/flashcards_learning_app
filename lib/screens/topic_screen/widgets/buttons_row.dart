@@ -1,11 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flashcards_learning_app/router/app_router.dart' as appRouter;
+import 'package:flashcards_learning_app/router/app_router.dart' as app_router;
 
 class ButtonsRow extends StatelessWidget {
   final int topicId;
-  const ButtonsRow({super.key, required this.topicId});
+  final Color topicColor;
+
+  const ButtonsRow({
+    super.key,
+    required this.topicId,
+    required this.topicColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +24,9 @@ class ButtonsRow extends StatelessWidget {
             width: 145,
             child: CustomActionButton(
               buttonText: 'Практика',
-              onTap: () => AutoRouter.of(
-                context,
-              ).push(appRouter.TestRoute(topicId: topicId)),
+              onTap: () => AutoRouter.of(context).push(
+                app_router.TestRoute(topicId: topicId, topicColor: topicColor),
+              ),
             ),
           ),
           SizedBox(
@@ -28,9 +34,9 @@ class ButtonsRow extends StatelessWidget {
 
             child: CustomActionButton(
               buttonText: 'Экзамен',
-              onTap: () => AutoRouter.of(
-                context,
-              ).push(appRouter.TestRoute(topicId: topicId)),
+              onTap: () => AutoRouter.of(context).push(
+                app_router.TestRoute(topicId: topicId, topicColor: topicColor),
+              ),
             ),
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,7 +57,11 @@ class TopicBodyWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(4.0),
                           child: SvgPicture.asset(
                             'assets/iconss/knowledge_button.svg',
-                            color: color,
+
+                            colorFilter: ColorFilter.mode(
+                              color,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),

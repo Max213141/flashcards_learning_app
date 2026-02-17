@@ -59,18 +59,6 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
-  // @override
-  // MigrationStrategy get migration => MigrationStrategy(
-  //   onCreate: (Migrator m) async {
-  //     await m.createAll();
-  //   },
-  //   onUpgrade: (Migrator m, int from, int to) async {
-  //     if (from < 2) {
-  //       await m.createTable(userGoalsTable);
-  //     }
-  //   },
-  // );
-
   Future<int> createTopic(Topic topic) async {
     return into(topics).insert(
       TopicsCompanion.insert(
@@ -326,6 +314,7 @@ class AppDatabase extends _$AppDatabase {
       learnedWords: row.read<int>('learnedWords'),
     );
   }
+
 }
 
 final AppDatabase appDatabase = AppDatabase();

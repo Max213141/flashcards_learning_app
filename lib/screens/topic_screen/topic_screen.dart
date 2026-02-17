@@ -1,13 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/deletion_acceptance_body.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
-import 'package:flashcards_learning_app/utils/pluralization.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,10 +16,12 @@ import 'package:flutter_svg/svg.dart';
 class TopicScreen extends StatefulWidget {
   final String topicName;
   final int topicId;
+  final Color topicColor;
   const TopicScreen({
     super.key,
     required this.topicName,
     required this.topicId,
+    required this.topicColor,
   });
 
   @override
@@ -226,7 +227,10 @@ class _TopicScreenState extends State<TopicScreen> {
                     ),
                   ),
 
-                  ButtonsRow(topicId: widget.topicId),
+                  ButtonsRow(
+                    topicId: widget.topicId,
+                    topicColor: widget.topicColor,
+                  ),
 
                   TopicWordsListWidget(
                     wordsList: words,

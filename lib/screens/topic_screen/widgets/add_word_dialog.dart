@@ -1,5 +1,5 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class AddWordDialog extends StatelessWidget {
             children: [
               Text('Добавление слова', style: AppConst.h1),
               const SizedBox(height: 8),
-              Expanded(child: EditWordForm(onSave: onSave)),
+              SingleChildScrollView(child: EditWordForm(onSave: onSave)),
             ],
           ),
         ),

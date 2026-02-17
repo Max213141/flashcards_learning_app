@@ -7,7 +7,12 @@ import 'package:flutter/material.dart';
 @RoutePage()
 class TestScreen extends StatefulWidget {
   final int topicId;
-  const TestScreen({super.key, required this.topicId});
+  final Color topicColor;
+  const TestScreen({
+    super.key,
+    required this.topicId,
+    required this.topicColor,
+  });
 
   @override
   State<TestScreen> createState() => _TestScreenState();
@@ -37,9 +42,12 @@ class _TestScreenState extends State<TestScreen> {
           }
 
           final words = snapshot.data ?? [];
-          final totalWords = words.length;
 
-          return TestScreenBodyWidget(wordList: words);
+          return TestScreenBodyWidget(
+            wordList: words,
+            topicId: widget.topicId,
+            topicColor: widget.topicColor,
+          );
         },
       ),
     );

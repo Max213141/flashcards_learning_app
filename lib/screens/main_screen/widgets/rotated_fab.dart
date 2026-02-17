@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -66,7 +66,10 @@ class _RotatingFabState extends State<RotatingFab>
             child: SvgPicture.asset(
               'assets/iconss/plus.svg',
               width: 30,
-              color: AppConst.black,
+              colorFilter: const ColorFilter.mode(
+                AppConst.black,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         ),

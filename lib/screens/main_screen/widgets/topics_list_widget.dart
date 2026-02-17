@@ -1,14 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class TopicsListWidget extends StatelessWidget {
-  const TopicsListWidget({super.key, required this.topicsStream});
   final Stream<List<TopicSummary>> topicsStream;
+  const TopicsListWidget({super.key, required this.topicsStream});
+
   static const double cardHeight = 175;
   static const double overlap = 100;
 
@@ -35,7 +36,7 @@ class TopicsListWidget extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
           child: ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(20),
+            borderRadius: BorderRadiusGeometry.circular(18),
             child: SizedBox(
               height: MediaQuery.sizeOf(context).height * .45,
               child: SingleChildScrollView(
@@ -57,6 +58,7 @@ class TopicsListWidget extends StatelessWidget {
                             TopicRoute(
                               topicName: topic.topicName,
                               topicId: topic.id,
+                              topicColor: color,
                             ),
                           ),
                           child: CustomPaint(

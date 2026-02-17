@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class FlashcardFrontSide extends StatelessWidget {
   final Word wordPair;
   final String word;
+  final Color topicColor;
   final String? transcription;
   final String? lexicalCategory;
   const FlashcardFrontSide({
@@ -16,6 +16,7 @@ class FlashcardFrontSide extends StatelessWidget {
     this.transcription,
     this.lexicalCategory,
     required this.wordPair,
+    required this.topicColor,
   });
 
   @override
@@ -24,7 +25,7 @@ class FlashcardFrontSide extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(width: 12, color: AppConst.primary),
+          border: Border.all(width: 12, color: topicColor),
           borderRadius: BorderRadius.circular(18),
         ),
         child: Center(

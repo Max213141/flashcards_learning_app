@@ -6,6 +6,6 @@ class TextfieldPaddingWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(width: 300, height: 40, child: textField);
+    return SizedBox(height: 40, child: textField);
   }
 }

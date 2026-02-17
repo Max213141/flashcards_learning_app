@@ -1,6 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/topic.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
@@ -78,7 +78,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
     try {
       final topic = Topic(topicName: name, colorValue: _selectedColorValue);
       final words = _importedWords.map((w) => w.copyWith(topic: name)).toList();
-      words.map((word) => print('${word.id}/${word.topicId}: ${word.topic}'));
+      // words.map((word) => print('${word.id}/${word.topicId}: ${word.topic}'));
       await appDatabase.createTopicWithWords(topic: topic, words: words);
       if (!mounted) return;
       Navigator.of(context).pop(true);
@@ -146,7 +146,10 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                 SvgPicture.asset(
                   'assets/iconss/file_export.svg',
                   height: 24,
-                  color: AppConst.black,
+                  colorFilter: const ColorFilter.mode(
+                    AppConst.black,
+                    BlendMode.srcIn,
+                  ),
                 ),
                 SizedBox(width: 5),
                 Text('Загрузить файл JSON', style: AppConst.text),

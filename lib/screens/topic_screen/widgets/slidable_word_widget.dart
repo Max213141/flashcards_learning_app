@@ -1,4 +1,4 @@
-import 'package:flashcards_learning_app/design/colors.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,7 +35,8 @@ class SlidableWordWidget extends StatelessWidget {
           CustomSlidableAction(
             onPressed: (_) => onDelete(),
             backgroundColor: AppConst.primary,
-            child: Expanded(
+            child: SizedBox(
+              height: 60,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -61,7 +62,8 @@ class SlidableWordWidget extends StatelessWidget {
             flex: 2,
             onPressed: (_) => onEdit(),
             backgroundColor: AppConst.primary,
-            child: Expanded(
+            child: SizedBox(
+              height: 60,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -87,6 +89,7 @@ class SlidableWordWidget extends StatelessWidget {
         ),
         child: SizedBox(
           height: 60,
+          width: MediaQuery.sizeOf(context).width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 

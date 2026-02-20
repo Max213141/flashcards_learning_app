@@ -155,6 +155,19 @@ class _TopicScreenState extends State<TopicScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Padding(
+            padding: const EdgeInsetsGeometry.all(10),
+            child: SvgPicture.asset(
+              'assets/iconss/arrow_back.svg',
+              colorFilter: const ColorFilter.mode(
+                AppConst.black,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+        ),
         backgroundColor: AppConst.primary,
         elevation: 0,
         scrolledUnderElevation: 0,

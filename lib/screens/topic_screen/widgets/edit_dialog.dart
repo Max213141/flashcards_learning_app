@@ -14,14 +14,16 @@ class EditWordDialog extends StatelessWidget {
       backgroundColor: AppConst.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: IntrinsicHeight(
-          child: Column(
-            children: [
-              Text('Изменение слова', style: AppConst.h1),
-              const SizedBox(height: 8),
-              EditWordForm(word: word, onSave: onSave),
-            ],
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 16),
+        child: IntrinsicWidth(
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                Text('Изменение слова', style: AppConst.h1),
+                const SizedBox(height: 8),
+                EditWordForm(word: word, onSave: onSave),
+              ],
+            ),
           ),
         ),
       ),

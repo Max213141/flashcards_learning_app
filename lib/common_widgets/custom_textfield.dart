@@ -33,6 +33,7 @@ class CustomTextfield extends StatelessWidget {
           ? [FilteringTextInputFormatter.digitsOnly]
           : null,
       decoration: InputDecoration(
+        counter: SizedBox.shrink(),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Color(0xffD7D7D7)),
         ),

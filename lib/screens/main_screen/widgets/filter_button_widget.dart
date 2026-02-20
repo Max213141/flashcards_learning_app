@@ -63,7 +63,13 @@ class FilterButtonWidget extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: SvgPicture.asset('assets/iconss/unfold.svg'),
+                  child: SvgPicture.asset(
+                    'assets/iconss/unfold.svg',
+                    colorFilter: const ColorFilter.mode(
+                      AppConst.black,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ),

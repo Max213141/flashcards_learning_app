@@ -86,6 +86,14 @@ class SlidableWordWidget extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: (index + 1).isEven ? AppConst.background : Color(0xffF0F0ED),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 10,
+              spreadRadius: -5,
+              offset: Offset(-35, 0), // negative = inner effect
+            ),
+          ],
         ),
         child: SizedBox(
           height: 60,

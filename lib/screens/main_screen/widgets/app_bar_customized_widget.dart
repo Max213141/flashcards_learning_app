@@ -52,15 +52,7 @@ class _AppBarCustomizedWidgetState extends State<AppBarCustomizedWidget> {
       setState(() {
         _reloadData();
       });
-      _showSnack('Цели сохранены');
     }
-  }
-
-  void _showSnack(String message) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -96,8 +88,8 @@ class _AppBarCustomizedWidgetState extends State<AppBarCustomizedWidget> {
                       ),
                       SizedBox(width: 10),
                       SizedBox(
-                        height: 20,
-                        width: 20,
+                        height: 24,
+                        width: 24,
                         child: SvgPicture.asset(
                           'assets/iconss/tap_icon.svg',
                           colorFilter: const ColorFilter.mode(

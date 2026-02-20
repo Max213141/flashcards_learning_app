@@ -19,7 +19,7 @@ class CustomActionButton extends StatelessWidget {
     this.icon,
     this.color = AppConst.buttonBackground,
     this.borderColor = AppConst.primary,
-    this.borderWidth = 2,
+    this.borderWidth = 1,
   });
 
   @override

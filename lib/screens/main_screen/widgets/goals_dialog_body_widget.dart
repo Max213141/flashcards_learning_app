@@ -60,7 +60,7 @@ class _GoalsDialogBodyWidgetState extends State<GoalsDialogBodyWidget> {
         CustomTextfield(
           controller: dailyController,
           digitsOnly: true,
-          maxLength: 5,
+          maxLength: 3,
           onChanged: (_) => setState(() {}),
         ),
         const SizedBox(height: 20),

@@ -11,7 +11,7 @@ class AppConst {
   static const Color transparent = Color(0x65FFFFFF);
   static const Color background = Color(0xFFF4F2F0);
   static const Color buttonBackground = Color(0x60FDFFED);
-  static const Color dialogbackground = Color(0xffF7F9E6);
+  static const Color dialogbackground = Color.fromARGB(255, 251, 252, 244);
 
   static const TextStyle h1 = TextStyle(
     fontFamily: 'Jost',

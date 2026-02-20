@@ -25,7 +25,7 @@ class TopicsListWidget extends StatelessWidget {
         }
         if (topics.isEmpty) {
           return Padding(
-            padding: const EdgeInsets.only(top: 250.0),
+            padding: const EdgeInsets.only(top: 150.0),
             child: Text('Нет ни одной темы', style: AppConst.text),
           );
         }

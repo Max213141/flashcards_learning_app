@@ -103,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         CustomActionButton(
                           buttonText: 'Восстановление из копии',
-                          icon: 'assets/iconss/archive.svg',
+                          icon: 'assets/iconss/unarchive.svg',
                           onTap: () {},
                         ),
                         Padding(

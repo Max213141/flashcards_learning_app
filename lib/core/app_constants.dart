@@ -21,8 +21,14 @@ class AppConst {
   static const TextStyle h2 = TextStyle(
     fontFamily: 'Jost',
     fontSize: 16,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
   );
+  static const TextStyle h3 = TextStyle(
+    fontFamily: 'Jost',
+    fontSize: 20,
+    fontWeight: FontWeight.w300,
+  );
+
   static const TextStyle text = TextStyle(
     fontFamily: 'Jost',
     fontSize: 16,

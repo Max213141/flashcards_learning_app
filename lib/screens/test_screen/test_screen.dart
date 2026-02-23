@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/test_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 @RoutePage()
 class TestScreen extends StatefulWidget {
@@ -30,7 +32,22 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Практика')),
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Padding(
+            padding: const EdgeInsetsGeometry.all(10),
+            child: SvgPicture.asset(
+              'assets/iconss/arrow_back.svg',
+              colorFilter: const ColorFilter.mode(
+                AppConst.black,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+        ),
+        title: Text('Практика', style: AppConst.h3),
+      ),
       body: FutureBuilder<List<Word>>(
         future: _wordsFuture,
         builder: (context, snapshot) {

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flutter/material.dart';
@@ -39,35 +40,34 @@ class FlashcardFrontSide extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(lexicalCategory ?? ''),
-                    GestureDetector(
-                      onTap: () => AutoRouter.of(
-                        context,
-                      ).push(EditWordRoute(word: wordPair)),
-                      child: SvgPicture.asset(
-                        'assets/iconss/edit.svg',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () => AutoRouter.of(
+                    //     context,
+                    //   ).push(EditWordRoute(word: wordPair)),
+                    //   child: SvgPicture.asset(
+                    //     'assets/iconss/edit.svg',
+                    //     width: 24,
+                    //     height: 24,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
               Spacer(flex: 8),
-              Text(
-                word,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 56, fontWeight: FontWeight.bold),
-              ),
-              if (transcription != null)
-                Text(
-                  transcription!,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal,
-                    color: const Color.fromARGB(255, 46, 50, 52),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: Text(
+                    word,
+
+                    textAlign: TextAlign.center,
+                    style: AppConst.h1.copyWith(fontSize: 56),
                   ),
                 ),
+              ),
+              if (transcription != null)
+                Text(transcription!, style: AppConst.text),
               Spacer(flex: 10),
             ],
           ),

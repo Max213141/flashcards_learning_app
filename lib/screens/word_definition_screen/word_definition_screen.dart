@@ -99,10 +99,23 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Padding(
+              padding: const EdgeInsetsGeometry.all(10),
+              child: SvgPicture.asset(
+                'assets/iconss/arrow_back.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppConst.black,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ),
           title: Row(
             children: [
               Expanded(
-                child: Center(child: Text('Определение', style: AppConst.h2)),
+                child: Center(child: Text('Определение', style: AppConst.h3)),
               ),
               GestureDetector(
                 onTap: _editWord,
@@ -122,12 +135,14 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                _wordData.word,
-                style: TextStyle(
-                  fontSize: 56,
-                  fontWeight: FontWeight.bold,
-                  height: 1.1,
+              FittedBox(
+                child: Text(
+                  _wordData.word,
+                  style: TextStyle(
+                    fontSize: 56,
+                    fontWeight: FontWeight.bold,
+                    height: 1.1,
+                  ),
                 ),
               ),
               Text('jam-kkan-man', style: AppConst.text),

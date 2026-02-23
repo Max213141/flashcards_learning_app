@@ -90,7 +90,7 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
                   threshold: 70,
                   cardsCount: wordsWidgetList.length,
                   onSwipe: _onSwipe,
-                  onEnd: () => _onEnd(context),
+                  onEnd: () => AutoRouter.of(context).pop(),
                   allowedSwipeDirection: AllowedSwipeDirection.only(
                     left: true,
                     right: true,

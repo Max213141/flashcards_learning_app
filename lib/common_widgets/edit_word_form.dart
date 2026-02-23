@@ -2,6 +2,7 @@ import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class EditWordForm extends StatefulWidget {
   final Word? word;
@@ -20,6 +21,7 @@ class _EditWordFormState extends State<EditWordForm> {
   final TextEditingController partofSpeechController = TextEditingController();
   final TextEditingController usageController = TextEditingController();
   bool _saving = false;
+  bool _expanded = false;
 
   @override
   void initState() {
@@ -75,6 +77,21 @@ class _EditWordFormState extends State<EditWordForm> {
                     'Дополнительно',
                     style: AppConst.h2,
                     textAlign: TextAlign.left,
+                  ),
+                  onExpansionChanged: (value) =>
+                      setState(() => _expanded = value),
+                  trailing: AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    child: SvgPicture.asset(
+                      'assets/iconss/unfold.svg',
+                      height: 28,
+                      colorFilter: ColorFilter.mode(
+                        AppConst.black,
+                        BlendMode.srcIn,
+                      ),
+                    ),
                   ),
                   shape: Border.all(color: Colors.transparent),
                   tilePadding: EdgeInsets.all(0),

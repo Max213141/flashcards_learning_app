@@ -1,3 +1,4 @@
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
 
@@ -23,28 +24,18 @@ class FlashcardBackside extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
         ),
 
-        child: Column(
-          children: [
-            Spacer(flex: 1),
-
-            Align(
-              alignment: AlignmentDirectional.topEnd,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 30.0, top: 5),
-                child: Icon(Icons.access_alarm_outlined),
-              ),
-            ),
-            Spacer(flex: 15),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 75.0),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            child: FittedBox(
               child: Text(
                 translation,
-                maxLines: 5,
+
                 textAlign: TextAlign.center,
+                style: AppConst.h1.copyWith(fontSize: 56),
               ),
             ),
-            Spacer(flex: 15),
-          ],
+          ),
         ),
       ),
     );

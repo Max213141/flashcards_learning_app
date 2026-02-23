@@ -1,4 +1,6 @@
+import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WordDescriptionWidget extends StatefulWidget {
   const WordDescriptionWidget({super.key});
@@ -8,6 +10,7 @@ class WordDescriptionWidget extends StatefulWidget {
 }
 
 class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
+  bool _expanded = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,10 +28,28 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
             highlightColor: Colors.transparent,
           ),
           child: ExpansionTile(
-            title: Text('Слово в употреблении'),
-            leading: Icon(
-              Icons.lightbulb_outlined,
-              fontWeight: FontWeight.w400,
+            title: Text(
+              'Слово в употреблении',
+              style: AppConst.text.copyWith(fontWeight: FontWeight.w500),
+            ),
+            leading: SvgPicture.asset(
+              'assets/iconss/lightbulb.svg',
+              width: 26,
+              colorFilter: const ColorFilter.mode(
+                AppConst.black,
+                BlendMode.srcIn,
+              ),
+            ),
+            onExpansionChanged: (value) => setState(() => _expanded = value),
+            trailing: AnimatedRotation(
+              turns: _expanded ? 0.5 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              child: SvgPicture.asset(
+                'assets/iconss/unfold.svg',
+                height: 28,
+                colorFilter: ColorFilter.mode(AppConst.black, BlendMode.srcIn),
+              ),
             ),
             shape: Border.all(color: Colors.transparent),
             children: [
@@ -38,6 +59,7 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
                   alignment: AlignmentGeometry.centerLeft,
                   child: Text(
                     'используется, чтобы попросить кого-то подождать короткий миг, или как вежливое «Извините»/«Прошу прощения», чтобы привлечь внимание или пройти.',
+                    style: AppConst.text,
                   ),
                 ),
               ),

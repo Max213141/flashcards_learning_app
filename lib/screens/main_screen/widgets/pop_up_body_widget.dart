@@ -104,7 +104,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
         children: [
           Center(child: Text('Новая тема', style: AppConst.h1)),
           SizedBox(height: 40),
-          Text('Название', style: AppConst.text),
+          Text('Название', style: AppConst.h2),
           Row(
             children: [
               Expanded(
@@ -126,7 +126,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
             ),
           ],
           SizedBox(height: 40),
-          Text('Цвет темы', style: AppConst.text),
+          Text('Цвет темы', style: AppConst.h2),
           ColorSelector(
             selectedColor: _selectedColor,
             onColorChange: (colorValue, color) {
@@ -152,7 +152,10 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                   ),
                 ),
                 SizedBox(width: 5),
-                Text('Загрузить файл JSON', style: AppConst.text),
+                Text(
+                  'Загрузить файл JSON',
+                  style: AppConst.text.copyWith(color: AppConst.black),
+                ),
               ],
             ),
           ),

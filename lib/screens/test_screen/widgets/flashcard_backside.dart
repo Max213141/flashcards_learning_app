@@ -1,5 +1,5 @@
-import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class FlashcardBackside extends StatelessWidget {
@@ -26,15 +26,8 @@ class FlashcardBackside extends StatelessWidget {
 
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: FittedBox(
-              child: Text(
-                translation,
-
-                textAlign: TextAlign.center,
-                style: AppConst.h1.copyWith(fontSize: 56),
-              ),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: ScaledText(value: translation),
           ),
         ),
       ),

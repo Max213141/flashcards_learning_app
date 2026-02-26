@@ -1,9 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/router/app_router.dart';
+import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class FlashcardFrontSide extends StatelessWidget {
   final Word wordPair;
@@ -56,15 +54,7 @@ class FlashcardFrontSide extends StatelessWidget {
               Spacer(flex: 8),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: Text(
-                    word,
-
-                    textAlign: TextAlign.center,
-                    style: AppConst.h1.copyWith(fontSize: 56),
-                  ),
-                ),
+                child: ScaledText(value: word),
               ),
               if (transcription != null)
                 Text(transcription!, style: AppConst.text),

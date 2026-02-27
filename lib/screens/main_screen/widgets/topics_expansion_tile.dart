@@ -1,6 +1,6 @@
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class TopicsExpansionTile extends StatefulWidget {
   final void Function(String) onTap;
@@ -37,16 +37,7 @@ class _TopicsExpansionTileState extends State<TopicsExpansionTile> {
         tilePadding: EdgeInsets.all(0),
         shape: Border(),
         onExpansionChanged: (value) => setState(() => _expanded = value),
-        trailing: AnimatedRotation(
-          turns: _expanded ? 0.5 : 0.0,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          child: SvgPicture.asset(
-            'assets/iconss/unfold.svg',
-            height: 28,
-            colorFilter: ColorFilter.mode(AppConst.black, BlendMode.srcIn),
-          ),
-        ),
+        trailing: CustomFlipingIcon(isExpanded: _expanded),
         childrenPadding: EdgeInsets.all(0),
         children: [
           SizedBox(

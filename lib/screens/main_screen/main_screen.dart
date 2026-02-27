@@ -9,6 +9,7 @@ import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/picker_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,19 +23,32 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool buttonsHidden = true;
-  late final Stream<List<TopicSummary>> _topicsStream;
+  late Stream<List<TopicSummary>> _topicsStream;
+  TopicSortOption _selectedSort = TopicSortOption.createdDesc;
   late final UserGoals? currentGoals;
 
   @override
   void initState() {
     super.initState();
-    _topicsStream = appDatabase.watchTopicSummaries();
+    _topicsStream = _buildTopicsStream();
+  }
+
+  Stream<List<TopicSummary>> _buildTopicsStream() {
+    return appDatabase.watchTopicSummaries(sortOption: _selectedSort);
+  }
+
+  void _onSortChanged(TopicSortOption option) {
+    if (_selectedSort == option) return;
+    setState(() {
+      _selectedSort = option;
+      _topicsStream = _buildTopicsStream();
+    });
   }
 
   Future<void> _exportBackup() async {
     try {
       final words = await appDatabase.getAllWordsWithTopicName();
-      final jsonList = words.map((w) => w.toJson()).toList();
+      final jsonList = words.map(_wordToBackupJson).toList();
       final jsonString = const JsonEncoder.withIndent('  ').convert(jsonList);
 
       final fileName =
@@ -57,11 +71,78 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  Future<void> _onRestoreBackupTap() async {
+    final shouldRestore = await showDialog<bool>(
+      context: context,
+      builder: (context) =>
+          const PopUpBox(popupContent: RestoreBackupAcceptanceBody()),
+    );
+    if (shouldRestore != true) return;
+    await _restoreBackup();
+  }
+
+  Future<void> _restoreBackup() async {
+    try {
+      final pickedData = await PickerUtil().pickJson();
+      if (pickedData is! List) {
+        throw const FormatException('JSON must be a list of words');
+      }
+      final backupJson = pickedData
+          .map<Map<String, dynamic>>((item) {
+            if (item is! Map) {
+              throw const FormatException(
+                'Each JSON item must be an object with word data',
+              );
+            }
+            return item.map(
+              (key, value) => MapEntry(key.toString(), value),
+            );
+          })
+          .toList();
+
+      final restoredWordsCount = await appDatabase.restoreFromBackupJson(
+        backupJson,
+      );
+      if (!mounted) return;
+      setState(() {
+        _topicsStream = _buildTopicsStream();
+      });
+      _showSnack('Восстановлено слов: $restoredWordsCount');
+    } on PlatformException catch (e) {
+      _showSnack('Ошибка доступа к файлам: ${e.message}');
+    } on FormatException catch (e) {
+      _showSnack(e.message);
+    } catch (_) {
+      _showSnack('Не удалось восстановить резервную копию');
+    }
+  }
+
   void _showSnack(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Map<String, dynamic> _wordToBackupJson(Word word) {
+    final json = <String, dynamic>{
+      'word': word.word.trim(),
+      'translation': word.translation.trim(),
+      'learned': word.learned,
+    };
+
+    void addIfNotEmpty(String key, String? value) {
+      final trimmed = value?.trim();
+      if (trimmed == null || trimmed.isEmpty) return;
+      json[key] = trimmed;
+    }
+
+    addIfNotEmpty('topic', word.topic);
+    addIfNotEmpty('transcription', word.transcription);
+    addIfNotEmpty('partOfSpeech', word.partOfSpeech);
+    addIfNotEmpty('usage', word.usage);
+
+    return json;
   }
 
   @override
@@ -84,7 +165,10 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           AppBarCustomizedWidget(),
 
-          FilterButtonWidget(),
+          FilterButtonWidget(
+            selectedSort: _selectedSort,
+            onSortChanged: _onSortChanged,
+          ),
 
           Expanded(
             child: Stack(
@@ -104,7 +188,7 @@ class _MainScreenState extends State<MainScreen> {
                         CustomActionButton(
                           buttonText: 'Восстановление из копии',
                           icon: 'assets/iconss/unarchive.svg',
-                          onTap: () {},
+                          onTap: _onRestoreBackupTap,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),

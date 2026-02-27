@@ -316,6 +316,37 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _transcriptionMeta = const VerificationMeta(
+    'transcription',
+  );
+  @override
+  late final GeneratedColumn<String> transcription = GeneratedColumn<String>(
+    'transcription',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _partOfSpeechMeta = const VerificationMeta(
+    'partOfSpeech',
+  );
+  @override
+  late final GeneratedColumn<String> partOfSpeech = GeneratedColumn<String>(
+    'part_of_speech',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _usageMeta = const VerificationMeta('usage');
+  @override
+  late final GeneratedColumn<String> usage = GeneratedColumn<String>(
+    'usage',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _learnedMeta = const VerificationMeta(
     'learned',
   );
@@ -338,6 +369,9 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     word,
     translation,
     topicName,
+    transcription,
+    partOfSpeech,
+    usage,
     learned,
   ];
   @override
@@ -388,6 +422,30 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     } else if (isInserting) {
       context.missing(_topicNameMeta);
     }
+    if (data.containsKey('transcription')) {
+      context.handle(
+        _transcriptionMeta,
+        transcription.isAcceptableOrUnknown(
+          data['transcription']!,
+          _transcriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('part_of_speech')) {
+      context.handle(
+        _partOfSpeechMeta,
+        partOfSpeech.isAcceptableOrUnknown(
+          data['part_of_speech']!,
+          _partOfSpeechMeta,
+        ),
+      );
+    }
+    if (data.containsKey('usage')) {
+      context.handle(
+        _usageMeta,
+        usage.isAcceptableOrUnknown(data['usage']!, _usageMeta),
+      );
+    }
     if (data.containsKey('learned')) {
       context.handle(
         _learnedMeta,
@@ -423,6 +481,18 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
         DriftSqlType.string,
         data['${effectivePrefix}topic_name'],
       )!,
+      transcription: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcription'],
+      ),
+      partOfSpeech: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}part_of_speech'],
+      ),
+      usage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}usage'],
+      ),
       learned: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}learned'],
@@ -442,6 +512,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
   final String word;
   final String translation;
   final String topicName;
+  final String? transcription;
+  final String? partOfSpeech;
+  final String? usage;
   final bool learned;
   const WordEntry({
     required this.id,
@@ -449,6 +522,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     required this.word,
     required this.translation,
     required this.topicName,
+    this.transcription,
+    this.partOfSpeech,
+    this.usage,
     required this.learned,
   });
   @override
@@ -461,6 +537,15 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     map['word'] = Variable<String>(word);
     map['translation'] = Variable<String>(translation);
     map['topic_name'] = Variable<String>(topicName);
+    if (!nullToAbsent || transcription != null) {
+      map['transcription'] = Variable<String>(transcription);
+    }
+    if (!nullToAbsent || partOfSpeech != null) {
+      map['part_of_speech'] = Variable<String>(partOfSpeech);
+    }
+    if (!nullToAbsent || usage != null) {
+      map['usage'] = Variable<String>(usage);
+    }
     map['learned'] = Variable<bool>(learned);
     return map;
   }
@@ -474,6 +559,15 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       word: Value(word),
       translation: Value(translation),
       topicName: Value(topicName),
+      transcription: transcription == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcription),
+      partOfSpeech: partOfSpeech == null && nullToAbsent
+          ? const Value.absent()
+          : Value(partOfSpeech),
+      usage: usage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(usage),
       learned: Value(learned),
     );
   }
@@ -489,6 +583,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       word: serializer.fromJson<String>(json['word']),
       translation: serializer.fromJson<String>(json['translation']),
       topicName: serializer.fromJson<String>(json['topicName']),
+      transcription: serializer.fromJson<String?>(json['transcription']),
+      partOfSpeech: serializer.fromJson<String?>(json['partOfSpeech']),
+      usage: serializer.fromJson<String?>(json['usage']),
       learned: serializer.fromJson<bool>(json['learned']),
     );
   }
@@ -501,6 +598,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       'word': serializer.toJson<String>(word),
       'translation': serializer.toJson<String>(translation),
       'topicName': serializer.toJson<String>(topicName),
+      'transcription': serializer.toJson<String?>(transcription),
+      'partOfSpeech': serializer.toJson<String?>(partOfSpeech),
+      'usage': serializer.toJson<String?>(usage),
       'learned': serializer.toJson<bool>(learned),
     };
   }
@@ -511,6 +611,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     String? word,
     String? translation,
     String? topicName,
+    Value<String?> transcription = const Value.absent(),
+    Value<String?> partOfSpeech = const Value.absent(),
+    Value<String?> usage = const Value.absent(),
     bool? learned,
   }) => WordEntry(
     id: id ?? this.id,
@@ -518,6 +621,11 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     word: word ?? this.word,
     translation: translation ?? this.translation,
     topicName: topicName ?? this.topicName,
+    transcription: transcription.present
+        ? transcription.value
+        : this.transcription,
+    partOfSpeech: partOfSpeech.present ? partOfSpeech.value : this.partOfSpeech,
+    usage: usage.present ? usage.value : this.usage,
     learned: learned ?? this.learned,
   );
   WordEntry copyWithCompanion(WordsCompanion data) {
@@ -529,6 +637,13 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           ? data.translation.value
           : this.translation,
       topicName: data.topicName.present ? data.topicName.value : this.topicName,
+      transcription: data.transcription.present
+          ? data.transcription.value
+          : this.transcription,
+      partOfSpeech: data.partOfSpeech.present
+          ? data.partOfSpeech.value
+          : this.partOfSpeech,
+      usage: data.usage.present ? data.usage.value : this.usage,
       learned: data.learned.present ? data.learned.value : this.learned,
     );
   }
@@ -541,14 +656,26 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           ..write('word: $word, ')
           ..write('translation: $translation, ')
           ..write('topicName: $topicName, ')
+          ..write('transcription: $transcription, ')
+          ..write('partOfSpeech: $partOfSpeech, ')
+          ..write('usage: $usage, ')
           ..write('learned: $learned')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, topicId, word, translation, topicName, learned);
+  int get hashCode => Object.hash(
+    id,
+    topicId,
+    word,
+    translation,
+    topicName,
+    transcription,
+    partOfSpeech,
+    usage,
+    learned,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -558,6 +685,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           other.word == this.word &&
           other.translation == this.translation &&
           other.topicName == this.topicName &&
+          other.transcription == this.transcription &&
+          other.partOfSpeech == this.partOfSpeech &&
+          other.usage == this.usage &&
           other.learned == this.learned);
 }
 
@@ -567,6 +697,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
   final Value<String> word;
   final Value<String> translation;
   final Value<String> topicName;
+  final Value<String?> transcription;
+  final Value<String?> partOfSpeech;
+  final Value<String?> usage;
   final Value<bool> learned;
   const WordsCompanion({
     this.id = const Value.absent(),
@@ -574,6 +707,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     this.word = const Value.absent(),
     this.translation = const Value.absent(),
     this.topicName = const Value.absent(),
+    this.transcription = const Value.absent(),
+    this.partOfSpeech = const Value.absent(),
+    this.usage = const Value.absent(),
     this.learned = const Value.absent(),
   });
   WordsCompanion.insert({
@@ -582,6 +718,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     required String word,
     required String translation,
     required String topicName,
+    this.transcription = const Value.absent(),
+    this.partOfSpeech = const Value.absent(),
+    this.usage = const Value.absent(),
     this.learned = const Value.absent(),
   }) : word = Value(word),
        translation = Value(translation),
@@ -592,6 +731,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     Expression<String>? word,
     Expression<String>? translation,
     Expression<String>? topicName,
+    Expression<String>? transcription,
+    Expression<String>? partOfSpeech,
+    Expression<String>? usage,
     Expression<bool>? learned,
   }) {
     return RawValuesInsertable({
@@ -600,6 +742,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
       if (word != null) 'word': word,
       if (translation != null) 'translation': translation,
       if (topicName != null) 'topic_name': topicName,
+      if (transcription != null) 'transcription': transcription,
+      if (partOfSpeech != null) 'part_of_speech': partOfSpeech,
+      if (usage != null) 'usage': usage,
       if (learned != null) 'learned': learned,
     });
   }
@@ -610,6 +755,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     Value<String>? word,
     Value<String>? translation,
     Value<String>? topicName,
+    Value<String?>? transcription,
+    Value<String?>? partOfSpeech,
+    Value<String?>? usage,
     Value<bool>? learned,
   }) {
     return WordsCompanion(
@@ -618,6 +766,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
       word: word ?? this.word,
       translation: translation ?? this.translation,
       topicName: topicName ?? this.topicName,
+      transcription: transcription ?? this.transcription,
+      partOfSpeech: partOfSpeech ?? this.partOfSpeech,
+      usage: usage ?? this.usage,
       learned: learned ?? this.learned,
     );
   }
@@ -640,6 +791,15 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     if (topicName.present) {
       map['topic_name'] = Variable<String>(topicName.value);
     }
+    if (transcription.present) {
+      map['transcription'] = Variable<String>(transcription.value);
+    }
+    if (partOfSpeech.present) {
+      map['part_of_speech'] = Variable<String>(partOfSpeech.value);
+    }
+    if (usage.present) {
+      map['usage'] = Variable<String>(usage.value);
+    }
     if (learned.present) {
       map['learned'] = Variable<bool>(learned.value);
     }
@@ -654,6 +814,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
           ..write('word: $word, ')
           ..write('translation: $translation, ')
           ..write('topicName: $topicName, ')
+          ..write('transcription: $transcription, ')
+          ..write('partOfSpeech: $partOfSpeech, ')
+          ..write('usage: $usage, ')
           ..write('learned: $learned')
           ..write(')'))
         .toString();
@@ -1187,6 +1350,9 @@ typedef $$WordsTableCreateCompanionBuilder =
       required String word,
       required String translation,
       required String topicName,
+      Value<String?> transcription,
+      Value<String?> partOfSpeech,
+      Value<String?> usage,
       Value<bool> learned,
     });
 typedef $$WordsTableUpdateCompanionBuilder =
@@ -1196,6 +1362,9 @@ typedef $$WordsTableUpdateCompanionBuilder =
       Value<String> word,
       Value<String> translation,
       Value<String> topicName,
+      Value<String?> transcription,
+      Value<String?> partOfSpeech,
+      Value<String?> usage,
       Value<bool> learned,
     });
 
@@ -1247,6 +1416,21 @@ class $$WordsTableFilterComposer extends Composer<_$AppDatabase, $WordsTable> {
 
   ColumnFilters<String> get topicName => $composableBuilder(
     column: $table.topicName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcription => $composableBuilder(
+    column: $table.transcription,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get partOfSpeech => $composableBuilder(
+    column: $table.partOfSpeech,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get usage => $composableBuilder(
+    column: $table.usage,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1308,6 +1492,21 @@ class $$WordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get transcription => $composableBuilder(
+    column: $table.transcription,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get partOfSpeech => $composableBuilder(
+    column: $table.partOfSpeech,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get usage => $composableBuilder(
+    column: $table.usage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get learned => $composableBuilder(
     column: $table.learned,
     builder: (column) => ColumnOrderings(column),
@@ -1359,6 +1558,19 @@ class $$WordsTableAnnotationComposer
 
   GeneratedColumn<String> get topicName =>
       $composableBuilder(column: $table.topicName, builder: (column) => column);
+
+  GeneratedColumn<String> get transcription => $composableBuilder(
+    column: $table.transcription,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get partOfSpeech => $composableBuilder(
+    column: $table.partOfSpeech,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get usage =>
+      $composableBuilder(column: $table.usage, builder: (column) => column);
 
   GeneratedColumn<bool> get learned =>
       $composableBuilder(column: $table.learned, builder: (column) => column);
@@ -1420,6 +1632,9 @@ class $$WordsTableTableManager
                 Value<String> word = const Value.absent(),
                 Value<String> translation = const Value.absent(),
                 Value<String> topicName = const Value.absent(),
+                Value<String?> transcription = const Value.absent(),
+                Value<String?> partOfSpeech = const Value.absent(),
+                Value<String?> usage = const Value.absent(),
                 Value<bool> learned = const Value.absent(),
               }) => WordsCompanion(
                 id: id,
@@ -1427,6 +1642,9 @@ class $$WordsTableTableManager
                 word: word,
                 translation: translation,
                 topicName: topicName,
+                transcription: transcription,
+                partOfSpeech: partOfSpeech,
+                usage: usage,
                 learned: learned,
               ),
           createCompanionCallback:
@@ -1436,6 +1654,9 @@ class $$WordsTableTableManager
                 required String word,
                 required String translation,
                 required String topicName,
+                Value<String?> transcription = const Value.absent(),
+                Value<String?> partOfSpeech = const Value.absent(),
+                Value<String?> usage = const Value.absent(),
                 Value<bool> learned = const Value.absent(),
               }) => WordsCompanion.insert(
                 id: id,
@@ -1443,6 +1664,9 @@ class $$WordsTableTableManager
                 word: word,
                 translation: translation,
                 topicName: topicName,
+                transcription: transcription,
+                partOfSpeech: partOfSpeech,
+                usage: usage,
                 learned: learned,
               ),
           withReferenceMapper: (p0) => p0

@@ -1,29 +1,26 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SlidableWordWidget extends StatelessWidget {
   final int index;
-  final int wordId;
-  final String word;
-  final String translation;
+  final Word wordEntity;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
   const SlidableWordWidget({
     super.key,
     required this.index,
-    required this.wordId,
-    required this.word,
-    required this.translation,
     required this.onDelete,
     required this.onEdit,
+    required this.wordEntity,
   });
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      key: ValueKey(wordId),
+      key: ValueKey(wordEntity.id ?? wordEntity.hashCode),
 
       // The start action pane is the one at the left or the top side.
       startActionPane: ActionPane(
@@ -83,42 +80,68 @@ class SlidableWordWidget extends StatelessWidget {
 
       // The child of the Slidable is what the user sees when the
       // component is not dragged.
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: (index + 1).isEven ? AppConst.background : Color(0xffF0F0ED),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 10,
-              spreadRadius: -5,
-              offset: Offset(-35, 0), // negative = inner effect
-            ),
-          ],
-        ),
-        child: SizedBox(
-          height: 60,
-          width: MediaQuery.sizeOf(context).width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-            children: [
-              Expanded(
-                child: Center(child: Text(word, style: AppConst.h2)),
+      child: ClipRect(
+        child: Stack(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: (index + 1).isEven
+                    ? AppConst.background
+                    : const Color(0xffF0F0ED),
               ),
-              VerticalDivider(thickness: 1, color: Color(0xffDFDFDF)),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    translation,
-                    style: AppConst.h2,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
+              child: SizedBox(
+                height: 60,
+                width: MediaQuery.sizeOf(context).width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(wordEntity.word, style: AppConst.h2),
+                      ),
+                    ),
+                    const VerticalDivider(
+                      thickness: 1,
+                      color: Color(0xffDFDFDF),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          wordEntity.translation,
+                          style: AppConst.h2,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (wordEntity.learned)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: 15,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            AppConst.primary.withValues(alpha: 0.1),
+
+                            AppConst.primary.withValues(alpha: 0.9),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/test_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
@@ -26,6 +25,7 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
   final CardSwiperController controller = CardSwiperController();
   late final int wordsListLength;
   late List<Widget> wordsWidgetList;
+  int _currentCardIndex = 0;
   int progress = 0;
   int successfulGuesses = 0;
   int failedGuesses = 0;
@@ -33,6 +33,7 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
   @override
   void initState() {
     wordsListLength = widget.wordList.length;
+
     wordsWidgetList = widget
         .wordList //There must be data
         .map(
@@ -41,8 +42,8 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
               topicColor: widget.topicColor,
               wordPair: word,
               word: word.word,
-              transcription: 'jam-kkan-man',
-              lexicalCategory: '동사',
+              transcription: word.transcription,
+              partOfSpeech: word.partOfSpeech,
             ),
             backWidget: FlashcardBackside(
               topicColor: widget.topicColor,
@@ -71,11 +72,11 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: SizedBox(
-                  height: 6,
+                  height: 8,
                   child: LinearProgressIndicator(
-                    backgroundColor: AppConst.dialogbackground,
+                    backgroundColor: const Color.fromARGB(255, 252, 253, 247),
                     color: widget.topicColor,
                     value: progress / wordsListLength,
                     borderRadius: BorderRadius.circular(8),
@@ -108,7 +109,9 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
                 ),
               ),
 
-              WordDescriptionWidget(),
+              WordDescriptionWidget(
+                usage: widget.wordList[_currentCardIndex].usage,
+              ),
             ],
           ),
         ),
@@ -123,6 +126,9 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
   ) async {
     setState(() {
       progress++;
+      if (currentIndex != null) {
+        _currentCardIndex = currentIndex;
+      }
       if (direction == CardSwiperDirection.right) {
         successfulGuesses++;
       } else if (direction == CardSwiperDirection.left) {
@@ -132,16 +138,16 @@ class _TestScreenBodyWidgetState extends State<TestScreenBodyWidget> {
     return true;
   }
 
-  Future<void> _onEnd(BuildContext pageContext) async {
-    if (!mounted) return;
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => FinishedTestBodyWidget(
-        successfulGuesses: successfulGuesses,
-        failedGuesses: failedGuesses,
-        wordsListLength: wordsListLength,
-      ),
-    ).then((_) => AutoRouter.of(pageContext).pop());
-  }
+  // Future<void> _onEnd(BuildContext pageContext) async {
+  //   if (!mounted) return;
+  //   await showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) => FinishedTestBodyWidget(
+  //       successfulGuesses: successfulGuesses,
+  //       failedGuesses: failedGuesses,
+  //       wordsListLength: wordsListLength,
+  //     ),
+  //   ).then((_) => AutoRouter.of(pageContext).pop());
+  // }
 }

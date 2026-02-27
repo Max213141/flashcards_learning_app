@@ -1,9 +1,11 @@
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class WordDescriptionWidget extends StatefulWidget {
-  const WordDescriptionWidget({super.key});
+  final String? usage;
+  const WordDescriptionWidget({super.key, this.usage});
 
   @override
   State<WordDescriptionWidget> createState() => _WordDescriptionWidgetState();
@@ -11,10 +13,26 @@ class WordDescriptionWidget extends StatefulWidget {
 
 class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
   bool _expanded = false;
+
+  // @override
+  // void didUpdateWidget(covariant WordDescriptionWidget oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (oldWidget.usage != widget.usage) {
+  //     _expanded = false;
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    double bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Padding(
-      padding: const EdgeInsets.all(32.0),
+      padding: EdgeInsets.only(
+        top: 32.0,
+        left: 26,
+        right: 26,
+        bottom: bottomPadding,
+      ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Color.fromRGBO(240, 234, 255, 60),
@@ -41,16 +59,7 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
               ),
             ),
             onExpansionChanged: (value) => setState(() => _expanded = value),
-            trailing: AnimatedRotation(
-              turns: _expanded ? 0.5 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              child: SvgPicture.asset(
-                'assets/iconss/unfold.svg',
-                height: 28,
-                colorFilter: ColorFilter.mode(AppConst.black, BlendMode.srcIn),
-              ),
-            ),
+            trailing: CustomFlipingIcon(isExpanded: _expanded),
             shape: Border.all(color: Colors.transparent),
             children: [
               Padding(
@@ -58,8 +67,10 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
                 child: Align(
                   alignment: AlignmentGeometry.centerLeft,
                   child: Text(
-                    'используется, чтобы попросить кого-то подождать короткий миг, или как вежливое «Извините»/«Прошу прощения», чтобы привлечь внимание или пройти.',
-                    style: AppConst.text,
+                    widget.usage ?? 'Информация не заполнена',
+                    style: widget.usage == null
+                        ? AppConst.additionalText
+                        : AppConst.text,
                   ),
                 ),
               ),

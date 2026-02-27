@@ -9,17 +9,27 @@ class AddWordDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final maxHeight =
+        (media.size.height - media.viewInsets.bottom - 48).clamp(
+              280.0,
+              media.size.height * 0.95,
+            );
+
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       backgroundColor: AppConst.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: IntrinsicHeight(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: 520),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text('Добавление слова', style: AppConst.h1),
               const SizedBox(height: 8),
-              SingleChildScrollView(child: EditWordForm(onSave: onSave)),
+              Flexible(child: EditWordForm(onSave: onSave)),
             ],
           ),
         ),

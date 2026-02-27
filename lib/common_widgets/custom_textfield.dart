@@ -7,6 +7,7 @@ class CustomTextfield extends StatelessWidget {
   final int? maxLength;
   final bool digitsOnly;
   final ValueChanged<String>? onChanged;
+  final int? minLines;
   final int? maxLines;
   final bool expands;
   const CustomTextfield({
@@ -15,6 +16,7 @@ class CustomTextfield extends StatelessWidget {
     this.maxLength,
     this.digitsOnly = false,
     this.onChanged,
+    this.minLines,
     this.maxLines,
     this.expands = false,
   });
@@ -24,11 +26,16 @@ class CustomTextfield extends StatelessWidget {
     return TextFormField(
       expands: expands,
       controller: controller,
+      minLines: expands ? null : minLines,
       maxLines: maxLines,
       onChanged: onChanged,
       style: AppConst.text,
       maxLength: maxLength,
-      keyboardType: digitsOnly ? TextInputType.number : TextInputType.text,
+      keyboardType: digitsOnly
+          ? TextInputType.number
+          : ((maxLines == null || (maxLines ?? 1) > 1 || (minLines ?? 1) > 1)
+                ? TextInputType.multiline
+                : TextInputType.text),
       inputFormatters: digitsOnly
           ? [FilteringTextInputFormatter.digitsOnly]
           : null,

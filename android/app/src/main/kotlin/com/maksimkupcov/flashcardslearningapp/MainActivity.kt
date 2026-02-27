@@ -1,4 +1,4 @@
-package com.example.flashcards_learning_app
+package com.maksimkupcov.flashcardslearningapp
 
 import io.flutter.embedding.android.FlutterActivity
 

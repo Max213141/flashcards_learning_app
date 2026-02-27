@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flashcards_learning_app/utils/rotation_widget/animated_card.dart';
-import 'package:flashcards_learning_app/utils/shaped_decorated_box.dart';
+// import 'package:flashcards_learning_app/utils/shaped_decorated_box.dart';
 import 'package:flutter/material.dart';
 
 class WidgetFlipper extends StatefulWidget {
@@ -99,7 +99,7 @@ class _WidgetFlipperState extends State<WidgetFlipper>
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints.expand(width: 355, height: 475),
+      constraints: BoxConstraints.expand(width: 388, height: 475),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -130,14 +130,7 @@ class _WidgetFlipperState extends State<WidgetFlipper>
             widthFactor: 1.0,
             heightFactor: 0.5,
             alignment: Alignment.topCenter,
-            child: DecoratedBox(
-              decoration: const ShapeDecoration(
-                shape: SwTicketBorder(
-                  fillColor: Colors.transparent,
-                  borderWidth: 4,
-                ),
-              ),
-            ),
+            child: Container(color: Colors.transparent),
           ),
         ),
       ],

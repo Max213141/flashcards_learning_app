@@ -2,9 +2,8 @@ import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 
-class DeletionAcceptanceBody extends StatelessWidget {
-  final String topicName;
-  const DeletionAcceptanceBody({super.key, required this.topicName});
+class RestoreBackupAcceptanceBody extends StatelessWidget {
+  const RestoreBackupAcceptanceBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class DeletionAcceptanceBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
           child: Text(
-            'Вы точно хотите удалить тему “$topicName”?',
+            'Восстановить данные из резервной копии?',
             textAlign: TextAlign.center,
             style: AppConst.h1,
           ),
@@ -21,12 +20,12 @@ class DeletionAcceptanceBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            'Все слова и ваш прогресс удалятся полностью',
+            'Текущие темы, слова и прогресс будут полностью заменены данными из резервной копии',
             textAlign: TextAlign.center,
             style: AppConst.text,
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -38,10 +37,10 @@ class DeletionAcceptanceBody extends StatelessWidget {
                 borderWidth: .5,
               ),
             ),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             Expanded(
               child: CustomActionButton(
-                buttonText: 'Удалить',
+                buttonText: 'Восстановить',
                 onTap: () => Navigator.of(context).pop(true),
                 color: Color(0x99FF0A0A),
                 borderColor: Colors.transparent,

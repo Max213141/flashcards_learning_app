@@ -241,6 +241,7 @@ class _TopicScreenState extends State<TopicScreen> {
                   ),
 
                   ButtonsRow(
+                    isTopicEmpty: words.isEmpty,
                     topicId: widget.topicId,
                     topicColor: widget.topicColor,
                   ),
@@ -248,6 +249,7 @@ class _TopicScreenState extends State<TopicScreen> {
                   TopicWordsListWidget(
                     wordsList: words,
                     topicName: widget.topicName,
+                    topicColor: widget.topicColor,
                     deleteWord: _deleteWord,
                     editWord: _onEdit,
                     reloadDB: _reoloadDB,

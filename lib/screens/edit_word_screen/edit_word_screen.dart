@@ -35,10 +35,16 @@ class _EditWordScreenState extends State<EditWordScreen> {
       appBar: AppBar(
         title: Text('Изменение слова', style: AppConst.h1),
         backgroundColor: AppConst.background,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: EditWordForm(word: widget.word, onSave: _saveWord),
+        child: EditWordForm(
+          word: widget.word,
+          onSave: _saveWord,
+          pinSaveButtonToBottom: true,
+        ),
       ),
     );
   }

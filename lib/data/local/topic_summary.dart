@@ -1,3 +1,5 @@
+enum TopicSortOption { createdDesc, titleAsc, colorAsc }
+
 class TopicSummary {
   final int id;
   final String topicName;

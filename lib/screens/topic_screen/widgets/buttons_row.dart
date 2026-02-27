@@ -6,11 +6,13 @@ import 'package:flashcards_learning_app/router/app_router.dart' as app_router;
 class ButtonsRow extends StatelessWidget {
   final int topicId;
   final Color topicColor;
+  final bool isTopicEmpty;
 
   const ButtonsRow({
     super.key,
     required this.topicId,
     required this.topicColor,
+    required this.isTopicEmpty,
   });
 
   @override
@@ -24,9 +26,14 @@ class ButtonsRow extends StatelessWidget {
             width: 145,
             child: CustomActionButton(
               buttonText: 'Практика',
-              onTap: () => AutoRouter.of(context).push(
-                app_router.TestRoute(topicId: topicId, topicColor: topicColor),
-              ),
+              onTap: isTopicEmpty
+                  ? null
+                  : () => AutoRouter.of(context).push(
+                      app_router.TestRoute(
+                        topicId: topicId,
+                        topicColor: topicColor,
+                      ),
+                    ),
             ),
           ),
           SizedBox(
@@ -34,9 +41,14 @@ class ButtonsRow extends StatelessWidget {
 
             child: CustomActionButton(
               buttonText: 'Экзамен',
-              onTap: () => AutoRouter.of(context).push(
-                app_router.TestRoute(topicId: topicId, topicColor: topicColor),
-              ),
+              onTap: isTopicEmpty
+                  ? null
+                  : () => AutoRouter.of(context).push(
+                      app_router.TestRoute(
+                        topicId: topicId,
+                        topicColor: topicColor,
+                      ),
+                    ),
             ),
           ),
         ],

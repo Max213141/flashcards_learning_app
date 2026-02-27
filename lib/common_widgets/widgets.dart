@@ -4,5 +4,8 @@ export 'app_bar.dart';
 export 'custom_textfield.dart';
 export 'fancy_accomplishment_text.dart';
 export 'pop_up_box.dart';
-export 'edit_word_form.dart';
 export 'textfield_padding_wrapper.dart';
+export 'custom_fliping_icon.dart';
+
+export 'edit_form/edit_word_form.dart';
+export 'edit_form/edit_form_fields.dart';

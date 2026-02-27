@@ -31,6 +31,9 @@ class Words extends Table {
   TextColumn get word => text()();
   TextColumn get translation => text()();
   TextColumn get topicName => text()();
+  TextColumn get transcription => text().nullable()();
+  TextColumn get partOfSpeech => text().nullable()();
+  TextColumn get usage => text().nullable()();
   BoolColumn get learned => boolean().withDefault(const Constant(false))();
 }
 
@@ -57,7 +60,18 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.addColumn(words, words.transcription);
+        await m.addColumn(words, words.partOfSpeech);
+        await m.addColumn(words, words.usage);
+      }
+    },
+  );
 
   Future<int> createTopic(Topic topic) async {
     return into(topics).insert(
@@ -68,7 +82,10 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Stream<List<TopicSummary>> watchTopicSummaries() {
+  Stream<List<TopicSummary>> watchTopicSummaries({
+    TopicSortOption sortOption = TopicSortOption.createdDesc,
+  }) {
+    final orderBy = _topicSummaryOrderBy(sortOption);
     final query = customSelect(
       '''
       SELECT
@@ -80,7 +97,7 @@ class AppDatabase extends _$AppDatabase {
       FROM topics t
       LEFT JOIN words w ON w.topic_id = t.id
       GROUP BY t.id
-      ORDER BY t.id DESC
+      ORDER BY $orderBy
       ''',
       readsFrom: {topics, words},
     );
@@ -96,6 +113,22 @@ class AppDatabase extends _$AppDatabase {
         );
       }).toList(),
     );
+  }
+
+  String _topicSummaryOrderBy(TopicSortOption option) {
+    switch (option) {
+      case TopicSortOption.titleAsc:
+        return 't.name COLLATE NOCASE ASC, t.id DESC';
+      case TopicSortOption.colorAsc:
+        return '''
+        CASE WHEN t.color_value IS NULL THEN 1 ELSE 0 END,
+        t.color_value ASC,
+        t.name COLLATE NOCASE ASC,
+        t.id DESC
+        ''';
+      case TopicSortOption.createdDesc:
+        return 't.id DESC';
+    }
   }
 
   Future<int> createTopicIfMissing(String topicName) async {
@@ -118,9 +151,12 @@ class AppDatabase extends _$AppDatabase {
         .map(
           (w) => WordsCompanion.insert(
             topicId: Value(topicId),
-            word: w.word,
-            topicName: topicName,
-            translation: w.translation,
+            word: w.word.trim(),
+            topicName: topicName.trim(),
+            translation: w.translation.trim(),
+            transcription: Value(_normalizeNullableText(w.transcription)),
+            partOfSpeech: Value(_normalizeNullableText(w.partOfSpeech)),
+            usage: Value(_normalizeNullableText(w.usage)),
             learned: Value(w.learned),
           ),
         )
@@ -159,7 +195,10 @@ class AppDatabase extends _$AppDatabase {
         w.word as word,
         w.translation as translation,
         w.learned as learned,
-        w.topic_name as topicName
+        w.topic_name as topicName,
+        w.transcription as transcription,
+        w.part_of_speech as partOfSpeech,
+        w.usage as usage
       FROM words w
       LEFT JOIN topics t ON t.id = w.topic_id
       WHERE w.id = ?
@@ -177,6 +216,9 @@ class AppDatabase extends _$AppDatabase {
       translation: row.read<String>('translation'),
       learned: row.read<int>('learned') == 1,
       topic: row.read<String?>('topicName'),
+      transcription: row.read<String?>('transcription'),
+      partOfSpeech: row.read<String?>('partOfSpeech'),
+      usage: row.read<String?>('usage'),
     );
   }
 
@@ -192,6 +234,9 @@ class AppDatabase extends _$AppDatabase {
             word: row.word,
             topic: row.topicName,
             translation: row.translation,
+            transcription: row.transcription,
+            partOfSpeech: row.partOfSpeech,
+            usage: row.usage,
             learned: row.learned,
           ),
         )
@@ -207,7 +252,10 @@ class AppDatabase extends _$AppDatabase {
         w.word as word,
         w.translation as translation,
         w.learned as learned,
-        w.topic_name as topicName
+        COALESCE(NULLIF(TRIM(w.topic_name), ''), t.name) as topicName,
+        w.transcription as transcription,
+        w.part_of_speech as partOfSpeech,
+        w.usage as usage
       FROM words w
       LEFT JOIN topics t ON t.id = w.topic_id
       ORDER BY w.id DESC
@@ -223,7 +271,14 @@ class AppDatabase extends _$AppDatabase {
             word: row.read<String>('word'),
             translation: row.read<String>('translation'),
             learned: row.read<int>('learned') == 1,
-            topic: row.read<String?>('topicName'),
+            topic: _normalizeNullableText(row.read<String?>('topicName')),
+            transcription: _normalizeNullableText(
+              row.read<String?>('transcription'),
+            ),
+            partOfSpeech: _normalizeNullableText(
+              row.read<String?>('partOfSpeech'),
+            ),
+            usage: _normalizeNullableText(row.read<String?>('usage')),
           ),
         )
         .toList();
@@ -245,6 +300,9 @@ class AppDatabase extends _$AppDatabase {
         word: newWord.word.trim(),
         translation: newWord.translation.trim(),
         topicName: resolvedTopicName,
+        transcription: Value(_normalizeNullableText(newWord.transcription)),
+        partOfSpeech: Value(_normalizeNullableText(newWord.partOfSpeech)),
+        usage: Value(_normalizeNullableText(newWord.usage)),
         learned: Value(newWord.learned),
       ),
     );
@@ -258,12 +316,28 @@ class AppDatabase extends _$AppDatabase {
         await (update(words)..where((word) => word.id.equals(id))).write(
           WordsCompanion(
             topicId: Value(updatedWord.topicId),
-            word: Value(updatedWord.word),
-            translation: Value(updatedWord.translation),
+            word: Value(updatedWord.word.trim()),
+            translation: Value(updatedWord.translation.trim()),
+            topicName: _normalizeNullableText(updatedWord.topic) == null
+                ? const Value.absent()
+                : Value(_normalizeNullableText(updatedWord.topic)!),
+            transcription: Value(
+              _normalizeNullableText(updatedWord.transcription),
+            ),
+            partOfSpeech: Value(
+              _normalizeNullableText(updatedWord.partOfSpeech),
+            ),
+            usage: Value(_normalizeNullableText(updatedWord.usage)),
             learned: Value(updatedWord.learned),
           ),
         );
     return updatedCount > 0;
+  }
+
+  String? _normalizeNullableText(String? value) {
+    if (value == null) return null;
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
   }
 
   Future<bool> deleteTopicWithWords(int topicId) async {
@@ -315,6 +389,97 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  Future<int> restoreFromBackupJson(List<Map<String, dynamic>> backupJson) {
+    const int defaultTopicColorValue = 0xFFA89DEF;
+    const String fallbackTopicName = 'Без темы';
+
+    String normalizeTopicName(String? raw) {
+      final trimmed = raw?.trim();
+      if (trimmed == null || trimmed.isEmpty) return fallbackTopicName;
+      return trimmed;
+    }
+
+    String requireTextField(
+      Map<String, dynamic> json,
+      String key, {
+      required int index,
+    }) {
+      final value = json[key];
+      if (value is! String || value.trim().isEmpty) {
+        throw FormatException(
+          'Invalid "$key" at item ${index + 1}: non-empty string expected',
+        );
+      }
+      return value.trim();
+    }
+
+    bool parseLearned(Map<String, dynamic> json) {
+      final value = json['learned'];
+      if (value == null) return false;
+      if (value is bool) return value;
+      if (value is num) return value != 0;
+      if (value is String) {
+        final normalized = value.trim().toLowerCase();
+        if (normalized == 'true' || normalized == '1') return true;
+        if (normalized == 'false' || normalized == '0') return false;
+      }
+      throw const FormatException('Invalid "learned" value in backup JSON');
+    }
+
+    return transaction(() async {
+      await delete(words).go();
+      await delete(topics).go();
+      await delete(userGoalsTable).go();
+
+      if (backupJson.isEmpty) return 0;
+
+      final topicIdByName = <String, int>{};
+      for (var i = 0; i < backupJson.length; i++) {
+        final item = backupJson[i];
+        final topicName = normalizeTopicName(item['topic'] as String?);
+        if (topicIdByName.containsKey(topicName)) continue;
+        final topicId = await into(topics).insert(
+          TopicsCompanion.insert(
+            name: topicName,
+            colorValue: const Value(defaultTopicColorValue),
+          ),
+        );
+        topicIdByName[topicName] = topicId;
+      }
+
+      final entries = <WordsCompanion>[];
+      for (var i = 0; i < backupJson.length; i++) {
+        final item = backupJson[i];
+        final topicName = normalizeTopicName(item['topic'] as String?);
+        final topicId = topicIdByName[topicName];
+        if (topicId == null) {
+          throw FormatException('Topic not found for item ${i + 1}');
+        }
+
+        final word = requireTextField(item, 'word', index: i);
+        final translation = requireTextField(item, 'translation', index: i);
+        final transcription = _normalizeNullableText(item['transcription'] as String?);
+        final partOfSpeech = _normalizeNullableText(item['partOfSpeech'] as String?);
+        final usage = _normalizeNullableText(item['usage'] as String?);
+
+        entries.add(
+          WordsCompanion.insert(
+            topicId: Value(topicId),
+            word: word,
+            translation: translation,
+            topicName: topicName,
+            transcription: Value(transcription),
+            partOfSpeech: Value(partOfSpeech),
+            usage: Value(usage),
+            learned: Value(parseLearned(item)),
+          ),
+        );
+      }
+
+      await batch((b) => b.insertAll(words, entries));
+      return entries.length;
+    });
+  }
 }
 
 final AppDatabase appDatabase = AppDatabase();

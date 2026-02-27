@@ -8,12 +8,12 @@ class FlashcardFrontSide extends StatelessWidget {
   final String word;
   final Color topicColor;
   final String? transcription;
-  final String? lexicalCategory;
+  final String? partOfSpeech;
   const FlashcardFrontSide({
     super.key,
     required this.word,
     this.transcription,
-    this.lexicalCategory,
+    this.partOfSpeech,
     required this.wordPair,
     required this.topicColor,
   });
@@ -21,7 +21,7 @@ class FlashcardFrontSide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(width: 12, color: topicColor),
@@ -37,7 +37,7 @@ class FlashcardFrontSide extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(lexicalCategory ?? ''),
+                    Text(partOfSpeech ?? '', style: AppConst.text),
                     // GestureDetector(
                     //   onTap: () => AutoRouter.of(
                     //     context,
@@ -57,7 +57,14 @@ class FlashcardFrontSide extends StatelessWidget {
                 child: ScaledText(value: word),
               ),
               if (transcription != null)
-                Text(transcription!, style: AppConst.text),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    transcription!,
+                    style: AppConst.text,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               Spacer(flex: 10),
             ],
           ),

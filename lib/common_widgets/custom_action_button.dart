@@ -7,7 +7,7 @@ class CustomActionButton extends StatelessWidget {
   final Color? color;
   final Color? borderColor;
   final double? borderWidth;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String? icon;
 
   const CustomActionButton({
@@ -32,6 +32,7 @@ class CustomActionButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: color,
             foregroundColor: AppConst.black,
+            disabledBackgroundColor: Color.fromARGB(255, 234, 234, 234),
             side: BorderSide(color: borderColor!, width: borderWidth!),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(35),

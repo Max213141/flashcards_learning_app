@@ -10,10 +10,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class WordDefinitionScreen extends StatefulWidget {
   final Word wordData;
   final String topicName;
+  final Color topicColor;
+
   const WordDefinitionScreen({
     super.key,
     required this.wordData,
     required this.topicName,
+    required this.topicColor,
   });
 
   @override
@@ -100,7 +103,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.of(context).pop(_hasChanges),
             child: Padding(
               padding: const EdgeInsetsGeometry.all(10),
               child: SvgPicture.asset(
@@ -145,14 +148,14 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                   ),
                 ),
               ),
-              Text('jam-kkan-man', style: AppConst.text),
+              Text(_wordData.transcription ?? '', style: AppConst.text),
               SizedBox(height: 15),
               ConstrainedBox(
                 constraints: BoxConstraints.expand(width: 355, height: 475),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: AppConst.white,
-                    border: Border.all(width: 12, color: AppConst.primary),
+                    border: Border.all(width: 12, color: widget.topicColor),
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Center(
@@ -161,15 +164,22 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('동사', style: AppConst.text),
+                          Text(
+                            _wordData.partOfSpeech ?? 'Часть речи не указана',
+                            style: widget.wordData.partOfSpeech == null
+                                ? AppConst.additionalText
+                                : AppConst.text,
+                          ),
                           SizedBox(height: 15),
                           Text('Перевод', style: AppConst.h2),
                           Text(_wordData.translation, style: AppConst.text),
                           SizedBox(height: 15),
                           Text('Слово в употреблении', style: AppConst.h2),
                           Text(
-                            'используется, чтобы попросить кого-то подождать короткий миг, или как вежливое «Извините»/«Прошу прощения», чтобы привлечь внимание или пройти.',
-                            style: AppConst.text,
+                            _wordData.usage ?? 'Информация не заполнена',
+                            style: widget.wordData.usage == null
+                                ? AppConst.additionalText
+                                : AppConst.text,
                           ),
                           Spacer(),
                           Row(
@@ -185,7 +195,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                                   height: 65,
                                   colorFilter: ColorFilter.mode(
                                     know
-                                        ? AppConst.primary
+                                        ? widget.topicColor
                                         : AppConst.background,
                                     BlendMode.srcIn,
                                   ),

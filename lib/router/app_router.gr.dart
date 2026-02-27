@@ -218,6 +218,7 @@ class WordDefinitionRoute extends PageRouteInfo<WordDefinitionRouteArgs> {
     Key? key,
     required Word wordData,
     required String topicName,
+    required Color topicColor,
     List<PageRouteInfo>? children,
   }) : super(
          WordDefinitionRoute.name,
@@ -225,6 +226,7 @@ class WordDefinitionRoute extends PageRouteInfo<WordDefinitionRouteArgs> {
            key: key,
            wordData: wordData,
            topicName: topicName,
+           topicColor: topicColor,
          ),
          initialChildren: children,
        );
@@ -239,6 +241,7 @@ class WordDefinitionRoute extends PageRouteInfo<WordDefinitionRouteArgs> {
         key: args.key,
         wordData: args.wordData,
         topicName: args.topicName,
+        topicColor: args.topicColor,
       );
     },
   );
@@ -249,6 +252,7 @@ class WordDefinitionRouteArgs {
     this.key,
     required this.wordData,
     required this.topicName,
+    required this.topicColor,
   });
 
   final Key? key;
@@ -257,9 +261,11 @@ class WordDefinitionRouteArgs {
 
   final String topicName;
 
+  final Color topicColor;
+
   @override
   String toString() {
-    return 'WordDefinitionRouteArgs{key: $key, wordData: $wordData, topicName: $topicName}';
+    return 'WordDefinitionRouteArgs{key: $key, wordData: $wordData, topicName: $topicName, topicColor: $topicColor}';
   }
 
   @override
@@ -268,9 +274,14 @@ class WordDefinitionRouteArgs {
     if (other is! WordDefinitionRouteArgs) return false;
     return key == other.key &&
         wordData == other.wordData &&
-        topicName == other.topicName;
+        topicName == other.topicName &&
+        topicColor == other.topicColor;
   }
 
   @override
-  int get hashCode => key.hashCode ^ wordData.hashCode ^ topicName.hashCode;
+  int get hashCode =>
+      key.hashCode ^
+      wordData.hashCode ^
+      topicName.hashCode ^
+      topicColor.hashCode;
 }

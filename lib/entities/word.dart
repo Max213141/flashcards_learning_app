@@ -10,6 +10,7 @@ class Word {
   final String? partOfSpeech;
   final String? usage;
   final bool learned;
+  final DateTime? learnedAt;
 
   const Word({
     this.id,
@@ -21,6 +22,7 @@ class Word {
     this.partOfSpeech,
     this.usage,
     this.learned = false,
+    this.learnedAt,
   });
 
   Word copyWith({
@@ -33,6 +35,7 @@ class Word {
     Object? partOfSpeech = _unset,
     Object? usage = _unset,
     bool? learned,
+    Object? learnedAt = _unset,
   }) {
     return Word(
       id: identical(id, _unset) ? this.id : id as int?,
@@ -48,6 +51,9 @@ class Word {
           : partOfSpeech as String?,
       usage: identical(usage, _unset) ? this.usage : usage as String?,
       learned: learned ?? this.learned,
+      learnedAt: identical(learnedAt, _unset)
+          ? this.learnedAt
+          : learnedAt as DateTime?,
     );
   }
 
@@ -60,6 +66,9 @@ class Word {
       partOfSpeech: json['partOfSpeech'] as String?,
       usage: json['usage'] as String?,
       learned: (json['learned'] as bool?) ?? false,
+      learnedAt: json['learnedAt'] == null
+          ? null
+          : DateTime.parse(json['learnedAt'] as String),
     );
   }
 
@@ -72,6 +81,7 @@ class Word {
       if (partOfSpeech != null) 'partOfSpeech': partOfSpeech,
       if (usage != null) 'usage': usage,
       'learned': learned,
+      if (learnedAt != null) 'learnedAt': learnedAt!.toIso8601String(),
     };
   }
 }

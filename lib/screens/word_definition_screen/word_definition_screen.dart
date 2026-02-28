@@ -76,7 +76,10 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
     final id = _wordData.id;
     if (id == null) return;
     final nextValue = !know;
-    final updatedWord = _wordData.copyWith(learned: nextValue);
+    final updatedWord = _wordData.copyWith(
+      learned: nextValue,
+      learnedAt: nextValue ? DateTime.now() : null,
+    );
     final updated = await appDatabase.updateWord(updatedWord);
     if (!mounted) return;
     if (!updated) {

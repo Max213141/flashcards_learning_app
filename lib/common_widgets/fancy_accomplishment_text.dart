@@ -2,8 +2,13 @@ import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
 
 class FancyAccomplishmentText extends StatelessWidget {
+  final int currentDailyLearned;
   final int dailyGoal;
-  const FancyAccomplishmentText({super.key, required this.dailyGoal});
+  const FancyAccomplishmentText({
+    super.key,
+    required this.currentDailyLearned,
+    required this.dailyGoal,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class FancyAccomplishmentText extends StatelessWidget {
             child: Transform.translate(
               offset: const Offset(0, -2),
               child: Text(
-                '0',
+                '$currentDailyLearned',
                 style: AppConst.additionalText.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

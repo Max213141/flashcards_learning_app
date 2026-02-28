@@ -35,6 +35,7 @@ class Words extends Table {
   TextColumn get partOfSpeech => text().nullable()();
   TextColumn get usage => text().nullable()();
   BoolColumn get learned => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get learnedAt => dateTime().nullable()();
 }
 
 @DataClassName('UserGoalsEntry')
@@ -60,18 +61,21 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
-  @override
-  MigrationStrategy get migration => MigrationStrategy(
-    onUpgrade: (m, from, to) async {
-      if (from < 2) {
-        await m.addColumn(words, words.transcription);
-        await m.addColumn(words, words.partOfSpeech);
-        await m.addColumn(words, words.usage);
-      }
-    },
-  );
+  // @override
+  // MigrationStrategy get migration => MigrationStrategy(
+  //   onUpgrade: (m, from, to) async {
+  //     if (from < 2) {
+  //       await m.addColumn(words, words.transcription);
+  //       await m.addColumn(words, words.partOfSpeech);
+  //       await m.addColumn(words, words.usage);
+  //     }
+  //     if (from < 3) {
+  //       await m.addColumn(words, words.learnedAt);
+  //     }
+  //   },
+  // );
 
   Future<int> createTopic(Topic topic) async {
     return into(topics).insert(
@@ -158,6 +162,7 @@ class AppDatabase extends _$AppDatabase {
             partOfSpeech: Value(_normalizeNullableText(w.partOfSpeech)),
             usage: Value(_normalizeNullableText(w.usage)),
             learned: Value(w.learned),
+            learnedAt: Value(w.learnedAt),
           ),
         )
         .toList();
@@ -195,6 +200,7 @@ class AppDatabase extends _$AppDatabase {
         w.word as word,
         w.translation as translation,
         w.learned as learned,
+        w.learned_at as learnedAt,
         w.topic_name as topicName,
         w.transcription as transcription,
         w.part_of_speech as partOfSpeech,
@@ -215,6 +221,7 @@ class AppDatabase extends _$AppDatabase {
       word: row.read<String>('word'),
       translation: row.read<String>('translation'),
       learned: row.read<int>('learned') == 1,
+      learnedAt: row.read<DateTime?>('learnedAt'),
       topic: row.read<String?>('topicName'),
       transcription: row.read<String?>('transcription'),
       partOfSpeech: row.read<String?>('partOfSpeech'),
@@ -238,6 +245,7 @@ class AppDatabase extends _$AppDatabase {
             partOfSpeech: row.partOfSpeech,
             usage: row.usage,
             learned: row.learned,
+            learnedAt: row.learnedAt,
           ),
         )
         .toList();
@@ -252,6 +260,7 @@ class AppDatabase extends _$AppDatabase {
         w.word as word,
         w.translation as translation,
         w.learned as learned,
+        w.learned_at as learnedAt,
         COALESCE(NULLIF(TRIM(w.topic_name), ''), t.name) as topicName,
         w.transcription as transcription,
         w.part_of_speech as partOfSpeech,
@@ -271,6 +280,7 @@ class AppDatabase extends _$AppDatabase {
             word: row.read<String>('word'),
             translation: row.read<String>('translation'),
             learned: row.read<int>('learned') == 1,
+            learnedAt: row.read<DateTime?>('learnedAt'),
             topic: _normalizeNullableText(row.read<String?>('topicName')),
             transcription: _normalizeNullableText(
               row.read<String?>('transcription'),
@@ -304,6 +314,7 @@ class AppDatabase extends _$AppDatabase {
         partOfSpeech: Value(_normalizeNullableText(newWord.partOfSpeech)),
         usage: Value(_normalizeNullableText(newWord.usage)),
         learned: Value(newWord.learned),
+        learnedAt: Value(newWord.learnedAt),
       ),
     );
     return insertedId > 0;
@@ -329,6 +340,7 @@ class AppDatabase extends _$AppDatabase {
             ),
             usage: Value(_normalizeNullableText(updatedWord.usage)),
             learned: Value(updatedWord.learned),
+            learnedAt: Value(updatedWord.learnedAt),
           ),
         );
     return updatedCount > 0;
@@ -372,6 +384,18 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  Stream<entity.UserGoals?> watchUserGoals() {
+    return (select(
+      userGoalsTable,
+    )..where((tbl) => tbl.id.equals(1))).watchSingleOrNull().map((row) {
+      if (row == null) return null;
+      return entity.UserGoals(
+        overallGoal: row.overallGoal,
+        dailyGoal: row.dailyGoal,
+      );
+    });
+  }
+
   Future<({int totalWords, int learnedWords})> getWordsProgressStats() async {
     final query = customSelect(
       '''
@@ -386,6 +410,42 @@ class AppDatabase extends _$AppDatabase {
     return (
       totalWords: row.read<int>('totalWords'),
       learnedWords: row.read<int>('learnedWords'),
+    );
+  }
+
+  Stream<({int totalWords, int learnedWords, int learnedToday})>
+  watchWordsProgressStats() {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final startOfNextDay = startOfDay.add(const Duration(days: 1));
+    final query = customSelect(
+      '''
+      SELECT
+        COUNT(*) as totalWords,
+        COALESCE(SUM(CASE WHEN learned = 1 THEN 1 ELSE 0 END), 0) as learnedWords,
+        COALESCE(
+          SUM(
+            CASE
+              WHEN learned_at >= ? AND learned_at < ? THEN 1
+              ELSE 0
+            END
+          ),
+          0
+        ) as learnedToday
+      FROM words
+      ''',
+      variables: [
+        Variable.withDateTime(startOfDay),
+        Variable.withDateTime(startOfNextDay),
+      ],
+      readsFrom: {words},
+    );
+    return query.watchSingle().map(
+      (row) => (
+        totalWords: row.read<int>('totalWords'),
+        learnedWords: row.read<int>('learnedWords'),
+        learnedToday: row.read<int>('learnedToday'),
+      ),
     );
   }
 
@@ -426,6 +486,23 @@ class AppDatabase extends _$AppDatabase {
       throw const FormatException('Invalid "learned" value in backup JSON');
     }
 
+    DateTime? parseLearnedAt(
+      Map<String, dynamic> json, {
+      required bool learned,
+    }) {
+      if (!learned) return null;
+      final value = json['learnedAt'];
+      if (value == null) return null;
+      if (value is! String || value.trim().isEmpty) {
+        throw const FormatException('Invalid "learnedAt" value in backup JSON');
+      }
+      try {
+        return DateTime.parse(value);
+      } on FormatException {
+        throw const FormatException('Invalid "learnedAt" value in backup JSON');
+      }
+    }
+
     return transaction(() async {
       await delete(words).go();
       await delete(topics).go();
@@ -458,9 +535,14 @@ class AppDatabase extends _$AppDatabase {
 
         final word = requireTextField(item, 'word', index: i);
         final translation = requireTextField(item, 'translation', index: i);
-        final transcription = _normalizeNullableText(item['transcription'] as String?);
-        final partOfSpeech = _normalizeNullableText(item['partOfSpeech'] as String?);
+        final transcription = _normalizeNullableText(
+          item['transcription'] as String?,
+        );
+        final partOfSpeech = _normalizeNullableText(
+          item['partOfSpeech'] as String?,
+        );
         final usage = _normalizeNullableText(item['usage'] as String?);
+        final learned = parseLearned(item);
 
         entries.add(
           WordsCompanion.insert(
@@ -471,7 +553,8 @@ class AppDatabase extends _$AppDatabase {
             transcription: Value(transcription),
             partOfSpeech: Value(partOfSpeech),
             usage: Value(usage),
-            learned: Value(parseLearned(item)),
+            learned: Value(learned),
+            learnedAt: Value(parseLearnedAt(item, learned: learned)),
           ),
         );
       }

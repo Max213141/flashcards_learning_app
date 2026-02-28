@@ -129,6 +129,7 @@ class _MainScreenState extends State<MainScreen> {
       'word': word.word.trim(),
       'translation': word.translation.trim(),
       'learned': word.learned,
+      if (word.learnedAt != null) 'learnedAt': word.learnedAt!.toIso8601String(),
     };
 
     void addIfNotEmpty(String key, String? value) {

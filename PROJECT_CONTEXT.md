@@ -16,7 +16,7 @@ This document is the working reference for current development. It reflects the 
   - backup all words to JSON
   - restore backup JSON by fully replacing local data
 
-## Current State (as of 2026-02-27)
+## Current State (as of 2026-02-28)
 
 - Local persistence is implemented with Drift (SQLite).
 - Main screen topic list is DB-backed and driven by a stream.
@@ -25,6 +25,7 @@ This document is the working reference for current development. It reflects the 
 - Single-word create/edit flows are wired to the database.
 - Backup export is implemented from current DB data.
 - Backup restore is implemented as a full replace operation (delete existing local data, recreate topics + words from backup JSON).
+- Main-screen goal widgets are now reactive and update from DB streams.
 - No app-wide state management layer is used; screens rely on local widget state and DB reads.
 - Navigation uses `auto_route`.
 
@@ -54,6 +55,11 @@ Routing:
   - Restores backup JSON after confirmation dialog
   - Opens topic-creation popup from the FAB menu
 
+- `lib/screens/main_screen/widgets/app_bar_customized_widget.dart`
+  - Reads user goals from `AppDatabase.watchUserGoals()`
+  - Reads overall + daily progress from `AppDatabase.watchWordsProgressStats()`
+  - Refreshes the daily-progress stream again at local midnight so the daily counter resets without reopening the screen
+
 - `lib/screens/topic_screen/topic_screen.dart`
   - Loads words from `AppDatabase.getWordsForTopic(topicId)`
   - Supports:
@@ -74,7 +80,7 @@ Routing:
 
 - `lib/screens/word_definition_screen/word_definition_screen.dart`
   - Additional word details UI
-  - Still worth reviewing separately if deeper behavior changes are needed
+  - Toggling the learned state is now the main place that sets or clears `Word.learnedAt`
 
 ## Entities
 
@@ -89,8 +95,10 @@ Routing:
     - `partOfSpeech` (optional)
     - `usage` (optional)
     - `learned`
+    - `learnedAt` (optional)
   - `copyWith(...)` uses an internal `_unset` sentinel so nullable fields can be explicitly cleared to `null`
   - JSON mapping is used for import/export flows
+  - `learnedAt` is serialized as an ISO-8601 string when present
 
 - `lib/entities/topic.dart`
   - Fields:
@@ -105,19 +113,23 @@ Routing:
     - `Topics`
     - `Words`
     - `UserGoalsTable`
-  - Schema version: `2`
-  - Migration adds optional word fields:
+  - Schema version: `3`
+  - Migrations add optional word fields:
     - `transcription`
     - `part_of_speech`
     - `usage`
+    - `learned_at`
   - DB methods now cover:
     - topic creation
     - topic summaries with sorting
     - batch word insert
     - add/update/delete word
     - delete topic with its words
+    - reactive user goals stream
+    - reactive overall + daily progress stream
     - backup export reads
     - full backup restore / replace
+  - Daily progress is based on `words.learned_at` for the current local day
 
 - `lib/data/local/topic_summary.dart`
   - DTO for main-screen topic list aggregation
@@ -169,6 +181,7 @@ Routing:
     - `transcription`
     - `partOfSpeech`
     - `usage`
+    - `learnedAt`
 
 - Restore:
   - user confirms destructive action first
@@ -183,6 +196,7 @@ Routing:
 - Backup restore currently clears `user_goals_table` as part of the full DB replace.
 - Topic colors are not preserved by backup/restore; restored topics use the default lavender color.
 - There is still no repository/service layer between UI and Drift.
+- The app bar uses nested `StreamBuilder`s plus a timer-based midnight refresh; this works, but it is still widget-driven state rather than a dedicated reactive view model.
 - Some screens/widgets outside the touched flows may still need documentation cleanup.
 
 ## Uncommitted Workspace Notes

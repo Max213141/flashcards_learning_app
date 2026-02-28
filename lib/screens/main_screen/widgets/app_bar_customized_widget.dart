@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
@@ -14,129 +16,172 @@ class AppBarCustomizedWidget extends StatefulWidget {
 }
 
 class _AppBarCustomizedWidgetState extends State<AppBarCustomizedWidget> {
-  late Future<({UserGoals? goals, int totalWords, int learnedWords})>
-  _currentDataFuture;
+  late final Stream<UserGoals?> _goalsStream;
+  late Stream<({int totalWords, int learnedWords, int learnedToday})>
+  _progressStream;
+  Timer? _midnightRefreshTimer;
 
   @override
   void initState() {
     super.initState();
-    _reloadData();
+    _goalsStream = appDatabase.watchUserGoals();
+    _reloadProgressStream();
+    _scheduleMidnightRefresh();
   }
 
-  Future<({UserGoals? goals, int totalWords, int learnedWords})>
-  _loadCurrentData() async {
-    final goals = await appDatabase.getUserGoals();
-    final progress = await appDatabase.getWordsProgressStats();
-    return (
-      goals: goals,
-      totalWords: progress.totalWords,
-      learnedWords: progress.learnedWords,
+  @override
+  void dispose() {
+    _midnightRefreshTimer?.cancel();
+    super.dispose();
+  }
+
+  void _reloadProgressStream() {
+    _progressStream = appDatabase.watchWordsProgressStats();
+  }
+
+  void _scheduleMidnightRefresh() {
+    _midnightRefreshTimer?.cancel();
+    final now = DateTime.now();
+    final nextMidnight = DateTime(
+      now.year,
+      now.month,
+      now.day + 1,
     );
-  }
-
-  void _reloadData() {
-    _currentDataFuture = _loadCurrentData();
+    final delay = nextMidnight.difference(now);
+    _midnightRefreshTimer = Timer(delay, () {
+      if (!mounted) return;
+      setState(() {
+        _reloadProgressStream();
+      });
+      _scheduleMidnightRefresh();
+    });
   }
 
   Future<void> _addGoals(UserGoals? currentGoals) async {
     if (!mounted) return;
 
-    final result = await showDialog<bool>(
+    await showDialog<bool>(
       context: context,
       builder: (context) => PopUpBox(
         popupContent: GoalsDialogBodyWidget(currentGoals: currentGoals),
       ),
     );
-
-    if (result == true && mounted) {
-      setState(() {
-        _reloadData();
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<
-      ({UserGoals? goals, int totalWords, int learnedWords})
-    >(
-      future: _currentDataFuture,
+    return StreamBuilder<UserGoals?>(
+      stream: _goalsStream,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting &&
+            !snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
+        final currentUserGoals = snapshot.data;
 
-        final data = snapshot.data;
-        final currentUserGoals = data?.goals;
-        final overallGoal = data?.goals?.overallGoal ?? 0;
-        final learnedWords = data?.learnedWords ?? 0;
-        final overallProgress = overallGoal == 0
-            ? 0.0
-            : learnedWords / overallGoal;
-        final overallProgressPercent = (overallProgress * 100).round();
-        return GestureDetector(
-          onTap: () => _addGoals(currentUserGoals),
-          child: AppBarWidget(
-            firstPart: currentUserGoals == null
-                ? Row(
-                    children: [
-                      FittedBox(
-                        child: Text('Поставь себе цели!', style: AppConst.text),
-                      ),
-                      SizedBox(width: 10),
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: SvgPicture.asset(
-                          'assets/iconss/tap_icon.svg',
-                          colorFilter: const ColorFilter.mode(
-                            AppConst.black,
-                            BlendMode.srcIn,
+        return StreamBuilder<
+          ({int totalWords, int learnedWords, int learnedToday})
+        >(
+          stream: _progressStream,
+          builder: (context, progressSnapshot) {
+            if (progressSnapshot.connectionState == ConnectionState.waiting &&
+                !progressSnapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (progressSnapshot.hasError) {
+              return Center(child: Text('Error: ${progressSnapshot.error}'));
+            }
+
+            final progressData = progressSnapshot.data;
+            final overallGoal = currentUserGoals?.overallGoal ?? 0;
+            final dailyGoal = currentUserGoals?.dailyGoal ?? 0;
+            final learnedWords = progressData?.learnedWords ?? 0;
+            final learnedToday = progressData?.learnedToday ?? 0;
+            final overallProgress = overallGoal == 0
+                ? 0.0
+                : (learnedWords / overallGoal).clamp(0.0, 1.0).toDouble();
+            final dailyProgress = dailyGoal == 0
+                ? 0.0
+                : (learnedToday / dailyGoal).clamp(0.0, 1.0).toDouble();
+            final overallProgressPercent =
+                overallGoal == 0 ? 0 : (overallProgress * 100).round();
+
+            return GestureDetector(
+              onTap: () => _addGoals(currentUserGoals),
+              child: AppBarWidget(
+                firstPart: currentUserGoals == null
+                    ? Row(
+                        children: [
+                          FittedBox(
+                            child: Text(
+                              'Поставь себе цели!',
+                              style: AppConst.text,
+                            ),
                           ),
-                        ),
+                          SizedBox(width: 10),
+                          SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: SvgPicture.asset(
+                              'assets/iconss/tap_icon.svg',
+                              colorFilter: const ColorFilter.mode(
+                                AppConst.black,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          CircularProgressBar(
+                            width: 50,
+                            height: 50,
+                            indicatorColor: AppConst.lavender,
+                            progress: overallProgress,
+                            accomplishment: Text(
+                              '$overallProgressPercent%',
+                              style: AppConst.additionalText,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          FittedBox(
+                            child: Text(
+                              'Общий \nпрогресс',
+                              style: AppConst.text,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      CircularProgressBar(
-                        width: 50,
-                        height: 50,
-                        indicatorColor: AppConst.lavender,
-                        progress: overallProgress,
-                        accomplishment: Text(
-                          '$overallProgressPercent%',
-                          style: AppConst.additionalText,
-                        ),
+                secondPart: currentUserGoals == null
+                    ? null
+                    : Row(
+                        children: [
+                          CircularProgressBar(
+                            width: 50,
+                            height: 50,
+                            indicatorColor: AppConst.primary,
+                            progress: dailyProgress,
+                            accomplishment: FancyAccomplishmentText(
+                              currentDailyLearned: learnedToday,
+                              dailyGoal: dailyGoal,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          FittedBox(
+                            child: Text(
+                              'Дневная \nцель',
+                              style: AppConst.text,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 10),
-                      FittedBox(
-                        child: Text('Общий \nпрогресс', style: AppConst.text),
-                      ),
-                    ],
-                  ),
-            secondPart: currentUserGoals == null
-                ? null
-                : Row(
-                    children: [
-                      CircularProgressBar(
-                        width: 50,
-                        height: 50,
-                        indicatorColor: AppConst.primary,
-                        accomplishment: FancyAccomplishmentText(
-                          dailyGoal: currentUserGoals.dailyGoal,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      FittedBox(
-                        child: Text('Дневная \nцель', style: AppConst.text),
-                      ),
-                    ],
-                  ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

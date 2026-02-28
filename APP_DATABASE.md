@@ -3,16 +3,20 @@
 This document describes the current Drift-based local database and the backup/restore behavior implemented around it.
 
 ## Location
+
 - Source: `/Users/maksimkupcov/Projects/flashcards_learning_app/lib/data/local/app_database.dart`
 - Generated code: `app_database.g.dart` (via `build_runner`)
 
 ## Tables
+
 ### Topics
+
 - `id` (int, auto-increment, primary key)
 - `name` (text, required)
 - `color_value` (int, nullable)
 
 ### Words
+
 - `id` (int, auto-increment, primary key)
 - `topic_id` (int, nullable, FK -> `topics.id`)
 - `word` (text, required)
@@ -22,20 +26,20 @@ This document describes the current Drift-based local database and the backup/re
 - `part_of_speech` (text, nullable)
 - `usage` (text, nullable)
 - `learned` (bool, default `false`)
+- `learned_at` (datetime, nullable)
 
 ### UserGoalsTable
+
 - `id` (int, primary key; singleton row uses `1`)
 - `overall_goal` (int, required)
 - `daily_goal` (int, required)
 
 ## Schema / Migration
-- Current schema version: `2`
-- Migration `1 -> 2` adds:
-  - `words.transcription`
-  - `words.part_of_speech`
-  - `words.usage`
+
+- Current schema version: `1`
 
 ## Query / Helper Methods
+
 - `createTopic(Topic topic)`
   Inserts a topic using the `Topic` entity.
 
@@ -53,6 +57,7 @@ This document describes the current Drift-based local database and the backup/re
   Behavior:
   - trims required text fields
   - persists optional fields (`transcription`, `partOfSpeech`, `usage`)
+  - persists optional `learnedAt`
   - converts blank optional strings to `null`
 
 - `createTopicWithWords({required Topic topic, required List<Word> words})`
@@ -62,15 +67,16 @@ This document describes the current Drift-based local database and the backup/re
   Returns topic name or `null`.
 
 - `getWordById(int wordId)`
-  Returns one `Word` with topic metadata and optional fields.
+  Returns one `Word` with topic metadata, optional fields, and `learnedAt`.
 
 - `getWordsForTopic(int topicId)`
-  Returns all words for a topic.
+  Returns all words for a topic, including `learnedAt`.
 
 - `getAllWordsWithTopicName()`
   Returns all words for backup/export.
   Behavior:
   - includes topic name and optional fields
+  - includes `learnedAt`
   - uses `COALESCE(NULLIF(TRIM(w.topic_name), ''), t.name)` so export falls back to topic table name if duplicated `topic_name` is blank
   - normalizes blank optional strings to `null`
 
@@ -83,6 +89,7 @@ This document describes the current Drift-based local database and the backup/re
   - requires `topicId`
   - resolves topic name from `newWord.topic` or DB if needed
   - trims required text fields
+  - persists optional `learnedAt`
   - normalizes optional fields to `null` when empty
 
 - `updateWord(Word updatedWord)`
@@ -90,6 +97,7 @@ This document describes the current Drift-based local database and the backup/re
   Behavior:
   - trims required text fields
   - persists optional fields
+  - persists optional `learnedAt`
   - allows clearing optional fields by writing `null`
   - updates duplicated `topic_name` when a non-empty topic string is provided
 
@@ -102,10 +110,23 @@ This document describes the current Drift-based local database and the backup/re
 - `getUserGoals()`
   Returns stored user goals or `null`.
 
+- `watchUserGoals()`
+  Streams the singleton user-goals row for reactive UI updates.
+
 - `getWordsProgressStats()`
   Returns:
   - `totalWords`
   - `learnedWords`
+
+- `watchWordsProgressStats()`
+  Streams:
+  - `totalWords`
+  - `learnedWords`
+  - `learnedToday`
+    Behavior:
+  - `learnedToday` is computed from `words.learned_at`
+  - counts rows where `learned_at` is between local start-of-day and the next midnight
+  - returns zero values correctly when the `words` table is empty
 
 - `restoreFromBackupJson(List<Map<String, dynamic>> backupJson)`
   Full database restore / replace operation.
@@ -124,9 +145,11 @@ This document describes the current Drift-based local database and the backup/re
     - `bool`
     - numeric `0` / non-zero
     - string `"true"`, `"false"`, `"1"`, `"0"`
+  - accepts optional `learnedAt` as an ISO-8601 string when `learned = true`
   - returns restored word count
 
 ## Internal Normalization Rules
+
 - `_normalizeNullableText(String? value)`
   - trims string values
   - converts blank strings to `null`
@@ -134,14 +157,18 @@ This document describes the current Drift-based local database and the backup/re
 This helper is used by insert, update, export-read, and restore flows to keep optional text fields clean.
 
 ## Notes
+
 - The SQLite file is stored as `flashcards.sqlite` in the app documents directory.
 - Topic name is intentionally duplicated in `words.topic_name` for simple reads / export.
-- Learning progress is currently inferred from `words.learned`.
+- Overall learning progress is inferred from `words.learned`.
+- Daily learning progress is inferred from `words.learned_at`.
 - The `Word` entity used by the DB includes:
-  - `id`, `topicId`, `word`, `translation`, `topic`, `learned`
+  - `id`, `topicId`, `word`, `translation`, `topic`, `learned`, `learnedAt`
   - optional `transcription`, `partOfSpeech`, `usage`
 
 ## Related UI Flows
+
 - Main screen backup export uses `getAllWordsWithTopicName()`.
 - Main screen restore uses `restoreFromBackupJson(...)`.
 - Topic screen create/edit flows use `addWord(...)` and `updateWord(...)`.
+- Main-screen app bar uses `watchUserGoals()` and `watchWordsProgressStats()` for reactive overall/daily goal progress.

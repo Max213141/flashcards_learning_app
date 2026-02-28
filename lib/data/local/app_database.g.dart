@@ -362,6 +362,17 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _learnedAtMeta = const VerificationMeta(
+    'learnedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> learnedAt = GeneratedColumn<DateTime>(
+    'learned_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -373,6 +384,7 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
     partOfSpeech,
     usage,
     learned,
+    learnedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -452,6 +464,12 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
         learned.isAcceptableOrUnknown(data['learned']!, _learnedMeta),
       );
     }
+    if (data.containsKey('learned_at')) {
+      context.handle(
+        _learnedAtMeta,
+        learnedAt.isAcceptableOrUnknown(data['learned_at']!, _learnedAtMeta),
+      );
+    }
     return context;
   }
 
@@ -497,6 +515,10 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordEntry> {
         DriftSqlType.bool,
         data['${effectivePrefix}learned'],
       )!,
+      learnedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}learned_at'],
+      ),
     );
   }
 
@@ -516,6 +538,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
   final String? partOfSpeech;
   final String? usage;
   final bool learned;
+  final DateTime? learnedAt;
   const WordEntry({
     required this.id,
     this.topicId,
@@ -526,6 +549,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     this.partOfSpeech,
     this.usage,
     required this.learned,
+    this.learnedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -547,6 +571,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       map['usage'] = Variable<String>(usage);
     }
     map['learned'] = Variable<bool>(learned);
+    if (!nullToAbsent || learnedAt != null) {
+      map['learned_at'] = Variable<DateTime>(learnedAt);
+    }
     return map;
   }
 
@@ -569,6 +596,9 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           ? const Value.absent()
           : Value(usage),
       learned: Value(learned),
+      learnedAt: learnedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(learnedAt),
     );
   }
 
@@ -587,6 +617,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       partOfSpeech: serializer.fromJson<String?>(json['partOfSpeech']),
       usage: serializer.fromJson<String?>(json['usage']),
       learned: serializer.fromJson<bool>(json['learned']),
+      learnedAt: serializer.fromJson<DateTime?>(json['learnedAt']),
     );
   }
   @override
@@ -602,6 +633,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
       'partOfSpeech': serializer.toJson<String?>(partOfSpeech),
       'usage': serializer.toJson<String?>(usage),
       'learned': serializer.toJson<bool>(learned),
+      'learnedAt': serializer.toJson<DateTime?>(learnedAt),
     };
   }
 
@@ -615,6 +647,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     Value<String?> partOfSpeech = const Value.absent(),
     Value<String?> usage = const Value.absent(),
     bool? learned,
+    Value<DateTime?> learnedAt = const Value.absent(),
   }) => WordEntry(
     id: id ?? this.id,
     topicId: topicId.present ? topicId.value : this.topicId,
@@ -627,6 +660,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     partOfSpeech: partOfSpeech.present ? partOfSpeech.value : this.partOfSpeech,
     usage: usage.present ? usage.value : this.usage,
     learned: learned ?? this.learned,
+    learnedAt: learnedAt.present ? learnedAt.value : this.learnedAt,
   );
   WordEntry copyWithCompanion(WordsCompanion data) {
     return WordEntry(
@@ -645,6 +679,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           : this.partOfSpeech,
       usage: data.usage.present ? data.usage.value : this.usage,
       learned: data.learned.present ? data.learned.value : this.learned,
+      learnedAt: data.learnedAt.present ? data.learnedAt.value : this.learnedAt,
     );
   }
 
@@ -659,7 +694,8 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           ..write('transcription: $transcription, ')
           ..write('partOfSpeech: $partOfSpeech, ')
           ..write('usage: $usage, ')
-          ..write('learned: $learned')
+          ..write('learned: $learned, ')
+          ..write('learnedAt: $learnedAt')
           ..write(')'))
         .toString();
   }
@@ -675,6 +711,7 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
     partOfSpeech,
     usage,
     learned,
+    learnedAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -688,7 +725,8 @@ class WordEntry extends DataClass implements Insertable<WordEntry> {
           other.transcription == this.transcription &&
           other.partOfSpeech == this.partOfSpeech &&
           other.usage == this.usage &&
-          other.learned == this.learned);
+          other.learned == this.learned &&
+          other.learnedAt == this.learnedAt);
 }
 
 class WordsCompanion extends UpdateCompanion<WordEntry> {
@@ -701,6 +739,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
   final Value<String?> partOfSpeech;
   final Value<String?> usage;
   final Value<bool> learned;
+  final Value<DateTime?> learnedAt;
   const WordsCompanion({
     this.id = const Value.absent(),
     this.topicId = const Value.absent(),
@@ -711,6 +750,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     this.partOfSpeech = const Value.absent(),
     this.usage = const Value.absent(),
     this.learned = const Value.absent(),
+    this.learnedAt = const Value.absent(),
   });
   WordsCompanion.insert({
     this.id = const Value.absent(),
@@ -722,6 +762,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     this.partOfSpeech = const Value.absent(),
     this.usage = const Value.absent(),
     this.learned = const Value.absent(),
+    this.learnedAt = const Value.absent(),
   }) : word = Value(word),
        translation = Value(translation),
        topicName = Value(topicName);
@@ -735,6 +776,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     Expression<String>? partOfSpeech,
     Expression<String>? usage,
     Expression<bool>? learned,
+    Expression<DateTime>? learnedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -746,6 +788,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
       if (partOfSpeech != null) 'part_of_speech': partOfSpeech,
       if (usage != null) 'usage': usage,
       if (learned != null) 'learned': learned,
+      if (learnedAt != null) 'learned_at': learnedAt,
     });
   }
 
@@ -759,6 +802,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     Value<String?>? partOfSpeech,
     Value<String?>? usage,
     Value<bool>? learned,
+    Value<DateTime?>? learnedAt,
   }) {
     return WordsCompanion(
       id: id ?? this.id,
@@ -770,6 +814,7 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
       partOfSpeech: partOfSpeech ?? this.partOfSpeech,
       usage: usage ?? this.usage,
       learned: learned ?? this.learned,
+      learnedAt: learnedAt ?? this.learnedAt,
     );
   }
 
@@ -803,6 +848,9 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
     if (learned.present) {
       map['learned'] = Variable<bool>(learned.value);
     }
+    if (learnedAt.present) {
+      map['learned_at'] = Variable<DateTime>(learnedAt.value);
+    }
     return map;
   }
 
@@ -817,7 +865,8 @@ class WordsCompanion extends UpdateCompanion<WordEntry> {
           ..write('transcription: $transcription, ')
           ..write('partOfSpeech: $partOfSpeech, ')
           ..write('usage: $usage, ')
-          ..write('learned: $learned')
+          ..write('learned: $learned, ')
+          ..write('learnedAt: $learnedAt')
           ..write(')'))
         .toString();
   }
@@ -1354,6 +1403,7 @@ typedef $$WordsTableCreateCompanionBuilder =
       Value<String?> partOfSpeech,
       Value<String?> usage,
       Value<bool> learned,
+      Value<DateTime?> learnedAt,
     });
 typedef $$WordsTableUpdateCompanionBuilder =
     WordsCompanion Function({
@@ -1366,6 +1416,7 @@ typedef $$WordsTableUpdateCompanionBuilder =
       Value<String?> partOfSpeech,
       Value<String?> usage,
       Value<bool> learned,
+      Value<DateTime?> learnedAt,
     });
 
 final class $$WordsTableReferences
@@ -1436,6 +1487,11 @@ class $$WordsTableFilterComposer extends Composer<_$AppDatabase, $WordsTable> {
 
   ColumnFilters<bool> get learned => $composableBuilder(
     column: $table.learned,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get learnedAt => $composableBuilder(
+    column: $table.learnedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1512,6 +1568,11 @@ class $$WordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get learnedAt => $composableBuilder(
+    column: $table.learnedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$TopicsTableOrderingComposer get topicId {
     final $$TopicsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -1575,6 +1636,9 @@ class $$WordsTableAnnotationComposer
   GeneratedColumn<bool> get learned =>
       $composableBuilder(column: $table.learned, builder: (column) => column);
 
+  GeneratedColumn<DateTime> get learnedAt =>
+      $composableBuilder(column: $table.learnedAt, builder: (column) => column);
+
   $$TopicsTableAnnotationComposer get topicId {
     final $$TopicsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -1636,6 +1700,7 @@ class $$WordsTableTableManager
                 Value<String?> partOfSpeech = const Value.absent(),
                 Value<String?> usage = const Value.absent(),
                 Value<bool> learned = const Value.absent(),
+                Value<DateTime?> learnedAt = const Value.absent(),
               }) => WordsCompanion(
                 id: id,
                 topicId: topicId,
@@ -1646,6 +1711,7 @@ class $$WordsTableTableManager
                 partOfSpeech: partOfSpeech,
                 usage: usage,
                 learned: learned,
+                learnedAt: learnedAt,
               ),
           createCompanionCallback:
               ({
@@ -1658,6 +1724,7 @@ class $$WordsTableTableManager
                 Value<String?> partOfSpeech = const Value.absent(),
                 Value<String?> usage = const Value.absent(),
                 Value<bool> learned = const Value.absent(),
+                Value<DateTime?> learnedAt = const Value.absent(),
               }) => WordsCompanion.insert(
                 id: id,
                 topicId: topicId,
@@ -1668,6 +1735,7 @@ class $$WordsTableTableManager
                 partOfSpeech: partOfSpeech,
                 usage: usage,
                 learned: learned,
+                learnedAt: learnedAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(

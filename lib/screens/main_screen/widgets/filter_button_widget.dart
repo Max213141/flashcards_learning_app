@@ -117,6 +117,7 @@ class _FilterButtonWidgetState extends State<FilterButtonWidget> {
             'Текущая сортировка: ${_sortLabel(widget.selectedSort)}',
             style: AppConst.additionalText.copyWith(
               fontWeight: FontWeight.w100,
+              fontSize: 12,
             ),
           ),
         ],

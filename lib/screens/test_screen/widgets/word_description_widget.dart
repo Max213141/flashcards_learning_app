@@ -69,7 +69,7 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
                   child: Text(
                     widget.usage ?? 'Информация не заполнена',
                     style: widget.usage == null
-                        ? AppConst.additionalText
+                        ? AppConst.additionalText.copyWith(fontSize: 12)
                         : AppConst.text,
                   ),
                 ),

@@ -21,9 +21,7 @@ class FancyAccomplishmentText extends StatelessWidget {
               offset: const Offset(0, -2),
               child: Text(
                 '$currentDailyLearned',
-                style: AppConst.additionalText.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppConst.additionalText,
               ),
             ),
           ),
@@ -36,7 +34,12 @@ class FancyAccomplishmentText extends StatelessWidget {
             alignment: PlaceholderAlignment.middle,
             child: Transform.translate(
               offset: const Offset(0, 0),
-              child: Text('$dailyGoal', style: AppConst.additionalText),
+              child: Text(
+                '$dailyGoal',
+                style: AppConst.additionalText.copyWith(
+                  color: Color.fromARGB(255, 117, 117, 117),
+                ),
+              ),
             ),
           ),
         ],

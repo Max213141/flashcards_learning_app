@@ -170,7 +170,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                           Text(
                             _wordData.partOfSpeech ?? 'Часть речи не указана',
                             style: widget.wordData.partOfSpeech == null
-                                ? AppConst.additionalText
+                                ? AppConst.additionalText.copyWith(fontSize: 12)
                                 : AppConst.text,
                           ),
                           SizedBox(height: 15),
@@ -181,7 +181,7 @@ class _WordDefinitionScreenState extends State<WordDefinitionScreen> {
                           Text(
                             _wordData.usage ?? 'Информация не заполнена',
                             style: widget.wordData.usage == null
-                                ? AppConst.additionalText
+                                ? AppConst.additionalText.copyWith(fontSize: 12)
                                 : AppConst.text,
                           ),
                           Spacer(),

@@ -42,6 +42,6 @@ class AppConst {
   static const TextStyle additionalText = TextStyle(
     fontFamily: 'Jost',
     fontSize: 10,
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w400,
   );
 }

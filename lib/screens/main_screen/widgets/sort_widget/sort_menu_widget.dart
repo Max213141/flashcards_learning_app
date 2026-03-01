@@ -31,7 +31,7 @@ class SortMenuWidget extends StatelessWidget {
             onTap: () => selectSort(TopicSortOption.createdDesc),
           ),
           SortOptionTile(
-            title: 'По названию (A-Z)',
+            title: 'По имени (А-Я)',
             isSelected: selectedSort == TopicSortOption.titleAsc,
             onTap: () => selectSort(TopicSortOption.titleAsc),
           ),

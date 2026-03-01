@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SortOptionTile extends StatelessWidget {
   final String title;
@@ -24,11 +25,11 @@ class SortOptionTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
           child: Row(
             children: [
-              Icon(
+              SvgPicture.asset(
                 isSelected
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_off,
-                size: 18,
+                    ? 'assets/iconss/radio_button_checked.svg'
+                    : 'assets/iconss/radio_button.svg',
+                width: 18,
                 color: AppConst.black,
               ),
               const SizedBox(width: 8),

@@ -43,12 +43,9 @@ class ButtonsRow extends StatelessWidget {
               buttonText: 'Экзамен',
               onTap: isTopicEmpty
                   ? null
-                  : () => AutoRouter.of(context).push(
-                      app_router.TestRoute(
-                        topicId: topicId,
-                        topicColor: topicColor,
-                      ),
-                    ),
+                  : () => AutoRouter.of(
+                      context,
+                    ).push(app_router.ExamRoute(topicId: topicId)),
             ),
           ),
         ],

@@ -57,6 +57,50 @@ class EditWordRouteArgs {
 }
 
 /// generated route for
+/// [ExamScreen]
+class ExamRoute extends PageRouteInfo<ExamRouteArgs> {
+  ExamRoute({Key? key, required int topicId, List<PageRouteInfo>? children})
+    : super(
+        ExamRoute.name,
+        args: ExamRouteArgs(key: key, topicId: topicId),
+        initialChildren: children,
+      );
+
+  static const String name = 'ExamRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ExamRouteArgs>();
+      return ExamScreen(key: args.key, topicId: args.topicId);
+    },
+  );
+}
+
+class ExamRouteArgs {
+  const ExamRouteArgs({this.key, required this.topicId});
+
+  final Key? key;
+
+  final int topicId;
+
+  @override
+  String toString() {
+    return 'ExamRouteArgs{key: $key, topicId: $topicId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ExamRouteArgs) return false;
+    return key == other.key && topicId == other.topicId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ topicId.hashCode;
+}
+
+/// generated route for
 /// [MainScreen]
 class MainRoute extends PageRouteInfo<void> {
   const MainRoute({List<PageRouteInfo>? children})

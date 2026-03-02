@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flashcards_learning_app/screens/exam_screen/exam_screen.dart';
 import 'package:flashcards_learning_app/screens/screens.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
@@ -14,5 +15,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: TestRoute.page),
     AutoRoute(page: TopicRoute.page),
     AutoRoute(page: WordDefinitionRoute.page),
+    AutoRoute(page: ExamRoute.page),
   ];
 }

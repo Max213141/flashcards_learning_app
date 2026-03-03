@@ -1,7 +1,9 @@
+import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditWordDialog extends StatelessWidget {
   final Word word;
@@ -17,7 +19,7 @@ class EditWordDialog extends StatelessWidget {
               media.size.height * 0.95,
             );
 
-    return Dialog(
+    Widget dialogChild = Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       backgroundColor: AppConst.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -35,6 +37,30 @@ class EditWordDialog extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    if (onSave != null) return dialogChild;
+
+    return BlocListener<WordEditingBloc, WordEditingState>(
+      listener: (context, state) {
+        if (state.status == WordEditingStatus.saveSuccess) {
+          Navigator.of(context).pop(true);
+          context.read<WordEditingBloc>().add(
+            const WordEditingEvent.statusConsumed(),
+          );
+          return;
+        }
+
+        if (state.status == WordEditingStatus.failure && state.message != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message!)));
+          context.read<WordEditingBloc>().add(
+            const WordEditingEvent.statusConsumed(),
+          );
+        }
+      },
+      child: dialogChild,
     );
   }
 }

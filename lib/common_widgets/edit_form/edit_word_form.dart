@@ -1,6 +1,8 @@
+import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditWordForm extends StatefulWidget {
   final Word? word;
@@ -61,8 +63,6 @@ class _EditWordFormState extends State<EditWordForm> {
       return;
     }
 
-    if (widget.onSave == null) return;
-
     final baseWord =
         widget.word ?? Word(word: wordValue, translation: translationValue);
     final updatedWord = baseWord.copyWith(
@@ -72,6 +72,13 @@ class _EditWordFormState extends State<EditWordForm> {
       partOfSpeech: _normalizedOrNull(partofSpeechController.text),
       usage: _normalizedOrNull(usageController.text),
     );
+
+    if (widget.onSave == null) {
+      context.read<WordEditingBloc>().add(
+        WordEditingEvent.saveRequested(updatedWord: updatedWord),
+      );
+      return;
+    }
 
     setState(() => _saving = true);
     try {
@@ -111,10 +118,7 @@ class _EditWordFormState extends State<EditWordForm> {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
-                  child: CustomActionButton(
-                    buttonText: _saving ? 'Сохранение...' : 'Сохранить',
-                    onTap: _handleSave,
-                  ),
+                  child: _buildSaveButton(),
                 ),
               ],
             ),
@@ -133,10 +137,7 @@ class _EditWordFormState extends State<EditWordForm> {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
-                  child: CustomActionButton(
-                    buttonText: _saving ? 'Сохранение...' : 'Сохранить',
-                    onTap: _handleSave,
-                  ),
+                  child: _buildSaveButton(),
                 ),
               ],
             ),
@@ -148,6 +149,24 @@ class _EditWordFormState extends State<EditWordForm> {
         padding: const EdgeInsets.symmetric(horizontal: 18),
         child: content,
       ),
+    );
+  }
+
+  Widget _buildSaveButton() {
+    if (widget.onSave != null) {
+      return CustomActionButton(
+        buttonText: _saving ? 'Сохранение...' : 'Сохранить',
+        onTap: _handleSave,
+      );
+    }
+
+    return BlocBuilder<WordEditingBloc, WordEditingState>(
+      builder: (context, state) {
+        return CustomActionButton(
+          buttonText: state.isSaving ? 'Сохранение...' : 'Сохранить',
+          onTap: state.isSaving ? null : _handleSave,
+        );
+      },
     );
   }
 }

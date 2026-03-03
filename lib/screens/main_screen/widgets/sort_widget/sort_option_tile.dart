@@ -30,7 +30,10 @@ class SortOptionTile extends StatelessWidget {
                     ? 'assets/iconss/radio_button_checked.svg'
                     : 'assets/iconss/radio_button.svg',
                 width: 18,
-                color: AppConst.black,
+                colorFilter: const ColorFilter.mode(
+                  AppConst.black,
+                  BlendMode.srcIn,
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(

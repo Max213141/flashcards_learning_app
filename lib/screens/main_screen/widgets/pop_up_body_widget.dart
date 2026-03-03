@@ -1,12 +1,9 @@
+import 'package:flashcards_learning_app/blocs/topic_creation_bloc/topic_creation_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
-import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
-import 'package:flashcards_learning_app/entities/topic.dart';
-import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
-import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PopUpBodyWidget extends StatefulWidget {
@@ -19,74 +16,10 @@ class PopUpBodyWidget extends StatefulWidget {
 class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
   final TextEditingController _topicController = TextEditingController();
 
-  int _selectedColorValue = AppConst.yellow.toARGB32();
-  Color _selectedColor = AppConst.yellow;
-  List<Word> _importedWords = [];
-  List<String> _topicSuggestions = [];
-  bool _loading = false;
-
   @override
   void dispose() {
     _topicController.dispose();
     super.dispose();
-  }
-
-  Future<void> _pickJson() async {
-    setState(() => _loading = true);
-    try {
-      final pickedData = await PickerUtil().pickJson();
-      if (pickedData is! List) {
-        throw const FormatException('JSON must be a list of words');
-      }
-      final words = pickedData
-          .cast<Map<String, dynamic>>()
-          .map((e) => Word.fromJson(e))
-          .toList();
-
-      final List<String> topicNames =
-          words
-              .map((w) => (w.topic ?? '').trim())
-              .where((t) => t.isNotEmpty)
-              .toSet()
-              .toList()
-            ..sort();
-
-      setState(() {
-        _importedWords = words;
-        _topicSuggestions = topicNames;
-        if (_topicController.text.trim().isEmpty &&
-            _topicSuggestions.isNotEmpty) {
-          _topicController.text = _topicSuggestions.first;
-        }
-      });
-    } on PlatformException catch (e) {
-      _showSnack('File access error: ${e.message}');
-    } on FormatException catch (e) {
-      _showSnack(e.message);
-    } catch (e) {
-      _showSnack('Failed to read JSON');
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
-  }
-
-  Future<void> _createTopic() async {
-    final name = _topicController.text.trim();
-    if (name.isEmpty) return;
-
-    setState(() => _loading = true);
-    try {
-      final topic = Topic(topicName: name, colorValue: _selectedColorValue);
-      final words = _importedWords.map((w) => w.copyWith(topic: name)).toList();
-      // words.map((word) => print('${word.id}/${word.topicId}: ${word.topic}'));
-      await appDatabase.createTopicWithWords(topic: topic, words: words);
-      if (!mounted) return;
-      Navigator.of(context).pop(true);
-    } catch (e) {
-      _showSnack('Failed to create topic');
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
   }
 
   void _showSnack(String message) {
@@ -98,79 +31,112 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(child: Text('Новая тема', style: AppConst.h1)),
-          SizedBox(height: 40),
-          Text('Название', style: AppConst.h2),
-          Row(
+    return BlocConsumer<TopicCreationBloc, TopicCreationState>(
+      listener: (context, state) {
+        final text = state.name;
+        if (_topicController.text != text) {
+          _topicController.value = TextEditingValue(
+            text: text,
+            selection: TextSelection.collapsed(offset: text.length),
+          );
+        }
+
+        if (state.status == TopicCreationStatus.success) {
+          Navigator.of(context).pop(true);
+          return;
+        }
+
+        if (state.status == TopicCreationStatus.failure &&
+            state.message != null) {
+          _showSnack(state.message!);
+          context.read<TopicCreationBloc>().add(
+            const TopicCreationEvent.statusConsumed(),
+          );
+        }
+      },
+      builder: (context, state) {
+        final selectedColor = Color(state.selectedColorValue);
+        final canCreate = state.name.trim().isNotEmpty && !state.isLoading;
+
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: CustomTextfield(
-                  controller: _topicController,
-                  maxLength: 30,
-                ),
-              ),
-            ],
-          ),
-          if (_topicSuggestions.isNotEmpty) ...[
-            const SizedBox(height: 8),
-
-            TopicsExpansionTile(
-              onTap: (String topicSuggestion) {
-                setState(() => _topicController.text = topicSuggestion);
-              },
-              topicSuggestions: _topicSuggestions,
-            ),
-          ],
-          SizedBox(height: 40),
-          Text('Цвет темы', style: AppConst.h2),
-          ColorSelector(
-            selectedColor: _selectedColor,
-            onColorChange: (colorValue, color) {
-              setState(() {
-                _selectedColorValue = colorValue;
-                _selectedColor = color;
-              });
-            },
-          ),
-
-          SizedBox(height: 40),
-          TextButton(
-            onPressed: _loading ? null : _pickJson,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/iconss/file_export.svg',
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    AppConst.black,
-                    BlendMode.srcIn,
+              Center(child: Text('Новая тема', style: AppConst.h1)),
+              SizedBox(height: 40),
+              Text('Название', style: AppConst.h2),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextfield(
+                      controller: _topicController,
+                      maxLength: 30,
+                      onChanged: (value) {
+                        context.read<TopicCreationBloc>().add(
+                          TopicCreationEvent.nameChanged(name: value),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: 5),
-                Text(
-                  'Загрузить файл JSON',
-                  style: AppConst.text.copyWith(color: AppConst.black),
+                ],
+              ),
+              if (state.topicSuggestions.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                TopicsExpansionTile(
+                  onTap: (String topicSuggestion) {
+                    context.read<TopicCreationBloc>().add(
+                      TopicCreationEvent.topicSuggestionSelected(
+                        name: topicSuggestion,
+                      ),
+                    );
+                  },
+                  topicSuggestions: state.topicSuggestions,
                 ),
               ],
-            ),
-          ),
-          SizedBox(height: 20),
-          Center(
-            child: SizedBox(
-              width: 350,
-              height: 55,
-              child: ValueListenableBuilder<TextEditingValue>(
-                valueListenable: _topicController,
-                builder: (_, value, _) {
-                  bool canCreate =
-                      _topicController.text.trim().isNotEmpty && !_loading;
-
-                  return FilledButton(
+              SizedBox(height: 40),
+              Text('Цвет темы', style: AppConst.h2),
+              ColorSelector(
+                selectedColor: selectedColor,
+                onColorChange: (colorValue, color) {
+                  context.read<TopicCreationBloc>().add(
+                    TopicCreationEvent.colorChanged(colorValue: colorValue),
+                  );
+                },
+              ),
+              SizedBox(height: 40),
+              TextButton(
+                onPressed: state.isLoading
+                    ? null
+                    : () {
+                        context.read<TopicCreationBloc>().add(
+                          const TopicCreationEvent.jsonImportRequested(),
+                        );
+                      },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/iconss/file_export.svg',
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        AppConst.black,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      'Загрузить файл JSON',
+                      style: AppConst.text.copyWith(color: AppConst.black),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: SizedBox(
+                  width: 350,
+                  height: 55,
+                  child: FilledButton(
                     style: FilledButton.styleFrom(
                       backgroundColor: AppConst.buttonBackground,
                       foregroundColor: AppConst.black,
@@ -182,16 +148,27 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                         borderRadius: BorderRadius.circular(35),
                       ),
                     ),
-
-                    onPressed: canCreate ? _createTopic : null,
-                    child: Text('Создать тему', style: AppConst.text),
-                  );
-                },
+                    onPressed: canCreate
+                        ? () {
+                            context.read<TopicCreationBloc>().add(
+                              const TopicCreationEvent.createSubmitted(),
+                            );
+                          }
+                        : null,
+                    child: state.isLoading
+                        ? const SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: FlashcardsLoader(),
+                          )
+                        : Text('Создать тему', style: AppConst.text),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

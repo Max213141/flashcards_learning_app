@@ -5,8 +5,8 @@ import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/screens/exam_screen/Widgets/timer.dart';
 import 'package:flashcards_learning_app/screens/exam_screen/widgets/exam_screen_body_widget.dart';
+import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -21,6 +21,7 @@ class ExamScreen extends StatefulWidget {
 
 class _ExamScreenState extends State<ExamScreen> {
   late Future<List<Word>> _wordsFuture;
+  final appDatabase = getIt<AppDatabase>();
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _ExamScreenState extends State<ExamScreen> {
         future: _wordsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: FlashcardsLoader());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));

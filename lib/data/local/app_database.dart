@@ -564,5 +564,3 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 }
-
-final AppDatabase appDatabase = AppDatabase();

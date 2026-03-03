@@ -13,6 +13,8 @@ class AppConst {
   static const Color buttonBackground = Color(0x60FDFFED);
   static const Color dialogbackground = Color.fromARGB(255, 251, 252, 244);
 
+  static const int yellowInt = 0xFFFFF36E;
+
   static const TextStyle h1 = TextStyle(
     fontFamily: 'Jost',
     fontSize: 20,

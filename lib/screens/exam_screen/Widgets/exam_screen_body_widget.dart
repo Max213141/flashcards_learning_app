@@ -41,8 +41,8 @@ class _ExamScreenBodyWidgetState extends State<ExamScreenBodyWidget> {
                             setState(() {
                               leftId = widget.wordList[index].id;
                             });
-                            if (leftId != null && rightId!= null) {
-                              (leftId == rightId) 
+                            if (leftId != null && rightId != null) {
+                              // (leftId == rightId)
                             }
                           },
                           color: leftId == widget.wordList[index].id

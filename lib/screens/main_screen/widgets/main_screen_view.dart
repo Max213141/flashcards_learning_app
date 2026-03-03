@@ -1,0 +1,176 @@
+import 'package:flashcards_learning_app/blocs/blocs.dart';
+import 'package:flashcards_learning_app/common_widgets/widgets.dart';
+import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/service_locator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MainScreenView extends StatefulWidget {
+  const MainScreenView({super.key});
+
+  @override
+  State<MainScreenView> createState() => _MainScreenViewState();
+}
+
+class _MainScreenViewState extends State<MainScreenView> {
+  bool buttonsHidden = true;
+
+  Future<void> _onRestoreBackupTap() async {
+    final shouldRestore = await showDialog<bool>(
+      context: context,
+      builder: (context) =>
+          const PopUpBox(popupContent: RestoreBackupAcceptanceBody()),
+    );
+    if (shouldRestore != true) return;
+    if (!mounted) return;
+    context.read<BackupBloc>().add(const BackupEvent.restoreRequested());
+  }
+
+  void _showSnack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<BackupBloc, BackupState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          exportSuccess: (message) {
+            _showSnack(message);
+            context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
+          },
+          restoreSuccess: (_, message) {
+            context.read<TopicBloc>().add(const TopicEvent.refreshRequested());
+            _showSnack(message);
+            context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
+          },
+          failure: (message) {
+            _showSnack(message);
+            context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
+          },
+        );
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppConst.primary,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+        ),
+        backgroundColor: AppConst.background,
+        floatingActionButton: RotatingFab(
+          onPressed: () {
+            setState(() {
+              buttonsHidden = !buttonsHidden;
+            });
+          },
+        ),
+        body: Column(
+          children: [
+            AppBarCustomizedWidget(),
+            Expanded(
+              child: BlocBuilder<TopicBloc, TopicState>(
+                builder: (context, state) {
+                  final topicsContent = state.when(
+                    initial: (_) => const Center(child: FlashcardsLoader()),
+                    loading: (_, previousTopics) => previousTopics.isEmpty
+                        ? const Center(child: FlashcardsLoader())
+                        : TopicsListWidget(topics: previousTopics),
+                    loaded: (_, topics) => TopicsListWidget(topics: topics),
+                    error: (_, message, previousTopics) =>
+                        previousTopics.isEmpty
+                        ? Center(child: Text(message))
+                        : TopicsListWidget(topics: previousTopics),
+                  );
+
+                  return Column(
+                    children: [
+                      FilterButtonWidget(
+                        selectedSort: state.selectedSort,
+                        onSortChanged: (option) {
+                          context.read<TopicBloc>().add(
+                            TopicEvent.sortChanged(sortOption: option),
+                          );
+                        },
+                      ),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: AlignmentGeometry.topCenter,
+                              child: topicsContent,
+                            ),
+                            Positioned(
+                              right: 30,
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom + 85,
+                              child: Offstage(
+                                offstage: buttonsHidden,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    CustomActionButton(
+                                      buttonText: 'Восстановление из копии',
+                                      icon: 'assets/iconss/unarchive.svg',
+                                      onTap: _onRestoreBackupTap,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0,
+                                      ),
+                                      child: CustomActionButton(
+                                        buttonText: 'Создание резервной копии',
+                                        icon: 'assets/iconss/archive.svg',
+                                        onTap: () {
+                                          context.read<BackupBloc>().add(
+                                            const BackupEvent.exportRequested(),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    CustomActionButton(
+                                      buttonText: 'Новая тема',
+                                      icon: 'assets/iconss/plus.svg',
+                                      onTap: () async {
+                                        final created = await showDialog<bool>(
+                                          context: context,
+                                          builder: (dialogContext) =>
+                                              BlocProvider(
+                                                create: (_) =>
+                                                    getIt<TopicCreationBloc>(),
+                                                child: PopUpBox(
+                                                  popupContent:
+                                                      PopUpBodyWidget(),
+                                                ),
+                                              ),
+                                        );
+                                        if (!context.mounted ||
+                                            created != true) {
+                                          return;
+                                        }
+                                        context.read<TopicBloc>().add(
+                                          const TopicEvent.refreshRequested(),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

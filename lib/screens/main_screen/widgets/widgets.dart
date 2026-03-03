@@ -11,3 +11,4 @@ export 'restore_backup_acceptance_body.dart';
 export 'sort_widget/sort_option_tile.dart';
 export 'sort_widget/sort_menu_widget.dart';
 export 'sort_widget/sort_button_second_part.dart';
+export 'main_screen_view.dart';

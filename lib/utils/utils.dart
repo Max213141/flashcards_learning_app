@@ -1,4 +1,5 @@
 export 'custom_painter.dart';
+export 'derangement_shuffle.dart';
 export 'topic_card_clipper.dart';
 export 'rotation_widget/widget_flipper.dart';
 export 'rotation_widget/animated_card.dart';

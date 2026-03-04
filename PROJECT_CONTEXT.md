@@ -137,6 +137,9 @@ Routing:
 - Detailed DB reference:
   - `/Users/maksimkupcov/Projects/flashcards_learning_app/APP_DATABASE.md`
 
+- Detailed Bloc reference:
+  - `/Users/maksimkupcov/Projects/flashcards_learning_app/BLOCS_CONTEXT.md`
+
 ## Shared UI
 
 - `lib/common_widgets/widgets.dart`

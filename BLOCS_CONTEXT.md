@@ -1,0 +1,391 @@
+# Bloc Layer Context
+
+This file documents the bloc layer introduced in the latest refactor commit.
+
+- Commit: `df51365a8c7d58d9d1ca2620b466a2feb008a225`
+- Title: `Full separation business logic from UI layer, all neccessary blocs created and wired up to the screens, all logic works great. Animation added`
+
+## General Rules
+
+- All feature blocs are intended to be created through `getIt`.
+- Feature blocs are registered as factories and provided at the nearest feature boundary.
+- UI keeps navigation, dialogs, and snackbars.
+- Blocs own database access, JSON parsing, subscriptions, timers, and workflow orchestration.
+- Transient success and failure effects are reset with `statusConsumed()` where needed.
+
+## TopicBloc
+
+**Purpose**
+
+Owns the `MainScreen` topic list and sorting state.
+
+**Main responsibilities**
+
+- Subscribes to `AppDatabase.watchTopicSummaries(...)`
+- Tracks the selected sort option
+- Re-subscribes when sort changes
+- Re-subscribes on explicit refresh
+- Preserves previous list data during reload
+
+**Events**
+
+- `started()`: initializes the topic stream subscription
+- `sortChanged(sortOption)`: switches the sort and re-subscribes
+- `refreshRequested()`: forces re-subscription with current sort
+- `topicsUpdated(selectedSort, topics)`: internal event emitted from the stream listener
+- `subscriptionFailed(selectedSort, message)`: internal event emitted from stream errors
+
+**States**
+
+- `initial(selectedSort)`
+- `loading(selectedSort, previousTopics)`
+- `loaded(selectedSort, topics)`
+- `error(selectedSort, message, previousTopics)`
+
+**Main logic**
+
+- On `started`, the bloc subscribes using the default or current sort.
+- On `sortChanged`, it cancels the previous subscription and starts a new one.
+- Stream emissions are converted into explicit `loaded` states.
+- Stream failures are converted into explicit `error` states.
+- The bloc cancels its `StreamSubscription` in `close()`.
+
+## TopicCreationBloc
+
+**Purpose**
+
+Owns the create-topic dialog flow on `MainScreen`.
+
+**Main responsibilities**
+
+- Manages topic name and selected color
+- Imports words from JSON
+- Extracts topic name suggestions from imported words
+- Creates a topic and optionally creates imported words in that topic
+
+**Events**
+
+- `nameChanged(name)`: updates the topic name
+- `colorChanged(colorValue)`: updates the selected color int
+- `topicSuggestionSelected(name)`: applies a suggested name from imported JSON
+- `jsonImportRequested()`: picks and parses a JSON file
+- `createSubmitted()`: validates and creates the topic
+- `statusConsumed()`: clears transient success or failure state
+- `resetRequested()`: resets the form to defaults
+
+**State**
+
+Single state object with:
+
+- `name`
+- `selectedColorValue`
+- `importedWords`
+- `topicSuggestions`
+- `isLoading`
+- `status`
+- `message`
+
+**Statuses**
+
+- `idle`
+- `importingJson`
+- `ready`
+- `creating`
+- `success`
+- `failure`
+
+**Main logic**
+
+- Validates that topic name is not empty before creation.
+- Uses `PickerUtil.pickJson()` for import.
+- Validates that imported JSON is a list of objects.
+- Converts JSON items to `Word`.
+- Extracts unique non-empty topic names and can prefill the form name.
+- Calls `AppDatabase.createTopicWithWords(...)`.
+- Keeps dialog side effects in UI; the UI reacts to `success` and `failure`.
+
+## BackupBloc
+
+**Purpose**
+
+Owns backup export and restore workflows for `MainScreen`.
+
+**Main responsibilities**
+
+- Exports all words to a JSON backup file
+- Restores words from a picked JSON backup file
+- Normalizes backup JSON payloads
+
+**Events**
+
+- `exportRequested()`: starts backup export
+- `restoreRequested()`: starts backup restore
+- `statusConsumed()`: returns the bloc to idle after UI consumes the effect
+
+**States**
+
+- `idle()`
+- `processing(operation)`
+- `exportSuccess(message)`
+- `restoreSuccess(restoredWordsCount, message)`
+- `failure(message)`
+
+**Operations**
+
+- `export`
+- `restore`
+
+**Main logic**
+
+- On export, fetches all words with topics from `AppDatabase.getAllWordsWithTopicName()`.
+- Serializes words into a normalized backup JSON shape.
+- Uses `FilePicker.platform.saveFile(...)` and writes the resulting file.
+- On restore, uses `PickerUtil.pickJson()`.
+- Validates that the payload is a list of maps.
+- Calls `AppDatabase.restoreFromBackupJson(...)`.
+- Emits explicit success states so UI can show snackbars and refresh topic data.
+
+## GoalsBloc
+
+**Purpose**
+
+Owns the `MainScreen` header goals and learning progress flow.
+
+**Main responsibilities**
+
+- Subscribes to saved user goals
+- Subscribes to words progress statistics
+- Refreshes progress subscription after midnight to keep daily progress correct
+- Saves edited goals from the dialog
+
+**Events**
+
+- `started()`: starts subscriptions and schedules midnight refresh
+- `goalsUpdated(goals)`: internal event emitted from goals stream updates
+- `progressUpdated(progressStats)`: internal event emitted from progress stream updates
+- `saveRequested(totalGoal, dailyGoal)`: validates and saves user goals
+- `midnightRefreshTriggered()`: internal timed refresh event
+- `failureOccurred(message)`: internal event for stream failures
+- `statusConsumed()`: clears transient status after UI handles it
+
+**State**
+
+Single state object with:
+
+- `currentGoals`
+- `progressStats`
+- `totalGoalInput`
+- `dailyGoalInput`
+- `isLoading`
+- `isSaving`
+- `status`
+- `message`
+
+**Statuses**
+
+- `initial`
+- `loading`
+- `readyWithoutGoals`
+- `readyWithGoals`
+- `saving`
+- `saveSuccess`
+- `failure`
+
+**Main logic**
+
+- Subscribes to `AppDatabase.watchUserGoals()`.
+- Subscribes to `AppDatabase.watchWordsProgressStats()`.
+- Maintains a `Timer` that fires at the next midnight and re-subscribes to refresh daily counters.
+- Parses dialog inputs to integers before saving.
+- Calls `AppDatabase.saveUserGoals(...)`.
+- Cancels both stream subscriptions and the timer in `close()`.
+
+## TopicDetailBloc
+
+**Purpose**
+
+Owns the `TopicScreen` topic-specific workflow.
+
+**Main responsibilities**
+
+- Loads all words for a topic
+- Reloads after changes
+- Adds a word to the topic
+- Imports words into the topic from JSON
+- Deletes the topic and its words
+- Tracks whether the screen has changes
+
+**Events**
+
+- `started(topicId, topicName)`: initializes the feature
+- `reloadRequested()`: reloads the topic words
+- `addWordRequested(newWord)`: adds a single word
+- `importWordsRequested()`: imports words from JSON
+- `deleteTopicRequested()`: deletes the topic
+- `statusConsumed()`: clears transient state after UI handles it
+
+**State**
+
+Single state object with:
+
+- `topicId`
+- `topicName`
+- `words`
+- `isLoading`
+- `hasChanges`
+- `status`
+- `message`
+
+**Statuses**
+
+- `initial`
+- `loading`
+- `ready`
+- `processing`
+- `topicDeleted`
+- `failure`
+
+**Main logic**
+
+- Loads words with `AppDatabase.getWordsForTopic(topicId)`.
+- Adds words with `AppDatabase.addWord(...)`.
+- Imports JSON through `PickerUtil.pickJson()` and converts items to `Word`.
+- Inserts imported words with `AppDatabase.insertWords(...)`.
+- Deletes the topic with `AppDatabase.deleteTopicWithWords(topicId)`.
+- Sets `hasChanges` when the topic content changes or the topic is deleted.
+- Leaves navigation after topic deletion to the UI layer.
+
+## WordBloc
+
+**Purpose**
+
+Owns non-editing word feature operations.
+
+**Main responsibilities**
+
+- Initializes the word details feature with the current word
+- Adds a new word
+- Refreshes a word from the database after edits
+- Deletes a word
+
+**Events**
+
+- `started(word)`: seeds the bloc with the current word
+- `addWord(newWord)`: adds a word
+- `refreshRequested(wordId)`: reloads the current word by id
+- `deleteRequested(wordId?)`: deletes a word by explicit id or current state word id
+- `statusConsumed()`: resets transient status
+
+**State**
+
+Single state object with:
+
+- `word`
+- `isLoading`
+- `hasChanges`
+- `status`
+- `message`
+
+**Statuses**
+
+- `initial`
+- `ready`
+- `saving`
+- `wordAdded`
+- `wordDeleted`
+- `failure`
+
+**Main logic**
+
+- Uses `AppDatabase.addWord(...)` for creation.
+- Uses `AppDatabase.getWordById(...)` for refresh after edits.
+- Uses `AppDatabase.deleteWordById(...)` for deletion.
+- Marks `hasChanges` when refresh succeeds with a new value or deletion succeeds.
+- Keeps editing and learned-status toggling out of this bloc.
+
+## WordEditingBloc
+
+**Purpose**
+
+Owns word mutation workflows.
+
+**Main responsibilities**
+
+- Initializes edit state for a word
+- Saves edited word fields
+- Toggles the learned flag and `learnedAt`
+
+**Events**
+
+- `started(word)`: seeds the editing state
+- `saveRequested(updatedWord)`: saves edited word data
+- `toggleLearnedRequested(word)`: flips learned state and persists it
+- `statusConsumed()`: resets transient status
+
+**State**
+
+Single state object with:
+
+- `word`
+- `isSaving`
+- `status`
+- `message`
+
+**Statuses**
+
+- `initial`
+- `ready`
+- `saveSuccess`
+- `wordUpdated`
+- `failure`
+
+**Main logic**
+
+- Saves edited words through `AppDatabase.updateWord(...)`.
+- For learned toggles, creates an updated copy of the word:
+  - flips `learned`
+  - sets `learnedAt` to `DateTime.now()` when marking as learned
+  - clears `learnedAt` when unmarking
+- Emits `saveSuccess` for edit form saves.
+- Emits `wordUpdated` for learned-status toggles so UI can refresh or react separately.
+
+## TestBloc
+
+**Purpose**
+
+Owns the loading flow for `TestScreen`.
+
+**Main responsibilities**
+
+- Loads words for practice by topic id
+- Re-loads practice words on demand
+- Replaces `FutureBuilder`-driven loading with explicit bloc states
+
+**Events**
+
+- `started(topicId)`: initial load
+- `reloadRequested(topicId)`: manual reload
+- `statusConsumed()`: clears transient failure state when needed
+
+**States**
+
+- `initial()`
+- `loading()`
+- `loaded(topicId, words)`
+- `failure(topicId, message)`
+
+**Main logic**
+
+- Uses `AppDatabase.getWordsForTopic(topicId)` to load test words.
+- Emits `loaded` with the full word list.
+- Emits `failure` if loading fails.
+- `statusConsumed()` restores the loaded state when possible, otherwise resets to `initial`.
+
+## UI Integration Notes
+
+- `BlocBuilder` is used for persistent render state.
+- `BlocListener` is used for one-off effects such as snackbars, dialog closing, and navigation.
+- `BlocConsumer` is used only where both rebuilding and side effects are needed in the same widget.
+- Dialogs that need an existing bloc instance should receive it via `BlocProvider.value(...)`.
+- New feature-local blocs should be created with `BlocProvider(create: (_) => getIt<BlocType>())`.
+

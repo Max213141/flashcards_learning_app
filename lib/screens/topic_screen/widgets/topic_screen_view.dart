@@ -44,6 +44,9 @@ class _TopicScreenViewState extends State<TopicScreenView> {
       ),
     );
     if (!mounted || result == null) return;
+    setState(() {
+      buttonsHidden = !buttonsHidden;
+    });
     context.read<TopicDetailBloc>().add(
       TopicDetailEvent.addWordRequested(newWord: result),
     );

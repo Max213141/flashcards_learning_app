@@ -42,15 +42,24 @@ class _MainScreenViewState extends State<MainScreenView> {
           exportSuccess: (message) {
             _showSnack(message);
             context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
+            setState(() {
+              buttonsHidden = !buttonsHidden;
+            });
           },
           restoreSuccess: (_, message) {
             context.read<TopicBloc>().add(const TopicEvent.refreshRequested());
             _showSnack(message);
             context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
+            setState(() {
+              buttonsHidden = !buttonsHidden;
+            });
           },
           failure: (message) {
             _showSnack(message);
             context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
+            setState(() {
+              buttonsHidden = !buttonsHidden;
+            });
           },
         );
       },
@@ -151,6 +160,9 @@ class _MainScreenViewState extends State<MainScreenView> {
                                             created != true) {
                                           return;
                                         }
+                                        setState(() {
+                                          buttonsHidden = !buttonsHidden;
+                                        });
                                         context.read<TopicBloc>().add(
                                           const TopicEvent.refreshRequested(),
                                         );

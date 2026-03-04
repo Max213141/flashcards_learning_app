@@ -3,6 +3,7 @@ import 'package:flashcards_learning_app/blocs/test_bloc/test_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/screens/exam_screen/widgets/exam_screen_body_widget.dart';
+import 'package:flashcards_learning_app/utils/derangement_shuffle.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +56,9 @@ class ExamScreen extends StatelessWidget {
               return state.when(
                 initial: () => const SizedBox.shrink(),
                 loading: () => const Center(child: FlashcardsLoader()),
-                loaded: (_, words) => ExamScreenBodyWidget(wordList: words),
+                loaded: (_, words) => ExamScreenBodyWidget(
+                  wordList: shuffleWithoutSamePositions(words),
+                ),
                 failure: (_, _) => const Center(child: FlashcardsLoader()),
               );
             },

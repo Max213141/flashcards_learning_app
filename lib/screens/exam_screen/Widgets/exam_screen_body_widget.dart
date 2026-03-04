@@ -1,9 +1,7 @@
 import 'dart:math' as math;
 
-import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
-import 'package:flashcards_learning_app/screens/exam_screen/widgets/exam_match_option_tile.dart';
-import 'package:flashcards_learning_app/screens/exam_screen/widgets/timer.dart';
+import 'package:flashcards_learning_app/screens/exam_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -178,7 +176,7 @@ class _ExamScreenBodyWidgetState extends State<ExamScreenBodyWidget>
         Expanded(
           flex: 6,
           child: currentBatch.isEmpty
-              ? Text('Exam completed', style: AppConst.h1)
+              ? ExamFinishedWidget(wordsListLength: widget.wordList.length)
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(

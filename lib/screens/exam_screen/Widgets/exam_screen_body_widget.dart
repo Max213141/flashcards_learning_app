@@ -86,6 +86,64 @@ class _ExamScreenBodyWidgetState extends State<ExamScreenBodyWidget>
     return widget.wordList.sublist(_batchStartIndex, endIndex);
   }
 
+  void _onLeftTap(int? wordId) {
+    if (wordId == null ||
+        _matchedIds.contains(wordId) ||
+        _shakeController.isAnimating) {
+      return;
+    }
+    setState(() {
+      leftId = wordId;
+    });
+    _tryCompletePair();
+  }
+
+  void _onRightTap(int? wordId) {
+    if (wordId == null ||
+        _matchedIds.contains(wordId) ||
+        _shakeController.isAnimating) {
+      return;
+    }
+    setState(() {
+      rightId = wordId;
+    });
+    _tryCompletePair();
+  }
+
+  void _tryCompletePair() {
+    if (leftId == null || rightId == null) {
+      return;
+    }
+    if (leftId != rightId) {
+      _startIncorrectPairAnimation();
+      return;
+    }
+    final matchedId = leftId!;
+
+    if (!_matchedIds.contains(matchedId)) {
+      _matchedIds.add(matchedId);
+    }
+
+    leftId = null;
+    rightId = null;
+
+    final currentBatchIds = _currentBatch
+        .map((word) => word.id)
+        .whereType<int>();
+
+    final isBatchCompleted =
+        currentBatchIds.isNotEmpty &&
+        currentBatchIds.every(_matchedIds.contains);
+
+    if (!isBatchCompleted) {
+      return;
+    }
+
+    _batchStartIndex += _currentBatch.length;
+    _matchedIds.clear();
+    _rightColumnBatch = _buildRightColumnBatch();
+  }
+
   List<Word> _buildRightColumnBatch() {
     return shuffleWithoutSamePositions(_currentBatch);
   }

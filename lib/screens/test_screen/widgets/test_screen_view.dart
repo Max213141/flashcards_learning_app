@@ -2,6 +2,7 @@ import 'package:flashcards_learning_app/blocs/test_bloc/test_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/screens/test_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,6 +47,7 @@ class TestScreenView extends StatelessWidget {
             ),
           ),
           title: Text('Практика', style: AppConst.h3),
+          centerTitle: true,
         ),
         body: BlocBuilder<TestBloc, TestState>(
           builder: (context, state) {
@@ -53,7 +55,7 @@ class TestScreenView extends StatelessWidget {
               initial: () => const SizedBox.shrink(),
               loading: () => const Center(child: FlashcardsLoader()),
               loaded: (_, words) => TestScreenBodyWidget(
-                wordList: words,
+                wordList: shuffleWithoutSamePositions(words),
                 topicId: topicId,
                 topicColor: topicColor,
               ),

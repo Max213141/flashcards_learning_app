@@ -140,6 +140,9 @@ Routing:
 - Detailed Bloc reference:
   - `/Users/maksimkupcov/Projects/flashcards_learning_app/BLOCS_CONTEXT.md`
 
+- Detailed Test reference:
+  - `/Users/maksimkupcov/Projects/flashcards_learning_app/TESTS_CONTEXT.md`
+
 ## Shared UI
 
 - `lib/common_widgets/widgets.dart`

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Widget Tests Creation Skill"
+  short_description: "Create stable Flutter widget tests for screen flows"
+  default_prompt: "Write focused widget tests for Flutter screens with bloc listeners, side effects, and stable rendering assertions."

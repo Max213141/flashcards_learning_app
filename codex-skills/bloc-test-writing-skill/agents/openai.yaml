@@ -1,0 +1,4 @@
+interface:
+  display_name: "BLOC_TEST_WRITING_SKILL"
+  short_description: "Write robust unit tests for flutter_bloc features"
+  default_prompt: "Create or update bloc unit tests with mocktail, bloc_test, and deterministic state expectations."

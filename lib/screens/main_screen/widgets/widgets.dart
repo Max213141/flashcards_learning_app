@@ -8,6 +8,7 @@ export 'topic_body_widget.dart';
 export 'goals_dialog_body_widget.dart';
 export 'app_bar_customized_widget.dart';
 export 'restore_backup_acceptance_body.dart';
+export 'crashlytics_consent_body.dart';
 export 'sort_widget/sort_option_tile.dart';
 export 'sort_widget/sort_menu_widget.dart';
 export 'sort_widget/sort_button_second_part.dart';

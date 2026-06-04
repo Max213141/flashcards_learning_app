@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/analytics_service.dart';
+import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flashcards_learning_app/router/app_router.dart' as app_router;
 
@@ -28,12 +30,17 @@ class ButtonsRow extends StatelessWidget {
               buttonText: 'Практика',
               onTap: isTopicEmpty
                   ? null
-                  : () => AutoRouter.of(context).push(
-                      app_router.TestRoute(
+                  : () {
+                      getIt<AnalyticsService>().logPracticeStarted(
                         topicId: topicId,
-                        topicColor: topicColor,
-                      ),
-                    ),
+                      );
+                      AutoRouter.of(context).push(
+                        app_router.TestRoute(
+                          topicId: topicId,
+                          topicColor: topicColor,
+                        ),
+                      );
+                    },
             ),
           ),
           SizedBox(
@@ -43,9 +50,14 @@ class ButtonsRow extends StatelessWidget {
               buttonText: 'Экзамен',
               onTap: isTopicEmpty
                   ? null
-                  : () => AutoRouter.of(
-                      context,
-                    ).push(app_router.ExamRoute(topicId: topicId)),
+                  : () {
+                      getIt<AnalyticsService>().logExamStarted(
+                        topicId: topicId,
+                      );
+                      AutoRouter.of(
+                        context,
+                      ).push(app_router.ExamRoute(topicId: topicId));
+                    },
             ),
           ),
         ],

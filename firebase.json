@@ -1,0 +1,56 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "buildConfigurations": {
+          "Debug": {
+            "projectId": "flashcards-bc929",
+            "appId": "1:1090172960306:android:57e4415fb2fcd03439862b",
+            "fileOutput": "android/app/google-services.json"
+          },
+          "Profile": {
+            "projectId": "flashcards-bc929",
+            "appId": "1:1090172960306:android:57e4415fb2fcd03439862b",
+            "fileOutput": "android/app/google-services.json"
+          },
+          "Release": {
+            "projectId": "flashcards-bc929",
+            "appId": "1:1090172960306:android:57e4415fb2fcd03439862b",
+            "fileOutput": "android/app/google-services.json"
+          }
+        }
+      },
+      "ios": {
+        "buildConfigurations": {
+          "Debug": {
+            "projectId": "flashcards-bc929",
+            "appId": "1:1090172960306:ios:7864b21d62d926e639862b",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/GoogleService-Info.plist"
+          },
+          "Profile": {
+            "projectId": "flashcards-bc929",
+            "appId": "1:1090172960306:ios:7864b21d62d926e639862b",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/GoogleService-Info.plist"
+          },
+          "Release": {
+            "projectId": "flashcards-bc929",
+            "appId": "1:1090172960306:ios:7864b21d62d926e639862b",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/GoogleService-Info.plist"
+          }
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "flashcards-bc929",
+          "configurations": {
+            "android": "1:1090172960306:android:57e4415fb2fcd03439862b",
+            "ios": "1:1090172960306:ios:7864b21d62d926e639862b"
+          }
+        }
+      }
+    }
+  }
+}

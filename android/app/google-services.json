@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1090172960306",
+    "project_id": "flashcards-bc929",
+    "storage_bucket": "flashcards-bc929.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090172960306:android:57e4415fb2fcd03439862b",
+        "android_client_info": {
+          "package_name": "com.maksimkupcov.flashcardslearningapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6CeNqUkgo6IpEhNhk9nZqH0_NJiGLhQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

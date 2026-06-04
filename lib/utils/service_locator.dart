@@ -7,11 +7,13 @@ import 'package:flashcards_learning_app/blocs/topic_creation_bloc/topic_creation
 import 'package:flashcards_learning_app/blocs/word_bloc/word_bloc.dart';
 import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_bloc.dart';
 import 'package:flashcards_learning_app/data/local/app_database.dart';
+import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
+  getIt.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
   getIt.registerLazySingleton<AppDatabase>(() => AppDatabase());
   getIt.registerFactory<TopicBloc>(
     () => TopicBloc(appDatabase: getIt<AppDatabase>()),

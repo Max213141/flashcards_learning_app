@@ -1,8 +1,12 @@
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/analytics_service.dart';
+import 'package:flashcards_learning_app/utils/crashlytics_consent_manager.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +20,33 @@ class MainScreenView extends StatefulWidget {
 class _MainScreenViewState extends State<MainScreenView> {
   bool buttonsHidden = true;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _maybeAskCrashlyticsConsent();
+    });
+  }
+
+  Future<void> _maybeAskCrashlyticsConsent() async {
+    final storedConsent = await CrashlyticsConsentManager.getStoredConsent();
+    if (storedConsent != null || !mounted) {
+      return;
+    }
+
+    final hasConsent = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const PopUpBox(popupContent: CrashlyticsConsentBody()),
+    );
+
+    if (hasConsent == null || !mounted) {
+      return;
+    }
+
+    await CrashlyticsConsentManager.setConsent(hasConsent);
+  }
+
   Future<void> _onRestoreBackupTap() async {
     final shouldRestore = await showDialog<bool>(
       context: context,
@@ -24,6 +55,7 @@ class _MainScreenViewState extends State<MainScreenView> {
     );
     if (shouldRestore != true) return;
     if (!mounted) return;
+    getIt<AnalyticsService>().logBackupRestoreRequested();
     context.read<BackupBloc>().add(const BackupEvent.restoreRequested());
   }
 
@@ -42,24 +74,15 @@ class _MainScreenViewState extends State<MainScreenView> {
           exportSuccess: (message) {
             _showSnack(message);
             context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
-            setState(() {
-              buttonsHidden = !buttonsHidden;
-            });
           },
           restoreSuccess: (_, message) {
             context.read<TopicBloc>().add(const TopicEvent.refreshRequested());
             _showSnack(message);
             context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
-            setState(() {
-              buttonsHidden = !buttonsHidden;
-            });
           },
           failure: (message) {
             _showSnack(message);
             context.read<BackupBloc>().add(const BackupEvent.statusConsumed());
-            setState(() {
-              buttonsHidden = !buttonsHidden;
-            });
           },
         );
       },
@@ -112,6 +135,17 @@ class _MainScreenViewState extends State<MainScreenView> {
                               alignment: AlignmentGeometry.topCenter,
                               child: topicsContent,
                             ),
+
+                            // if (kDebugMode)
+                            //   Center(
+                            //     child: CustomActionButton(
+                            //       buttonText: 'Crash Test',
+                            //       onTap: () {
+                            //         // FirebaseCrashlytics.instance.crash();
+                            //         throw Exception();
+                            //       },
+                            //     ),
+                            //   ),
                             Positioned(
                               right: 30,
                               bottom:
@@ -134,6 +168,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                         buttonText: 'Создание резервной копии',
                                         icon: 'assets/iconss/archive.svg',
                                         onTap: () {
+                                          getIt<AnalyticsService>()
+                                              .logBackupExportRequested();
                                           context.read<BackupBloc>().add(
                                             const BackupEvent.exportRequested(),
                                           );
@@ -160,9 +196,9 @@ class _MainScreenViewState extends State<MainScreenView> {
                                             created != true) {
                                           return;
                                         }
-                                        setState(() {
-                                          buttonsHidden = !buttonsHidden;
-                                        });
+                                        getIt<AnalyticsService>()
+                                            .logTopicCreated();
+
                                         context.read<TopicBloc>().add(
                                           const TopicEvent.refreshRequested(),
                                         );

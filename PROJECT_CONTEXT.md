@@ -113,8 +113,9 @@ Routing:
     - `Topics`
     - `Words`
     - `UserGoalsTable`
-  - Schema version: `3`
-  - Migrations add optional word fields:
+  - Schema version: `1`
+  - Migrations are intentionally not active yet because the app has not been released; during development, test devices are cleared/reinstalled after local schema changes instead.
+  - Previous local schema iterations added optional word fields:
     - `transcription`
     - `part_of_speech`
     - `usage`

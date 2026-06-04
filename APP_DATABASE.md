@@ -37,6 +37,9 @@ This document describes the current Drift-based local database and the backup/re
 ## Schema / Migration
 
 - Current schema version: `1`
+- Drift migrations are intentionally not active yet because the app has not been
+  released. During development, local schema changes are handled by deleting and
+  reinstalling the app on test devices instead of migrating existing test data.
 
 ## Query / Helper Methods
 

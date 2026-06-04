@@ -3,7 +3,7 @@ import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
-import 'package:flashcards_learning_app/router/app_router.dart';
+// import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/analytics_service.dart';
@@ -126,7 +126,8 @@ class _TopicScreenViewState extends State<TopicScreenView> {
         BlocListener<TopicDetailBloc, TopicDetailState>(
           listener: (context, state) {
             if (state.status == TopicDetailStatus.topicDeleted) {
-              context.router.replaceAll([const MainRoute()]);
+              // context.router.replaceAll([const MainRoute()]);
+              context.router.pop(true);
               return;
             }
 
@@ -218,7 +219,14 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                             ),
                           ),
                           SizedBox(width: 10),
-                          Text('Общий \nпрогресс', style: AppConst.text),
+                          Expanded(
+                            child: FittedBox(
+                              child: Text(
+                                'Общий \nпрогресс',
+                                style: AppConst.text,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

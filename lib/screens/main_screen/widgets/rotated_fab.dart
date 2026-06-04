@@ -51,6 +51,7 @@ class _RotatingFabState extends State<RotatingFab>
         height: 55,
         width: 55,
         child: FloatingActionButton(
+          heroTag: null,
           elevation: 0,
           backgroundColor: AppConst.primary,
           shape: const CircleBorder(),

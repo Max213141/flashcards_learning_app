@@ -77,8 +77,10 @@ class AppBarCustomizedWidget extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 10),
-                      FittedBox(
-                        child: Text('Общий \nпрогресс', style: AppConst.text),
+                      Expanded(
+                        child: FittedBox(
+                          child: Text('Общий \nпрогресс', style: AppConst.text),
+                        ),
                       ),
                     ],
                   ),
@@ -97,8 +99,10 @@ class AppBarCustomizedWidget extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 10),
-                      FittedBox(
-                        child: Text('Дневная \nцель', style: AppConst.text),
+                      Expanded(
+                        child: FittedBox(
+                          child: Text('Дневная \nцель', style: AppConst.text),
+                        ),
                       ),
                     ],
                   ),

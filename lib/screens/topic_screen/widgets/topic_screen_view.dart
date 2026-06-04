@@ -6,6 +6,7 @@ import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
   }
 
   void _onAddJSON() {
+    getIt<AnalyticsService>().logWordsImportRequested(topicId: widget.topicId);
     context.read<TopicDetailBloc>().add(
       const TopicDetailEvent.importWordsRequested(),
     );
@@ -228,6 +230,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                     TopicWordsListWidget(
                       wordsList: words,
                       topicName: widget.topicName,
+                      topicId: widget.topicId,
                       topicColor: widget.topicColor,
                       deleteWord: _deleteWord,
                       editWord: _onEdit,
@@ -252,7 +255,12 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                         CustomActionButton(
                           buttonText: 'Добавить слово',
                           icon: 'assets/iconss/plus.svg',
-                          onTap: _onAdd,
+                          onTap: () {
+                            getIt<AnalyticsService>().logWordAddRequested(
+                              topicId: widget.topicId,
+                            );
+                            _onAdd();
+                          },
                         ),
                       ],
                     ),

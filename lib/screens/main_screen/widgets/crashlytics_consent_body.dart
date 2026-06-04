@@ -12,7 +12,7 @@ class CrashlyticsConsentBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
           child: Text(
-            'Разрешить отправку отчётов о сбоях?',
+            'Разрешить анонимную аналитику и отчёты о сбоях?',
             textAlign: TextAlign.center,
             style: AppConst.h1,
           ),
@@ -20,7 +20,7 @@ class CrashlyticsConsentBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            'Это помогает быстрее исправлять ошибки и делать приложение стабильнее. '
+            'Это помогает понять, как вы используете приложение, и быстрее исправлять ошибки. '
             'Вы можете изменить выбор позже.',
             textAlign: TextAlign.center,
             style: AppConst.text,

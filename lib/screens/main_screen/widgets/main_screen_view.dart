@@ -3,6 +3,7 @@ import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:flashcards_learning_app/utils/crashlytics_consent_manager.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
 // import 'package:flutter/foundation.dart';
@@ -54,6 +55,7 @@ class _MainScreenViewState extends State<MainScreenView> {
     );
     if (shouldRestore != true) return;
     if (!mounted) return;
+    getIt<AnalyticsService>().logBackupRestoreRequested();
     context.read<BackupBloc>().add(const BackupEvent.restoreRequested());
   }
 
@@ -166,6 +168,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                         buttonText: 'Создание резервной копии',
                                         icon: 'assets/iconss/archive.svg',
                                         onTap: () {
+                                          getIt<AnalyticsService>()
+                                              .logBackupExportRequested();
                                           context.read<BackupBloc>().add(
                                             const BackupEvent.exportRequested(),
                                           );
@@ -192,6 +196,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                             created != true) {
                                           return;
                                         }
+                                        getIt<AnalyticsService>()
+                                            .logTopicCreated();
 
                                         context.read<TopicBloc>().add(
                                           const TopicEvent.refreshRequested(),

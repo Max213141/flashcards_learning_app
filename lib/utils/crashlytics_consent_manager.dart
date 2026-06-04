@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +20,9 @@ class CrashlyticsConsentManager {
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
         storedConsent,
       );
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(
+        storedConsent,
+      );
     }
   }
 
@@ -35,5 +39,6 @@ class CrashlyticsConsentManager {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
       hasConsent,
     );
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(hasConsent);
   }
 }

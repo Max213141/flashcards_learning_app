@@ -3,6 +3,8 @@ import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
+import 'package:flashcards_learning_app/utils/analytics_service.dart';
+import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -46,13 +48,16 @@ class TopicsListWidget extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: GestureDetector(
-                      onTap: () => AutoRouter.of(context).push(
-                        TopicRoute(
-                          topicName: topic.topicName,
-                          topicId: topic.id,
-                          topicColor: color,
-                        ),
-                      ),
+                      onTap: () {
+                        getIt<AnalyticsService>().logTopicOpened(topic: topic);
+                        AutoRouter.of(context).push(
+                          TopicRoute(
+                            topicName: topic.topicName,
+                            topicId: topic.id,
+                            topicColor: color,
+                          ),
+                        );
+                      },
                       child: CustomPaint(
                         painter: MyPainter(initialColor: color),
                         child: TopicBodyWidget(

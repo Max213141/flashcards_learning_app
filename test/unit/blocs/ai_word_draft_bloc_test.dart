@@ -4,6 +4,7 @@ import 'package:flashcards_learning_app/core/interfaces/ai/local_ai_model_manage
 import 'package:flashcards_learning_app/core/interfaces/ai/local_ai_word_draft_service.dart';
 import 'package:flashcards_learning_app/blocs/ai_word_draft_bloc/ai_word_draft_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_gemma/flutter_gemma.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockLocalAiModelManager extends Mock implements LocalAiModelManager {}
@@ -33,6 +34,9 @@ void main() {
   setUp(() {
     modelManager = MockLocalAiModelManager();
     wordDraftService = MockLocalAiWordDraftService();
+    when(
+      () => modelManager.cleanupIncompleteInstall(),
+    ).thenAnswer((_) async {});
   });
 
   blocTest<AiWordDraftBloc, AiWordDraftState>(
@@ -218,6 +222,7 @@ void main() {
           ),
     ],
     verify: (_) {
+      verify(() => modelManager.cleanupIncompleteInstall()).called(1);
       verifyNever(() => modelManager.activateInstalledModel());
       verifyNever(
         () => wordDraftService.generateWordDraft(
@@ -258,6 +263,38 @@ void main() {
             AiGenerationStatus.failure,
           ),
     ],
+    verify: (_) {
+      verify(() => modelManager.cleanupIncompleteInstall()).called(2);
+    },
+  );
+
+  blocTest<AiWordDraftBloc, AiWordDraftState>(
+    'download cancellation cleans incomplete install and emits cancelled',
+    build: () {
+      when(
+        () => modelManager.install(onProgress: any(named: 'onProgress')),
+      ).thenThrow(DownloadCancelledException('cancelled', null));
+      return buildBloc();
+    },
+    seed: () => const AiWordDraftState(
+      setupStatus: AiSetupStatus.downloadConfirmationRequired,
+    ),
+    act: (bloc) => bloc.add(const AiWordDraftEvent.downloadAccepted()),
+    expect: () => [
+      isA<AiWordDraftState>().having(
+        (s) => s.setupStatus,
+        'setupStatus',
+        AiSetupStatus.downloading,
+      ),
+      isA<AiWordDraftState>().having(
+        (s) => s.setupStatus,
+        'setupStatus',
+        AiSetupStatus.cancelled,
+      ),
+    ],
+    verify: (_) {
+      verify(() => modelManager.cleanupIncompleteInstall()).called(2);
+    },
   );
 
   blocTest<AiWordDraftBloc, AiWordDraftState>(

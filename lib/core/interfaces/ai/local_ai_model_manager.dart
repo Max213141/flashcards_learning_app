@@ -5,5 +5,7 @@ abstract interface class LocalAiModelManager {
 
   Future<void> activateInstalledModel();
 
+  Future<void> cleanupIncompleteInstall();
+
   void cancelInstall();
 }

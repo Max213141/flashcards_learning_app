@@ -37,6 +37,21 @@ class FlutterGemmaModelManager implements LocalAiModelManager {
   }
 
   @override
+  Future<void> cleanupIncompleteInstall() async {
+    try {
+      if (await isInstalled()) {
+        return;
+      }
+
+      final modelManager = FlutterGemmaPlugin.instance.modelManager;
+      await modelManager.cleanupStorage();
+      await modelManager.deleteModel(_modelSpec());
+    } catch (_) {
+      // Cleanup is best-effort; a cleanup failure should not block a retry.
+    }
+  }
+
+  @override
   void cancelInstall() {
     _cancelToken?.cancel('User cancelled local AI model download');
   }
@@ -46,6 +61,15 @@ class FlutterGemmaModelManager implements LocalAiModelManager {
       modelType: LocalAiModelConfig.modelType,
       fileType: LocalAiModelConfig.fileType,
     ).fromNetwork(LocalAiModelConfig.downloadUrl, foreground: true);
+  }
+
+  InferenceModelSpec _modelSpec() {
+    return InferenceModelSpec.fromLegacyUrl(
+      name: LocalAiModelConfig.fileName,
+      modelUrl: LocalAiModelConfig.downloadUrl,
+      modelType: LocalAiModelConfig.modelType,
+      fileType: LocalAiModelConfig.fileType,
+    );
   }
 
   Future<void> _prepareForegroundDownload() async {

@@ -60,7 +60,7 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextFormField).first, 'bonjour');
-    await tester.tap(find.text('Заполнить AI'));
+    await tester.tap(find.text('Сгенерировать перевод'));
     await tester.pumpAndSettle();
 
     expect(find.text('привет'), findsOneWidget);

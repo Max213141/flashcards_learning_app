@@ -134,6 +134,7 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
     );
 
     try {
+      await _modelManager.cleanupIncompleteInstall();
       await _modelManager.install(
         onProgress: (progress) {
           if (emit.isDone) return;
@@ -165,6 +166,7 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
       }
     } catch (error) {
       if (CancelToken.isCancel(error)) {
+        await _modelManager.cleanupIncompleteInstall();
         emit(
           state.copyWith(
             setupStatus: AiSetupStatus.cancelled,
@@ -175,6 +177,7 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
         return;
       }
 
+      await _modelManager.cleanupIncompleteInstall();
       emit(
         state.copyWith(
           setupStatus: AiSetupStatus.failure,

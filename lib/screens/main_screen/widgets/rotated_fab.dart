@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RotatingFab extends StatefulWidget {
+  final bool isOpen;
   final VoidCallback? onPressed;
 
-  const RotatingFab({super.key, this.onPressed});
+  const RotatingFab({super.key, required this.isOpen, this.onPressed});
 
   @override
   State<RotatingFab> createState() => _RotatingFabState();
@@ -15,7 +16,6 @@ class RotatingFab extends StatefulWidget {
 class _RotatingFabState extends State<RotatingFab>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  bool _isOpen = false;
 
   @override
   void initState() {
@@ -23,17 +23,25 @@ class _RotatingFabState extends State<RotatingFab>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
+      value: widget.isOpen ? 1 : 0,
     );
   }
 
-  void _handleTap() {
-    if (_isOpen) {
-      _controller.reverse();
-    } else {
-      _controller.forward();
+  @override
+  void didUpdateWidget(covariant RotatingFab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isOpen == widget.isOpen) {
+      return;
     }
 
-    setState(() => _isOpen = !_isOpen);
+    if (widget.isOpen) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  void _handleTap() {
     widget.onPressed?.call();
   }
 

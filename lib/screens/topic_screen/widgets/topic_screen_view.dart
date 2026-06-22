@@ -51,6 +51,8 @@ class _TopicScreenViewState extends State<TopicScreenView> {
   }
 
   void _onAddWithAi() async {
+    closeFloatingActionButton();
+
     final result = await showDialog<Word>(
       context: context,
 
@@ -81,6 +83,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
   }
 
   void _onAddJSON() {
+    closeFloatingActionButton();
     getIt<AnalyticsService>().logWordsImportRequested(topicId: widget.topicId);
     context.read<TopicDetailBloc>().add(
       const TopicDetailEvent.importWordsRequested(),
@@ -122,6 +125,19 @@ class _TopicScreenViewState extends State<TopicScreenView> {
     context.read<TopicDetailBloc>().add(
       const TopicDetailEvent.deleteTopicRequested(),
     );
+  }
+
+  void triggerFloatingActionButton() {
+    setState(() {
+      buttonsHidden = !buttonsHidden;
+    });
+  }
+
+  void closeFloatingActionButton() {
+    if (buttonsHidden) return;
+    setState(() {
+      buttonsHidden = true;
+    });
   }
 
   @override
@@ -204,11 +220,8 @@ class _TopicScreenViewState extends State<TopicScreenView> {
               ],
             ),
             floatingActionButton: RotatingFab(
-              onPressed: () {
-                setState(() {
-                  buttonsHidden = !buttonsHidden;
-                });
-              },
+              isOpen: !buttonsHidden,
+              onPressed: triggerFloatingActionButton,
             ),
             body: Stack(
               children: [
@@ -292,6 +305,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                             getIt<AnalyticsService>().logWordAddRequested(
                               topicId: widget.topicId,
                             );
+                            closeFloatingActionButton();
                             _onAdd();
                           },
                         ),

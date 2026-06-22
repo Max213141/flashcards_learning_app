@@ -48,6 +48,7 @@ class _MainScreenViewState extends State<MainScreenView> {
   }
 
   Future<void> _onRestoreBackupTap() async {
+    closeFloatingActionButton();
     final shouldRestore = await showDialog<bool>(
       context: context,
       builder: (context) =>
@@ -64,6 +65,19 @@ class _MainScreenViewState extends State<MainScreenView> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void triggerFloatingActionButton() {
+    setState(() {
+      buttonsHidden = !buttonsHidden;
+    });
+  }
+
+  void closeFloatingActionButton() {
+    if (buttonsHidden) return;
+    setState(() {
+      buttonsHidden = true;
+    });
   }
 
   @override
@@ -94,11 +108,8 @@ class _MainScreenViewState extends State<MainScreenView> {
         ),
         backgroundColor: AppConst.background,
         floatingActionButton: RotatingFab(
-          onPressed: () {
-            setState(() {
-              buttonsHidden = !buttonsHidden;
-            });
-          },
+          isOpen: !buttonsHidden,
+          onPressed: triggerFloatingActionButton,
         ),
         body: Column(
           children: [
@@ -168,6 +179,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                         buttonText: 'Создание резервной копии',
                                         icon: 'assets/iconss/archive.svg',
                                         onTap: () {
+                                          closeFloatingActionButton();
+
                                           getIt<AnalyticsService>()
                                               .logBackupExportRequested();
                                           context.read<BackupBloc>().add(
@@ -180,6 +193,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                       buttonText: 'Новая тема',
                                       icon: 'assets/iconss/plus.svg',
                                       onTap: () async {
+                                        closeFloatingActionButton();
+
                                         final created = await showDialog<bool>(
                                           context: context,
                                           builder: (dialogContext) =>

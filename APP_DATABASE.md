@@ -165,6 +165,8 @@ This helper is used by insert, update, export-read, and restore flows to keep op
 - Topic name is intentionally duplicated in `words.topic_name` for simple reads / export.
 - Overall learning progress is inferred from `words.learned`.
 - Daily learning progress is inferred from `words.learned_at`.
+- Local AI word generation does not require a schema change. The AI draft fields map onto the existing `words` columns: `word`, `translation`, `transcription`, `part_of_speech`, and `usage`.
+- AI-generated data is not saved directly. The draft fills a form, and the user-reviewed `Word` is saved through the same add-word path as manual entry.
 - The `Word` entity used by the DB includes:
   - `id`, `topicId`, `word`, `translation`, `topic`, `learned`, `learnedAt`
   - optional `transcription`, `partOfSpeech`, `usage`
@@ -173,5 +175,6 @@ This helper is used by insert, update, export-read, and restore flows to keep op
 
 - Main screen backup export uses `getAllWordsWithTopicName()`.
 - Main screen restore uses `restoreFromBackupJson(...)`.
-- Topic screen create/edit flows use `addWord(...)` and `updateWord(...)`.
+- Topic screen manual and AI-assisted create flows use `addWord(...)`.
+- Topic screen edit flows use `updateWord(...)`.
 - Main-screen app bar uses `watchUserGoals()` and `watchWordsProgressStats()` for reactive overall/daily goal progress.

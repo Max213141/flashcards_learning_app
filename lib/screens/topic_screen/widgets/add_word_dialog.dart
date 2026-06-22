@@ -10,11 +10,10 @@ class AddWordDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
-    final maxHeight =
-        (media.size.height - media.viewInsets.bottom - 48).clamp(
-              280.0,
-              media.size.height * 0.95,
-            );
+    final maxHeight = (media.size.height - media.viewInsets.bottom - 48).clamp(
+      280.0,
+      media.size.height * 0.95,
+    );
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),

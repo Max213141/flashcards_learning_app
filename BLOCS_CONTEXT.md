@@ -1,9 +1,6 @@
 # Bloc Layer Context
 
-This file documents the bloc layer introduced in the latest refactor commit.
-
-- Commit: `df51365a8c7d58d9d1ca2620b466a2feb008a225`
-- Title: `Full separation business logic from UI layer, all neccessary blocs created and wired up to the screens, all logic works great. Animation added`
+This file documents the current bloc layer used by the app. It reflects the active uncommitted workspace state, including topic/word workflows, backup/restore, goals, tests, and local AI setup/generation.
 
 ## General Rules
 
@@ -255,6 +252,83 @@ Single state object with:
 - Sets `hasChanges` when the topic content changes or the topic is deleted.
 - Leaves navigation after topic deletion to the UI layer.
 
+## AiWordDraftBloc
+
+**Purpose**
+
+Owns local AI model setup and AI word draft generation for the add-word AI assistant flow.
+
+**Main responsibilities**
+
+- Checks whether the configured local model is installed on device.
+- Drives the setup-first AI dialog state before the AI form is shown.
+- Downloads the model with determinate progress and cancellation support.
+- Activates the installed model before generation.
+- Generates an `AiWordDraft` from user input and language settings.
+- Keeps AI output as a draft only; final DB saving remains a user-reviewed form save through `TopicDetailBloc.addWordRequested`.
+
+**Events**
+
+- `started()`: checks whether the local model is installed.
+- `generateRequested(input, sourceLanguage, targetLanguage)`: prepares the model and generates a draft for the entered word or phrase.
+- `downloadAccepted()`: starts model download. This supports both setup-only download from `AddWordAIDialog` and download-then-generate when a generation request is already pending.
+- `downloadCancelled()`: cancels the in-flight model download if present.
+- `statusConsumed()`: clears transient draft/message state after UI consumes it.
+
+**State**
+
+Single state object with:
+
+- `setupStatus`
+- `generationStatus`
+- `downloadProgress`
+- `draft`
+- `message`
+- `pendingInput`
+- `pendingSourceLanguage`
+- `pendingTargetLanguage`
+
+**Setup statuses**
+
+- `initial`
+- `checking`
+- `notInstalled`
+- `downloadConfirmationRequired`
+- `downloading`
+- `installed`
+- `loadingModel`
+- `ready`
+- `failure`
+- `cancelled`
+
+**Generation statuses**
+
+- `idle`
+- `generating`
+- `success`
+- `failure`
+
+**Main logic**
+
+- On `started`, calls `LocalAiModelManager.isInstalled()`.
+- If installed, emits `installed`; the dialog can show the AI form.
+- If missing, emits `notInstalled`; the dialog shows model setup content.
+- On setup-only `downloadAccepted`, installs the model and emits `installed` without triggering generation.
+- On generation `downloadAccepted`, installs the model and continues into activation/generation with the pending input.
+- During download, progress callbacks emit `downloading(progress)`.
+- On generation, activates the model through `LocalAiModelManager.activateInstalledModel()`, then calls `LocalAiWordDraftService.generateWordDraft(...)`.
+- Successful generation emits `success(draft)`; the UI applies draft fields to the form and then consumes the status.
+- Failure states use user-facing Russian messages and do not block manual word creation.
+
+**UI integration**
+
+- `AddWordAIDialog` owns setup UI:
+  - starts the check with `started()`
+  - shows download explanation/progress/cancel/retry while the model is missing
+  - shows `AiWordForm` after install/ready state
+- `AiWordForm` owns post-setup draft generation UI.
+- `AiDraftControls` should not own model download controls; it is only for language inputs and the generate action after setup.
+
 ## WordBloc
 
 **Purpose**
@@ -388,4 +462,3 @@ Owns the loading flow for `TestScreen`.
 - `BlocConsumer` is used only where both rebuilding and side effects are needed in the same widget.
 - Dialogs that need an existing bloc instance should receive it via `BlocProvider.value(...)`.
 - New feature-local blocs should be created with `BlocProvider(create: (_) => getIt<BlocType>())`.
-

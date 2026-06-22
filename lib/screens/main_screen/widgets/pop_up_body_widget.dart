@@ -124,9 +124,11 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                       ),
                     ),
                     SizedBox(width: 5),
-                    Text(
-                      'Загрузить файл JSON',
-                      style: AppConst.text.copyWith(color: AppConst.black),
+                    Flexible(
+                      child: Text(
+                        'Загрузить файл JSON',
+                        style: AppConst.text.copyWith(color: AppConst.black),
+                      ),
                     ),
                   ],
                 ),

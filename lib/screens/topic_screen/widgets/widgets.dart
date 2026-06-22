@@ -6,3 +6,4 @@ export 'edit_dialog.dart';
 export 'add_word_dialog.dart';
 export 'deletion_acceptance_body.dart';
 export 'topic_screen_view.dart';
+export 'ai_dialog/add_word_ai_dialog.dart';

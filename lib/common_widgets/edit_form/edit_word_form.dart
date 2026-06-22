@@ -1,4 +1,5 @@
 import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_bloc.dart';
+import 'package:flashcards_learning_app/common_widgets/edit_form/word_form_controllers.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
 import 'package:flutter/material.dart';
@@ -22,56 +23,31 @@ class EditWordForm extends StatefulWidget {
 
 class _EditWordFormState extends State<EditWordForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController learningWordController = TextEditingController();
-  final TextEditingController translationController = TextEditingController();
-  final TextEditingController transcriptionController = TextEditingController();
-  final TextEditingController partofSpeechController = TextEditingController();
-  final TextEditingController usageController = TextEditingController();
+  late final WordFormControllers _controllers;
 
   bool _saving = false;
 
   @override
   void initState() {
     super.initState();
-    final word = widget.word;
-    if (word != null) {
-      learningWordController.text = word.word;
-      translationController.text = word.translation;
-      transcriptionController.text = word.transcription ?? '';
-      partofSpeechController.text = word.partOfSpeech ?? '';
-      usageController.text = word.usage ?? '';
-    }
+    _controllers = WordFormControllers(word: widget.word);
   }
 
   @override
   void dispose() {
-    learningWordController.dispose();
-    translationController.dispose();
-    transcriptionController.dispose();
-    partofSpeechController.dispose();
-    usageController.dispose();
+    _controllers.dispose();
     super.dispose();
   }
 
   Future<void> _handleSave() async {
-    final wordValue = learningWordController.text.trim();
-    final translationValue = translationController.text.trim();
-    if (wordValue.isEmpty || translationValue.isEmpty) {
+    if (_controllers.wordText.isEmpty || _controllers.translationText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Заполните слово и перевод')),
       );
       return;
     }
 
-    final baseWord =
-        widget.word ?? Word(word: wordValue, translation: translationValue);
-    final updatedWord = baseWord.copyWith(
-      word: wordValue,
-      translation: translationValue,
-      transcription: _normalizedOrNull(transcriptionController.text),
-      partOfSpeech: _normalizedOrNull(partofSpeechController.text),
-      usage: _normalizedOrNull(usageController.text),
-    );
+    final updatedWord = _controllers.toWord(baseWord: widget.word);
 
     if (widget.onSave == null) {
       context.read<WordEditingBloc>().add(
@@ -90,36 +66,25 @@ class _EditWordFormState extends State<EditWordForm> {
     }
   }
 
-  String? _normalizedOrNull(String value) {
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
-  }
-
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).padding.bottom;
+    final formContent = EditFormFields(
+      learningWordController: _controllers.learningWord,
+      translationController: _controllers.translation,
+      transcriptionController: _controllers.transcription,
+      partofSpeechController: _controllers.partOfSpeech,
+      usageController: _controllers.usage,
+    );
 
     final content = widget.pinSaveButtonToBottom
         ? Padding(
             padding: EdgeInsets.only(bottom: bottom),
             child: Column(
               children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: EditFormFields(
-                      learningWordController: learningWordController,
-                      translationController: translationController,
-                      transcriptionController: transcriptionController,
-                      partofSpeechController: partofSpeechController,
-                      usageController: usageController,
-                    ),
-                  ),
-                ),
+                Expanded(child: SingleChildScrollView(child: formContent)),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: _buildSaveButton(),
-                ),
+                SizedBox(width: double.infinity, child: _buildSaveButton()),
               ],
             ),
           )
@@ -127,18 +92,9 @@ class _EditWordFormState extends State<EditWordForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                EditFormFields(
-                  learningWordController: learningWordController,
-                  translationController: translationController,
-                  transcriptionController: transcriptionController,
-                  partofSpeechController: partofSpeechController,
-                  usageController: usageController,
-                ),
+                formContent,
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: _buildSaveButton(),
-                ),
+                SizedBox(width: double.infinity, child: _buildSaveButton()),
               ],
             ),
           );

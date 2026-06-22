@@ -1,3 +1,8 @@
+import 'package:flashcards_learning_app/ai/flutter_gemma_model_manager.dart';
+import 'package:flashcards_learning_app/ai/flutter_gemma_word_draft_service.dart';
+import 'package:flashcards_learning_app/core/interfaces/ai/local_ai_model_manager.dart';
+import 'package:flashcards_learning_app/core/interfaces/ai/local_ai_word_draft_service.dart';
+import 'package:flashcards_learning_app/blocs/ai_word_draft_bloc/ai_word_draft_bloc.dart';
 import 'package:flashcards_learning_app/blocs/backup_bloc/backup_bloc.dart';
 import 'package:flashcards_learning_app/blocs/goals_bloc/goals_bloc.dart';
 import 'package:flashcards_learning_app/blocs/test_bloc/test_bloc.dart';
@@ -15,6 +20,18 @@ final getIt = GetIt.instance;
 Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
   getIt.registerLazySingleton<AppDatabase>(() => AppDatabase());
+  getIt.registerLazySingleton<LocalAiModelManager>(
+    () => FlutterGemmaModelManager(),
+  );
+  getIt.registerLazySingleton<LocalAiWordDraftService>(
+    () => FlutterGemmaWordDraftService(),
+  );
+  getIt.registerFactory<AiWordDraftBloc>(
+    () => AiWordDraftBloc(
+      modelManager: getIt<LocalAiModelManager>(),
+      wordDraftService: getIt<LocalAiWordDraftService>(),
+    ),
+  );
   getIt.registerFactory<TopicBloc>(
     () => TopicBloc(appDatabase: getIt<AppDatabase>()),
   );

@@ -43,20 +43,18 @@ class CustomActionButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null)
-                Expanded(
-                  child: SvgPicture.asset(
-                    icon!,
-                    width: 24,
+                SvgPicture.asset(
+                  icon!,
+                  width: 24,
 
-                    colorFilter: const ColorFilter.mode(
-                      AppConst.black,
-                      BlendMode.srcIn,
-                    ),
+                  colorFilter: const ColorFilter.mode(
+                    AppConst.black,
+                    BlendMode.srcIn,
                   ),
                 ),
               SizedBox(width: 5),
 
-              Text(buttonText, style: AppConst.text),
+              FittedBox(child: Text(buttonText, style: AppConst.text)),
             ],
           ),
         ),

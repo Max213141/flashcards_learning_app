@@ -50,6 +50,25 @@ class _TopicScreenViewState extends State<TopicScreenView> {
     );
   }
 
+  void _onAddWithAi() async {
+    final result = await showDialog<Word>(
+      context: context,
+
+      builder: (context) => AddWordAIDialog(
+        onSave: (Word newWord) async {
+          if (!context.mounted) return;
+          Navigator.of(context).pop(
+            newWord.copyWith(topic: widget.topicName, topicId: widget.topicId),
+          );
+        },
+      ),
+    );
+    if (!mounted || result == null) return;
+    context.read<TopicDetailBloc>().add(
+      TopicDetailEvent.addWordRequested(newWord: result),
+    );
+  }
+
   Future<void> _deleteWord(int wordId) async {
     if (wordId < 0) return;
     context.read<WordBloc>().add(WordEvent.deleteRequested(wordId: wordId));
@@ -254,6 +273,12 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        CustomActionButton(
+                          buttonText: 'ИИ ассистент',
+                          icon: 'assets/iconss/file_export.svg',
+                          onTap: _onAddWithAi,
+                        ),
+                        SizedBox(height: 10),
                         CustomActionButton(
                           buttonText: 'Добавить файл JSON',
                           icon: 'assets/iconss/file_export.svg',

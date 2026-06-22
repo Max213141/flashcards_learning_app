@@ -47,8 +47,15 @@ class AppBarCustomizedWidget extends StatelessWidget {
             firstPart: currentUserGoals == null
                 ? Row(
                     children: [
-                      FittedBox(
-                        child: Text('Поставь себе цели!', style: AppConst.text),
+                      Expanded(
+                        child: FittedBox(
+                          alignment: Alignment.centerLeft,
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            'Поставь себе цели!',
+                            style: AppConst.text,
+                          ),
+                        ),
                       ),
                       SizedBox(width: 10),
                       SizedBox(

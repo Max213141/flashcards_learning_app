@@ -10,3 +10,4 @@ export 'custom_fliping_icon.dart';
 
 export 'edit_form/edit_word_form.dart';
 export 'edit_form/edit_form_fields.dart';
+export 'edit_form/ai_word_form.dart';

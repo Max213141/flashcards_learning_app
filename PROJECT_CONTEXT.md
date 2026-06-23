@@ -146,11 +146,12 @@ Routing:
 - The local AI feature is additive. Manual add/edit flows must keep working without any downloaded model.
 - `lib/screens/topic_screen/widgets/topic_screen_view.dart`
   - exposes separate FAB menu actions for manual word add and AI assistant add.
+  - reuses the topic-screen `AiWordDraftBloc` when opening `AddWordAIDialog`, so source/target language settings survive dialog close/reopen while the topic screen remains alive.
 - `lib/screens/topic_screen/widgets/add_word_dialog.dart`
   - simple manual add-word dialog using `EditWordForm`.
 - `lib/screens/topic_screen/widgets/add_word_ai_dialog.dart`
-  - owns model setup before showing the AI word form.
-  - dispatches `AiWordDraftEvent.started()` on open to check model presence.
+  - consumes the topic-screen `AiWordDraftBloc` before showing the AI word form.
+  - model presence is checked by `TopicScreenView` dispatching `AiWordDraftEvent.started()` when the dialog opens.
   - if the model is missing, shows in-dialog download content with model name, size, local privacy note, progress bar, cancel, and retry.
   - when the model is installed/ready, shows `AiWordForm`.
 - `lib/common_widgets/edit_form/edit_word_form.dart`
@@ -165,10 +166,12 @@ Routing:
   - shared controller lifecycle, draft application, normalization, and `Word` mapping.
 - `lib/common_widgets/edit_form/ai_drafts_controls.dart`
   - post-setup AI controls only; model download UI belongs to `AddWordAIDialog`.
+  - owns the visible source/target language text controllers and syncs changes into `AiWordDraftBloc` state so language settings are remembered while the AI assistant flow is active.
 - `lib/core/local_ai_model_config.dart`
   - central model metadata: display name, approximate size, file name, download URL, model type, and file type.
 - `lib/ai/flutter_gemma_model_manager.dart`
-  - checks install status, configures Android foreground download notification, requests notification permission where needed, installs/cancels the model, and activates the installed model.
+  - checks install status, configures Android foreground download notification, requests notification permission where needed, installs/cancels the model, activates the installed model, and performs best-effort cleanup for incomplete model installs.
+  - `cleanupIncompleteInstall()` only runs when the configured model is not installed; it uses `flutter_gemma` storage cleanup and exact configured-model deletion so partial/corrupt model files do not keep consuming device storage after failed or cancelled downloads.
 - `lib/ai/flutter_gemma_word_draft_service.dart`
   - loads the active model with GPU preference and CPU fallback.
   - prompts for strict JSON and retries once with a repair prompt if parsing fails.
@@ -178,6 +181,8 @@ Routing:
 Failure behavior:
 
 - Download failure keeps the add form unavailable and allows retry.
+- Before each model download attempt, the bloc asks the model manager to clean any previous incomplete install.
+- Download failure and downloader-reported cancellation trigger incomplete-install cleanup before returning to failure/cancelled setup state.
 - User cancellation returns to setup state without generating.
 - Model load or generation failure is surfaced as a snackbar/form message and does not affect manual add flow.
 - User-entered text and model output should not be logged to analytics/crash reporting.

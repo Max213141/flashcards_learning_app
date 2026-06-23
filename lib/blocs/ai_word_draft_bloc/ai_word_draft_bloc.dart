@@ -17,6 +17,7 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
        _wordDraftService = wordDraftService,
        super(const AiWordDraftState()) {
     on<_Started>(_onStarted);
+    on<_LanguageSettingsChanged>(_onLanguageSettingsChanged);
     on<_GenerateRequested>(_onGenerateRequested);
     on<_DownloadAccepted>(_onDownloadAccepted);
     on<_DownloadCancelled>(_onDownloadCancelled);
@@ -52,6 +53,18 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
     }
   }
 
+  void _onLanguageSettingsChanged(
+    _LanguageSettingsChanged event,
+    Emitter<AiWordDraftState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        sourceLanguage: event.sourceLanguage,
+        targetLanguage: event.targetLanguage,
+      ),
+    );
+  }
+
   Future<void> _onGenerateRequested(
     _GenerateRequested event,
     Emitter<AiWordDraftState> emit,
@@ -67,12 +80,12 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
       return;
     }
 
-    final sourceLanguage = event.sourceLanguage.trim().isEmpty
+    final sourceLanguage = state.sourceLanguage.trim().isEmpty
         ? 'auto'
-        : event.sourceLanguage.trim();
-    final targetLanguage = event.targetLanguage.trim().isEmpty
+        : state.sourceLanguage.trim();
+    final targetLanguage = state.targetLanguage.trim().isEmpty
         ? 'русский'
-        : event.targetLanguage.trim();
+        : state.targetLanguage.trim();
 
     emit(
       state.copyWith(
@@ -80,6 +93,8 @@ class AiWordDraftBloc extends Bloc<AiWordDraftEvent, AiWordDraftState> {
         generationStatus: AiGenerationStatus.idle,
         draft: null,
         message: null,
+        sourceLanguage: sourceLanguage,
+        targetLanguage: targetLanguage,
         pendingInput: input,
         pendingSourceLanguage: sourceLanguage,
         pendingTargetLanguage: targetLanguage,

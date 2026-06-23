@@ -6,6 +6,8 @@ sealed class AiWordDraftState with _$AiWordDraftState {
     @Default(AiSetupStatus.initial) AiSetupStatus setupStatus,
     @Default(AiGenerationStatus.idle) AiGenerationStatus generationStatus,
     @Default(0) int downloadProgress,
+    @Default('auto') String sourceLanguage,
+    @Default('русский') String targetLanguage,
     AiWordDraft? draft,
     String? message,
     String? pendingInput,

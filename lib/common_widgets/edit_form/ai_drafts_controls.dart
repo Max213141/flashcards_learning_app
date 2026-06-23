@@ -2,22 +2,60 @@ import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AiDraftControls extends StatelessWidget {
-  final TextEditingController sourceLanguageController;
-  final TextEditingController targetLanguageController;
+class AiDraftControls extends StatefulWidget {
   final AiWordDraftState state;
   final VoidCallback onGenerate;
-  final VoidCallback onCancel;
 
   const AiDraftControls({
     super.key,
-    required this.sourceLanguageController,
-    required this.targetLanguageController,
     required this.state,
     required this.onGenerate,
-    required this.onCancel,
   });
+
+  @override
+  State<AiDraftControls> createState() => _AiDraftControlsState();
+}
+
+class _AiDraftControlsState extends State<AiDraftControls> {
+  late final TextEditingController _sourceLanguageController;
+  late final TextEditingController _targetLanguageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sourceLanguageController = TextEditingController(
+      text: widget.state.sourceLanguage,
+    );
+    _targetLanguageController = TextEditingController(
+      text: widget.state.targetLanguage,
+    );
+    _sourceLanguageController.addListener(_languageSettingsChanged);
+    _targetLanguageController.addListener(_languageSettingsChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant AiDraftControls oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncControllerText(
+      controller: _sourceLanguageController,
+      text: widget.state.sourceLanguage,
+    );
+    _syncControllerText(
+      controller: _targetLanguageController,
+      text: widget.state.targetLanguage,
+    );
+  }
+
+  @override
+  void dispose() {
+    _sourceLanguageController.removeListener(_languageSettingsChanged);
+    _targetLanguageController.removeListener(_languageSettingsChanged);
+    _sourceLanguageController.dispose();
+    _targetLanguageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +71,7 @@ class AiDraftControls extends StatelessWidget {
               child: TextfieldPaddingWrapper(
                 height: 48,
                 textField: CustomTextfield(
-                  controller: sourceLanguageController,
+                  controller: _sourceLanguageController,
                   maxLength: 24,
                 ),
               ),
@@ -43,7 +81,7 @@ class AiDraftControls extends StatelessWidget {
               child: TextfieldPaddingWrapper(
                 height: 48,
                 textField: CustomTextfield(
-                  controller: targetLanguageController,
+                  controller: _targetLanguageController,
                   maxLength: 24,
                 ),
               ),
@@ -56,10 +94,33 @@ class AiDraftControls extends StatelessWidget {
           width: double.infinity,
           child: CustomActionButton(
             buttonText: 'Сгенерировать перевод',
-            onTap: onGenerate,
+            onTap: widget.onGenerate,
           ),
         ),
       ],
+    );
+  }
+
+  void _languageSettingsChanged() {
+    context.read<AiWordDraftBloc>().add(
+      AiWordDraftEvent.languageSettingsChanged(
+        sourceLanguage: _sourceLanguageController.text,
+        targetLanguage: _targetLanguageController.text,
+      ),
+    );
+  }
+
+  void _syncControllerText({
+    required TextEditingController controller,
+    required String text,
+  }) {
+    if (controller.text == text) {
+      return;
+    }
+
+    controller.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
     );
   }
 }

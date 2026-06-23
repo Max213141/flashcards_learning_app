@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flashcards_learning_app/blocs/ai_word_draft_bloc/ai_word_draft_bloc.dart';
 import 'package:flashcards_learning_app/blocs/topic_detail_bloc/topic_detail_bloc.dart';
 import 'package:flashcards_learning_app/blocs/word_bloc/word_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/flashcards_loader.dart';
@@ -15,9 +16,13 @@ class MockTopicDetailBloc extends MockBloc<TopicDetailEvent, TopicDetailState>
 
 class MockWordBloc extends MockBloc<WordEvent, WordState> implements WordBloc {}
 
+class MockAiWordDraftBloc extends MockBloc<AiWordDraftEvent, AiWordDraftState>
+    implements AiWordDraftBloc {}
+
 void main() {
   late MockTopicDetailBloc topicDetailBloc;
   late MockWordBloc wordBloc;
+  late MockAiWordDraftBloc aiWordDraftBloc;
   late void Function(FlutterErrorDetails)? originalOnError;
 
   setUpAll(() {
@@ -27,6 +32,7 @@ void main() {
     registerFallbackValue(const TopicDetailEvent.reloadRequested());
     registerFallbackValue(const TopicDetailEvent.statusConsumed());
     registerFallbackValue(const WordEvent.statusConsumed());
+    registerFallbackValue(const AiWordDraftEvent.started());
   });
 
   setUp(() async {
@@ -41,6 +47,7 @@ void main() {
 
     topicDetailBloc = MockTopicDetailBloc();
     wordBloc = MockWordBloc();
+    aiWordDraftBloc = MockAiWordDraftBloc();
 
     const baseLoadingState = TopicDetailState(
       topicId: 1,
@@ -62,6 +69,12 @@ void main() {
       const Stream<WordState>.empty(),
       initialState: const WordState(),
     );
+    when(() => aiWordDraftBloc.state).thenReturn(const AiWordDraftState());
+    whenListen(
+      aiWordDraftBloc,
+      const Stream<AiWordDraftState>.empty(),
+      initialState: const AiWordDraftState(),
+    );
 
     await getIt.reset();
   });
@@ -78,6 +91,7 @@ void main() {
           providers: [
             BlocProvider<TopicDetailBloc>.value(value: topicDetailBloc),
             BlocProvider<WordBloc>.value(value: wordBloc),
+            BlocProvider<AiWordDraftBloc>.value(value: aiWordDraftBloc),
           ],
           child: const TopicScreenView(
             topicName: 'Animals',
@@ -93,6 +107,7 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 2200));
     getIt.registerFactory<TopicDetailBloc>(() => topicDetailBloc);
     getIt.registerFactory<WordBloc>(() => wordBloc);
+    getIt.registerFactory<AiWordDraftBloc>(() => aiWordDraftBloc);
 
     await tester.pumpWidget(
       const MaterialApp(

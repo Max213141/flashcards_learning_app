@@ -55,11 +55,12 @@ extension AiWordDraftEventPatterns on AiWordDraftEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _GenerateRequested value)?  generateRequested,TResult Function( _DownloadAccepted value)?  downloadAccepted,TResult Function( _DownloadCancelled value)?  downloadCancelled,TResult Function( _StatusConsumed value)?  statusConsumed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _LanguageSettingsChanged value)?  languageSettingsChanged,TResult Function( _GenerateRequested value)?  generateRequested,TResult Function( _DownloadAccepted value)?  downloadAccepted,TResult Function( _DownloadCancelled value)?  downloadCancelled,TResult Function( _StatusConsumed value)?  statusConsumed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that);case _GenerateRequested() when generateRequested != null:
+return started(_that);case _LanguageSettingsChanged() when languageSettingsChanged != null:
+return languageSettingsChanged(_that);case _GenerateRequested() when generateRequested != null:
 return generateRequested(_that);case _DownloadAccepted() when downloadAccepted != null:
 return downloadAccepted(_that);case _DownloadCancelled() when downloadCancelled != null:
 return downloadCancelled(_that);case _StatusConsumed() when statusConsumed != null:
@@ -81,11 +82,12 @@ return statusConsumed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _GenerateRequested value)  generateRequested,required TResult Function( _DownloadAccepted value)  downloadAccepted,required TResult Function( _DownloadCancelled value)  downloadCancelled,required TResult Function( _StatusConsumed value)  statusConsumed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _LanguageSettingsChanged value)  languageSettingsChanged,required TResult Function( _GenerateRequested value)  generateRequested,required TResult Function( _DownloadAccepted value)  downloadAccepted,required TResult Function( _DownloadCancelled value)  downloadCancelled,required TResult Function( _StatusConsumed value)  statusConsumed,}){
 final _that = this;
 switch (_that) {
 case _Started():
-return started(_that);case _GenerateRequested():
+return started(_that);case _LanguageSettingsChanged():
+return languageSettingsChanged(_that);case _GenerateRequested():
 return generateRequested(_that);case _DownloadAccepted():
 return downloadAccepted(_that);case _DownloadCancelled():
 return downloadCancelled(_that);case _StatusConsumed():
@@ -103,11 +105,12 @@ return statusConsumed(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _GenerateRequested value)?  generateRequested,TResult? Function( _DownloadAccepted value)?  downloadAccepted,TResult? Function( _DownloadCancelled value)?  downloadCancelled,TResult? Function( _StatusConsumed value)?  statusConsumed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _LanguageSettingsChanged value)?  languageSettingsChanged,TResult? Function( _GenerateRequested value)?  generateRequested,TResult? Function( _DownloadAccepted value)?  downloadAccepted,TResult? Function( _DownloadCancelled value)?  downloadCancelled,TResult? Function( _StatusConsumed value)?  statusConsumed,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that);case _GenerateRequested() when generateRequested != null:
+return started(_that);case _LanguageSettingsChanged() when languageSettingsChanged != null:
+return languageSettingsChanged(_that);case _GenerateRequested() when generateRequested != null:
 return generateRequested(_that);case _DownloadAccepted() when downloadAccepted != null:
 return downloadAccepted(_that);case _DownloadCancelled() when downloadCancelled != null:
 return downloadCancelled(_that);case _StatusConsumed() when statusConsumed != null:
@@ -128,11 +131,12 @@ return statusConsumed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String input,  String sourceLanguage,  String targetLanguage)?  generateRequested,TResult Function()?  downloadAccepted,TResult Function()?  downloadCancelled,TResult Function()?  statusConsumed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String sourceLanguage,  String targetLanguage)?  languageSettingsChanged,TResult Function( String input)?  generateRequested,TResult Function()?  downloadAccepted,TResult Function()?  downloadCancelled,TResult Function()?  statusConsumed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _GenerateRequested() when generateRequested != null:
-return generateRequested(_that.input,_that.sourceLanguage,_that.targetLanguage);case _DownloadAccepted() when downloadAccepted != null:
+return started();case _LanguageSettingsChanged() when languageSettingsChanged != null:
+return languageSettingsChanged(_that.sourceLanguage,_that.targetLanguage);case _GenerateRequested() when generateRequested != null:
+return generateRequested(_that.input);case _DownloadAccepted() when downloadAccepted != null:
 return downloadAccepted();case _DownloadCancelled() when downloadCancelled != null:
 return downloadCancelled();case _StatusConsumed() when statusConsumed != null:
 return statusConsumed();case _:
@@ -153,11 +157,12 @@ return statusConsumed();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String input,  String sourceLanguage,  String targetLanguage)  generateRequested,required TResult Function()  downloadAccepted,required TResult Function()  downloadCancelled,required TResult Function()  statusConsumed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String sourceLanguage,  String targetLanguage)  languageSettingsChanged,required TResult Function( String input)  generateRequested,required TResult Function()  downloadAccepted,required TResult Function()  downloadCancelled,required TResult Function()  statusConsumed,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started();case _GenerateRequested():
-return generateRequested(_that.input,_that.sourceLanguage,_that.targetLanguage);case _DownloadAccepted():
+return started();case _LanguageSettingsChanged():
+return languageSettingsChanged(_that.sourceLanguage,_that.targetLanguage);case _GenerateRequested():
+return generateRequested(_that.input);case _DownloadAccepted():
 return downloadAccepted();case _DownloadCancelled():
 return downloadCancelled();case _StatusConsumed():
 return statusConsumed();}
@@ -174,11 +179,12 @@ return statusConsumed();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String input,  String sourceLanguage,  String targetLanguage)?  generateRequested,TResult? Function()?  downloadAccepted,TResult? Function()?  downloadCancelled,TResult? Function()?  statusConsumed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String sourceLanguage,  String targetLanguage)?  languageSettingsChanged,TResult? Function( String input)?  generateRequested,TResult? Function()?  downloadAccepted,TResult? Function()?  downloadCancelled,TResult? Function()?  statusConsumed,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _GenerateRequested() when generateRequested != null:
-return generateRequested(_that.input,_that.sourceLanguage,_that.targetLanguage);case _DownloadAccepted() when downloadAccepted != null:
+return started();case _LanguageSettingsChanged() when languageSettingsChanged != null:
+return languageSettingsChanged(_that.sourceLanguage,_that.targetLanguage);case _GenerateRequested() when generateRequested != null:
+return generateRequested(_that.input);case _DownloadAccepted() when downloadAccepted != null:
 return downloadAccepted();case _DownloadCancelled() when downloadCancelled != null:
 return downloadCancelled();case _StatusConsumed() when statusConsumed != null:
 return statusConsumed();case _:
@@ -224,13 +230,79 @@ String toString() {
 /// @nodoc
 
 
+class _LanguageSettingsChanged implements AiWordDraftEvent {
+  const _LanguageSettingsChanged({required this.sourceLanguage, required this.targetLanguage});
+  
+
+ final  String sourceLanguage;
+ final  String targetLanguage;
+
+/// Create a copy of AiWordDraftEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LanguageSettingsChangedCopyWith<_LanguageSettingsChanged> get copyWith => __$LanguageSettingsChangedCopyWithImpl<_LanguageSettingsChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LanguageSettingsChanged&&(identical(other.sourceLanguage, sourceLanguage) || other.sourceLanguage == sourceLanguage)&&(identical(other.targetLanguage, targetLanguage) || other.targetLanguage == targetLanguage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,sourceLanguage,targetLanguage);
+
+@override
+String toString() {
+  return 'AiWordDraftEvent.languageSettingsChanged(sourceLanguage: $sourceLanguage, targetLanguage: $targetLanguage)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$LanguageSettingsChangedCopyWith<$Res> implements $AiWordDraftEventCopyWith<$Res> {
+  factory _$LanguageSettingsChangedCopyWith(_LanguageSettingsChanged value, $Res Function(_LanguageSettingsChanged) _then) = __$LanguageSettingsChangedCopyWithImpl;
+@useResult
+$Res call({
+ String sourceLanguage, String targetLanguage
+});
+
+
+
+
+}
+/// @nodoc
+class __$LanguageSettingsChangedCopyWithImpl<$Res>
+    implements _$LanguageSettingsChangedCopyWith<$Res> {
+  __$LanguageSettingsChangedCopyWithImpl(this._self, this._then);
+
+  final _LanguageSettingsChanged _self;
+  final $Res Function(_LanguageSettingsChanged) _then;
+
+/// Create a copy of AiWordDraftEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? sourceLanguage = null,Object? targetLanguage = null,}) {
+  return _then(_LanguageSettingsChanged(
+sourceLanguage: null == sourceLanguage ? _self.sourceLanguage : sourceLanguage // ignore: cast_nullable_to_non_nullable
+as String,targetLanguage: null == targetLanguage ? _self.targetLanguage : targetLanguage // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
 class _GenerateRequested implements AiWordDraftEvent {
-  const _GenerateRequested({required this.input, required this.sourceLanguage, required this.targetLanguage});
+  const _GenerateRequested({required this.input});
   
 
  final  String input;
- final  String sourceLanguage;
- final  String targetLanguage;
 
 /// Create a copy of AiWordDraftEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -242,16 +314,16 @@ _$GenerateRequestedCopyWith<_GenerateRequested> get copyWith => __$GenerateReque
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GenerateRequested&&(identical(other.input, input) || other.input == input)&&(identical(other.sourceLanguage, sourceLanguage) || other.sourceLanguage == sourceLanguage)&&(identical(other.targetLanguage, targetLanguage) || other.targetLanguage == targetLanguage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GenerateRequested&&(identical(other.input, input) || other.input == input));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,input,sourceLanguage,targetLanguage);
+int get hashCode => Object.hash(runtimeType,input);
 
 @override
 String toString() {
-  return 'AiWordDraftEvent.generateRequested(input: $input, sourceLanguage: $sourceLanguage, targetLanguage: $targetLanguage)';
+  return 'AiWordDraftEvent.generateRequested(input: $input)';
 }
 
 
@@ -262,7 +334,7 @@ abstract mixin class _$GenerateRequestedCopyWith<$Res> implements $AiWordDraftEv
   factory _$GenerateRequestedCopyWith(_GenerateRequested value, $Res Function(_GenerateRequested) _then) = __$GenerateRequestedCopyWithImpl;
 @useResult
 $Res call({
- String input, String sourceLanguage, String targetLanguage
+ String input
 });
 
 
@@ -279,11 +351,9 @@ class __$GenerateRequestedCopyWithImpl<$Res>
 
 /// Create a copy of AiWordDraftEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? input = null,Object? sourceLanguage = null,Object? targetLanguage = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? input = null,}) {
   return _then(_GenerateRequested(
 input: null == input ? _self.input : input // ignore: cast_nullable_to_non_nullable
-as String,sourceLanguage: null == sourceLanguage ? _self.sourceLanguage : sourceLanguage // ignore: cast_nullable_to_non_nullable
-as String,targetLanguage: null == targetLanguage ? _self.targetLanguage : targetLanguage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -390,7 +460,7 @@ String toString() {
 /// @nodoc
 mixin _$AiWordDraftState {
 
- AiSetupStatus get setupStatus; AiGenerationStatus get generationStatus; int get downloadProgress; AiWordDraft? get draft; String? get message; String? get pendingInput; String? get pendingSourceLanguage; String? get pendingTargetLanguage;
+ AiSetupStatus get setupStatus; AiGenerationStatus get generationStatus; int get downloadProgress; String get sourceLanguage; String get targetLanguage; AiWordDraft? get draft; String? get message; String? get pendingInput; String? get pendingSourceLanguage; String? get pendingTargetLanguage;
 /// Create a copy of AiWordDraftState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -401,16 +471,16 @@ $AiWordDraftStateCopyWith<AiWordDraftState> get copyWith => _$AiWordDraftStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AiWordDraftState&&(identical(other.setupStatus, setupStatus) || other.setupStatus == setupStatus)&&(identical(other.generationStatus, generationStatus) || other.generationStatus == generationStatus)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.draft, draft) || other.draft == draft)&&(identical(other.message, message) || other.message == message)&&(identical(other.pendingInput, pendingInput) || other.pendingInput == pendingInput)&&(identical(other.pendingSourceLanguage, pendingSourceLanguage) || other.pendingSourceLanguage == pendingSourceLanguage)&&(identical(other.pendingTargetLanguage, pendingTargetLanguage) || other.pendingTargetLanguage == pendingTargetLanguage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AiWordDraftState&&(identical(other.setupStatus, setupStatus) || other.setupStatus == setupStatus)&&(identical(other.generationStatus, generationStatus) || other.generationStatus == generationStatus)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.sourceLanguage, sourceLanguage) || other.sourceLanguage == sourceLanguage)&&(identical(other.targetLanguage, targetLanguage) || other.targetLanguage == targetLanguage)&&(identical(other.draft, draft) || other.draft == draft)&&(identical(other.message, message) || other.message == message)&&(identical(other.pendingInput, pendingInput) || other.pendingInput == pendingInput)&&(identical(other.pendingSourceLanguage, pendingSourceLanguage) || other.pendingSourceLanguage == pendingSourceLanguage)&&(identical(other.pendingTargetLanguage, pendingTargetLanguage) || other.pendingTargetLanguage == pendingTargetLanguage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,setupStatus,generationStatus,downloadProgress,draft,message,pendingInput,pendingSourceLanguage,pendingTargetLanguage);
+int get hashCode => Object.hash(runtimeType,setupStatus,generationStatus,downloadProgress,sourceLanguage,targetLanguage,draft,message,pendingInput,pendingSourceLanguage,pendingTargetLanguage);
 
 @override
 String toString() {
-  return 'AiWordDraftState(setupStatus: $setupStatus, generationStatus: $generationStatus, downloadProgress: $downloadProgress, draft: $draft, message: $message, pendingInput: $pendingInput, pendingSourceLanguage: $pendingSourceLanguage, pendingTargetLanguage: $pendingTargetLanguage)';
+  return 'AiWordDraftState(setupStatus: $setupStatus, generationStatus: $generationStatus, downloadProgress: $downloadProgress, sourceLanguage: $sourceLanguage, targetLanguage: $targetLanguage, draft: $draft, message: $message, pendingInput: $pendingInput, pendingSourceLanguage: $pendingSourceLanguage, pendingTargetLanguage: $pendingTargetLanguage)';
 }
 
 
@@ -421,7 +491,7 @@ abstract mixin class $AiWordDraftStateCopyWith<$Res>  {
   factory $AiWordDraftStateCopyWith(AiWordDraftState value, $Res Function(AiWordDraftState) _then) = _$AiWordDraftStateCopyWithImpl;
 @useResult
 $Res call({
- AiSetupStatus setupStatus, AiGenerationStatus generationStatus, int downloadProgress, AiWordDraft? draft, String? message, String? pendingInput, String? pendingSourceLanguage, String? pendingTargetLanguage
+ AiSetupStatus setupStatus, AiGenerationStatus generationStatus, int downloadProgress, String sourceLanguage, String targetLanguage, AiWordDraft? draft, String? message, String? pendingInput, String? pendingSourceLanguage, String? pendingTargetLanguage
 });
 
 
@@ -438,12 +508,14 @@ class _$AiWordDraftStateCopyWithImpl<$Res>
 
 /// Create a copy of AiWordDraftState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? setupStatus = null,Object? generationStatus = null,Object? downloadProgress = null,Object? draft = freezed,Object? message = freezed,Object? pendingInput = freezed,Object? pendingSourceLanguage = freezed,Object? pendingTargetLanguage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? setupStatus = null,Object? generationStatus = null,Object? downloadProgress = null,Object? sourceLanguage = null,Object? targetLanguage = null,Object? draft = freezed,Object? message = freezed,Object? pendingInput = freezed,Object? pendingSourceLanguage = freezed,Object? pendingTargetLanguage = freezed,}) {
   return _then(_self.copyWith(
 setupStatus: null == setupStatus ? _self.setupStatus : setupStatus // ignore: cast_nullable_to_non_nullable
 as AiSetupStatus,generationStatus: null == generationStatus ? _self.generationStatus : generationStatus // ignore: cast_nullable_to_non_nullable
 as AiGenerationStatus,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
-as int,draft: freezed == draft ? _self.draft : draft // ignore: cast_nullable_to_non_nullable
+as int,sourceLanguage: null == sourceLanguage ? _self.sourceLanguage : sourceLanguage // ignore: cast_nullable_to_non_nullable
+as String,targetLanguage: null == targetLanguage ? _self.targetLanguage : targetLanguage // ignore: cast_nullable_to_non_nullable
+as String,draft: freezed == draft ? _self.draft : draft // ignore: cast_nullable_to_non_nullable
 as AiWordDraft?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,pendingInput: freezed == pendingInput ? _self.pendingInput : pendingInput // ignore: cast_nullable_to_non_nullable
 as String?,pendingSourceLanguage: freezed == pendingSourceLanguage ? _self.pendingSourceLanguage : pendingSourceLanguage // ignore: cast_nullable_to_non_nullable
@@ -530,10 +602,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AiSetupStatus setupStatus,  AiGenerationStatus generationStatus,  int downloadProgress,  AiWordDraft? draft,  String? message,  String? pendingInput,  String? pendingSourceLanguage,  String? pendingTargetLanguage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AiSetupStatus setupStatus,  AiGenerationStatus generationStatus,  int downloadProgress,  String sourceLanguage,  String targetLanguage,  AiWordDraft? draft,  String? message,  String? pendingInput,  String? pendingSourceLanguage,  String? pendingTargetLanguage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AiWordDraftState() when $default != null:
-return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,_that.draft,_that.message,_that.pendingInput,_that.pendingSourceLanguage,_that.pendingTargetLanguage);case _:
+return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,_that.sourceLanguage,_that.targetLanguage,_that.draft,_that.message,_that.pendingInput,_that.pendingSourceLanguage,_that.pendingTargetLanguage);case _:
   return orElse();
 
 }
@@ -551,10 +623,10 @@ return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AiSetupStatus setupStatus,  AiGenerationStatus generationStatus,  int downloadProgress,  AiWordDraft? draft,  String? message,  String? pendingInput,  String? pendingSourceLanguage,  String? pendingTargetLanguage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AiSetupStatus setupStatus,  AiGenerationStatus generationStatus,  int downloadProgress,  String sourceLanguage,  String targetLanguage,  AiWordDraft? draft,  String? message,  String? pendingInput,  String? pendingSourceLanguage,  String? pendingTargetLanguage)  $default,) {final _that = this;
 switch (_that) {
 case _AiWordDraftState():
-return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,_that.draft,_that.message,_that.pendingInput,_that.pendingSourceLanguage,_that.pendingTargetLanguage);}
+return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,_that.sourceLanguage,_that.targetLanguage,_that.draft,_that.message,_that.pendingInput,_that.pendingSourceLanguage,_that.pendingTargetLanguage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -568,10 +640,10 @@ return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AiSetupStatus setupStatus,  AiGenerationStatus generationStatus,  int downloadProgress,  AiWordDraft? draft,  String? message,  String? pendingInput,  String? pendingSourceLanguage,  String? pendingTargetLanguage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AiSetupStatus setupStatus,  AiGenerationStatus generationStatus,  int downloadProgress,  String sourceLanguage,  String targetLanguage,  AiWordDraft? draft,  String? message,  String? pendingInput,  String? pendingSourceLanguage,  String? pendingTargetLanguage)?  $default,) {final _that = this;
 switch (_that) {
 case _AiWordDraftState() when $default != null:
-return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,_that.draft,_that.message,_that.pendingInput,_that.pendingSourceLanguage,_that.pendingTargetLanguage);case _:
+return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,_that.sourceLanguage,_that.targetLanguage,_that.draft,_that.message,_that.pendingInput,_that.pendingSourceLanguage,_that.pendingTargetLanguage);case _:
   return null;
 
 }
@@ -583,12 +655,14 @@ return $default(_that.setupStatus,_that.generationStatus,_that.downloadProgress,
 
 
 class _AiWordDraftState implements AiWordDraftState {
-  const _AiWordDraftState({this.setupStatus = AiSetupStatus.initial, this.generationStatus = AiGenerationStatus.idle, this.downloadProgress = 0, this.draft, this.message, this.pendingInput, this.pendingSourceLanguage, this.pendingTargetLanguage});
+  const _AiWordDraftState({this.setupStatus = AiSetupStatus.initial, this.generationStatus = AiGenerationStatus.idle, this.downloadProgress = 0, this.sourceLanguage = 'auto', this.targetLanguage = 'русский', this.draft, this.message, this.pendingInput, this.pendingSourceLanguage, this.pendingTargetLanguage});
   
 
 @override@JsonKey() final  AiSetupStatus setupStatus;
 @override@JsonKey() final  AiGenerationStatus generationStatus;
 @override@JsonKey() final  int downloadProgress;
+@override@JsonKey() final  String sourceLanguage;
+@override@JsonKey() final  String targetLanguage;
 @override final  AiWordDraft? draft;
 @override final  String? message;
 @override final  String? pendingInput;
@@ -605,16 +679,16 @@ _$AiWordDraftStateCopyWith<_AiWordDraftState> get copyWith => __$AiWordDraftStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AiWordDraftState&&(identical(other.setupStatus, setupStatus) || other.setupStatus == setupStatus)&&(identical(other.generationStatus, generationStatus) || other.generationStatus == generationStatus)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.draft, draft) || other.draft == draft)&&(identical(other.message, message) || other.message == message)&&(identical(other.pendingInput, pendingInput) || other.pendingInput == pendingInput)&&(identical(other.pendingSourceLanguage, pendingSourceLanguage) || other.pendingSourceLanguage == pendingSourceLanguage)&&(identical(other.pendingTargetLanguage, pendingTargetLanguage) || other.pendingTargetLanguage == pendingTargetLanguage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AiWordDraftState&&(identical(other.setupStatus, setupStatus) || other.setupStatus == setupStatus)&&(identical(other.generationStatus, generationStatus) || other.generationStatus == generationStatus)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.sourceLanguage, sourceLanguage) || other.sourceLanguage == sourceLanguage)&&(identical(other.targetLanguage, targetLanguage) || other.targetLanguage == targetLanguage)&&(identical(other.draft, draft) || other.draft == draft)&&(identical(other.message, message) || other.message == message)&&(identical(other.pendingInput, pendingInput) || other.pendingInput == pendingInput)&&(identical(other.pendingSourceLanguage, pendingSourceLanguage) || other.pendingSourceLanguage == pendingSourceLanguage)&&(identical(other.pendingTargetLanguage, pendingTargetLanguage) || other.pendingTargetLanguage == pendingTargetLanguage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,setupStatus,generationStatus,downloadProgress,draft,message,pendingInput,pendingSourceLanguage,pendingTargetLanguage);
+int get hashCode => Object.hash(runtimeType,setupStatus,generationStatus,downloadProgress,sourceLanguage,targetLanguage,draft,message,pendingInput,pendingSourceLanguage,pendingTargetLanguage);
 
 @override
 String toString() {
-  return 'AiWordDraftState(setupStatus: $setupStatus, generationStatus: $generationStatus, downloadProgress: $downloadProgress, draft: $draft, message: $message, pendingInput: $pendingInput, pendingSourceLanguage: $pendingSourceLanguage, pendingTargetLanguage: $pendingTargetLanguage)';
+  return 'AiWordDraftState(setupStatus: $setupStatus, generationStatus: $generationStatus, downloadProgress: $downloadProgress, sourceLanguage: $sourceLanguage, targetLanguage: $targetLanguage, draft: $draft, message: $message, pendingInput: $pendingInput, pendingSourceLanguage: $pendingSourceLanguage, pendingTargetLanguage: $pendingTargetLanguage)';
 }
 
 
@@ -625,7 +699,7 @@ abstract mixin class _$AiWordDraftStateCopyWith<$Res> implements $AiWordDraftSta
   factory _$AiWordDraftStateCopyWith(_AiWordDraftState value, $Res Function(_AiWordDraftState) _then) = __$AiWordDraftStateCopyWithImpl;
 @override @useResult
 $Res call({
- AiSetupStatus setupStatus, AiGenerationStatus generationStatus, int downloadProgress, AiWordDraft? draft, String? message, String? pendingInput, String? pendingSourceLanguage, String? pendingTargetLanguage
+ AiSetupStatus setupStatus, AiGenerationStatus generationStatus, int downloadProgress, String sourceLanguage, String targetLanguage, AiWordDraft? draft, String? message, String? pendingInput, String? pendingSourceLanguage, String? pendingTargetLanguage
 });
 
 
@@ -642,12 +716,14 @@ class __$AiWordDraftStateCopyWithImpl<$Res>
 
 /// Create a copy of AiWordDraftState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? setupStatus = null,Object? generationStatus = null,Object? downloadProgress = null,Object? draft = freezed,Object? message = freezed,Object? pendingInput = freezed,Object? pendingSourceLanguage = freezed,Object? pendingTargetLanguage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? setupStatus = null,Object? generationStatus = null,Object? downloadProgress = null,Object? sourceLanguage = null,Object? targetLanguage = null,Object? draft = freezed,Object? message = freezed,Object? pendingInput = freezed,Object? pendingSourceLanguage = freezed,Object? pendingTargetLanguage = freezed,}) {
   return _then(_AiWordDraftState(
 setupStatus: null == setupStatus ? _self.setupStatus : setupStatus // ignore: cast_nullable_to_non_nullable
 as AiSetupStatus,generationStatus: null == generationStatus ? _self.generationStatus : generationStatus // ignore: cast_nullable_to_non_nullable
 as AiGenerationStatus,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
-as int,draft: freezed == draft ? _self.draft : draft // ignore: cast_nullable_to_non_nullable
+as int,sourceLanguage: null == sourceLanguage ? _self.sourceLanguage : sourceLanguage // ignore: cast_nullable_to_non_nullable
+as String,targetLanguage: null == targetLanguage ? _self.targetLanguage : targetLanguage // ignore: cast_nullable_to_non_nullable
+as String,draft: freezed == draft ? _self.draft : draft // ignore: cast_nullable_to_non_nullable
 as AiWordDraft?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,pendingInput: freezed == pendingInput ? _self.pendingInput : pendingInput // ignore: cast_nullable_to_non_nullable
 as String?,pendingSourceLanguage: freezed == pendingSourceLanguage ? _self.pendingSourceLanguage : pendingSourceLanguage // ignore: cast_nullable_to_non_nullable

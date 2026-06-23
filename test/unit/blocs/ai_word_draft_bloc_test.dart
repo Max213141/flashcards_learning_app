@@ -40,22 +40,37 @@ void main() {
   });
 
   blocTest<AiWordDraftBloc, AiWordDraftState>(
-    'generateRequested asks for download confirmation when model is missing',
-    build: () {
-      when(() => modelManager.isInstalled()).thenAnswer((_) async => false);
-      return buildBloc();
-    },
+    'languageSettingsChanged remembers source and target languages',
+    build: buildBloc,
     act: (bloc) => bloc.add(
-      const AiWordDraftEvent.generateRequested(
-        input: 'bonjour',
+      const AiWordDraftEvent.languageSettingsChanged(
         sourceLanguage: 'fr',
         targetLanguage: 'ru',
       ),
     ),
     expect: () => [
       isA<AiWordDraftState>()
+          .having((s) => s.sourceLanguage, 'sourceLanguage', 'fr')
+          .having((s) => s.targetLanguage, 'targetLanguage', 'ru'),
+    ],
+  );
+
+  blocTest<AiWordDraftBloc, AiWordDraftState>(
+    'generateRequested asks for download confirmation when model is missing',
+    build: () {
+      when(() => modelManager.isInstalled()).thenAnswer((_) async => false);
+      return buildBloc();
+    },
+    seed: () =>
+        const AiWordDraftState(sourceLanguage: 'fr', targetLanguage: 'ru'),
+    act: (bloc) =>
+        bloc.add(const AiWordDraftEvent.generateRequested(input: 'bonjour')),
+    expect: () => [
+      isA<AiWordDraftState>()
           .having((s) => s.setupStatus, 'setupStatus', AiSetupStatus.checking)
-          .having((s) => s.pendingInput, 'pendingInput', 'bonjour'),
+          .having((s) => s.pendingInput, 'pendingInput', 'bonjour')
+          .having((s) => s.pendingSourceLanguage, 'sourceLanguage', 'fr')
+          .having((s) => s.pendingTargetLanguage, 'targetLanguage', 'ru'),
       isA<AiWordDraftState>().having(
         (s) => s.setupStatus,
         'setupStatus',
@@ -80,13 +95,10 @@ void main() {
       ).thenAnswer((_) async => draft);
       return buildBloc();
     },
-    act: (bloc) => bloc.add(
-      const AiWordDraftEvent.generateRequested(
-        input: 'bonjour',
-        sourceLanguage: 'fr',
-        targetLanguage: 'ru',
-      ),
-    ),
+    seed: () =>
+        const AiWordDraftState(sourceLanguage: 'fr', targetLanguage: 'ru'),
+    act: (bloc) =>
+        bloc.add(const AiWordDraftEvent.generateRequested(input: 'bonjour')),
     expect: () => [
       isA<AiWordDraftState>().having(
         (s) => s.setupStatus,

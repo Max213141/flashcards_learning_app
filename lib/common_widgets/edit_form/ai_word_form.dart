@@ -18,20 +18,12 @@ class AiWordForm extends StatefulWidget {
 class _AiWordFormState extends State<AiWordForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final WordFormControllers _wordControllers = WordFormControllers();
-  final TextEditingController sourceLanguageController = TextEditingController(
-    text: 'auto',
-  );
-  final TextEditingController targetLanguageController = TextEditingController(
-    text: 'русский',
-  );
 
   bool _saving = false;
 
   @override
   void dispose() {
     _wordControllers.dispose();
-    sourceLanguageController.dispose();
-    targetLanguageController.dispose();
     super.dispose();
   }
 
@@ -45,11 +37,7 @@ class _AiWordFormState extends State<AiWordForm> {
     }
 
     context.read<AiWordDraftBloc>().add(
-      AiWordDraftEvent.generateRequested(
-        input: input,
-        sourceLanguage: sourceLanguageController.text,
-        targetLanguage: targetLanguageController.text,
-      ),
+      AiWordDraftEvent.generateRequested(input: input),
     );
   }
 
@@ -92,15 +80,7 @@ class _AiWordFormState extends State<AiWordForm> {
                     partofSpeechController: _wordControllers.partOfSpeech,
                     usageController: _wordControllers.usage,
                   ),
-                  AiDraftControls(
-                    sourceLanguageController: sourceLanguageController,
-                    targetLanguageController: targetLanguageController,
-                    state: state,
-                    onGenerate: _requestAiDraft,
-                    onCancel: () => context.read<AiWordDraftBloc>().add(
-                      const AiWordDraftEvent.downloadCancelled(),
-                    ),
-                  ),
+                  AiDraftControls(state: state, onGenerate: _requestAiDraft),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,

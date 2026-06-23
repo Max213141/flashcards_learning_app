@@ -257,12 +257,16 @@ Single state object with:
 **Purpose**
 
 Owns local AI model setup and AI word draft generation for the add-word AI assistant flow.
+The bloc is provided at the `TopicScreen` boundary and reused by `AddWordAIDialog`
+with `BlocProvider.value`, so source/target language settings survive dialog
+close/reopen while the topic screen stays mounted.
 
 **Main responsibilities**
 
 - Checks whether the configured local model is installed on device.
 - Drives the setup-first AI dialog state before the AI form is shown.
 - Downloads the model with determinate progress and cancellation support.
+- Requests best-effort cleanup of incomplete local model installs before retrying downloads and after failed/cancelled download attempts.
 - Activates the installed model before generation.
 - Generates an `AiWordDraft` from user input and language settings.
 - Keeps AI output as a draft only; final DB saving remains a user-reviewed form save through `TopicDetailBloc.addWordRequested`.
@@ -270,7 +274,8 @@ Owns local AI model setup and AI word draft generation for the add-word AI assis
 **Events**
 
 - `started()`: checks whether the local model is installed.
-- `generateRequested(input, sourceLanguage, targetLanguage)`: prepares the model and generates a draft for the entered word or phrase.
+- `languageSettingsChanged(sourceLanguage, targetLanguage)`: remembers the current source/target language fields while the AI form is active.
+- `generateRequested(input)`: prepares the model and generates a draft for the entered word or phrase using the remembered source/target language settings from state.
 - `downloadAccepted()`: starts model download. This supports both setup-only download from `AddWordAIDialog` and download-then-generate when a generation request is already pending.
 - `downloadCancelled()`: cancels the in-flight model download if present.
 - `statusConsumed()`: clears transient draft/message state after UI consumes it.
@@ -282,6 +287,8 @@ Single state object with:
 - `setupStatus`
 - `generationStatus`
 - `downloadProgress`
+- `sourceLanguage`
+- `targetLanguage`
 - `draft`
 - `message`
 - `pendingInput`
@@ -313,17 +320,24 @@ Single state object with:
 - On `started`, calls `LocalAiModelManager.isInstalled()`.
 - If installed, emits `installed`; the dialog can show the AI form.
 - If missing, emits `notInstalled`; the dialog shows model setup content.
+- On `languageSettingsChanged`, stores source and target language input in bloc state. Defaults are `auto` and `русский`.
+- On `generateRequested`, trims remembered source/target languages, falls back to defaults for empty values, stores the normalized values in both visible language state and pending generation state, then checks model availability.
+- Before `downloadAccepted` starts a new install, calls `LocalAiModelManager.cleanupIncompleteInstall()` so stale partial files from an earlier unfinished download are removed when possible.
 - On setup-only `downloadAccepted`, installs the model and emits `installed` without triggering generation.
 - On generation `downloadAccepted`, installs the model and continues into activation/generation with the pending input.
 - During download, progress callbacks emit `downloading(progress)`.
+- If the install future fails or reports cancellation, calls `cleanupIncompleteInstall()` before emitting `failure` or `cancelled`.
 - On generation, activates the model through `LocalAiModelManager.activateInstalledModel()`, then calls `LocalAiWordDraftService.generateWordDraft(...)`.
 - Successful generation emits `success(draft)`; the UI applies draft fields to the form and then consumes the status.
 - Failure states use user-facing Russian messages and do not block manual word creation.
 
 **UI integration**
 
+- `TopicScreen` provides `AiWordDraftBloc` for the topic feature lifetime.
+- `TopicScreenView` opens `AddWordAIDialog` with the existing bloc instance:
+  - starts each dialog-open setup check with `started()`
+  - keeps source/target language settings across dialog close/reopen
 - `AddWordAIDialog` owns setup UI:
-  - starts the check with `started()`
   - shows download explanation/progress/cancel/retry while the model is missing
   - shows `AiWordForm` after install/ready state
 - `AiWordForm` owns post-setup draft generation UI.

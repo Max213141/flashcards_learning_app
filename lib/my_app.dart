@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MyApp extends StatelessWidget {
   final AppRouter appRouter;
@@ -9,9 +10,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return MaterialApp.router(
       routerConfig: appRouter.config(),
-      title: 'Flutter Demo',
+      title: 'Flashy Learn',
       theme: ThemeData(
         textTheme: const TextTheme(
           bodySmall: TextStyle(color: AppConst.black),

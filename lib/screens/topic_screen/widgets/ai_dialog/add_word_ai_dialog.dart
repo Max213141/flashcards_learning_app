@@ -3,7 +3,6 @@ import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/ai_dialog/widgets.dart';
-import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,14 +32,7 @@ class AddWordAIDialog extends StatelessWidget {
             children: [
               Text('ИИ ассистент', style: AppConst.h1),
               const SizedBox(height: 8),
-              Flexible(
-                child: BlocProvider(
-                  create: (_) =>
-                      getIt<AiWordDraftBloc>()
-                        ..add(const AiWordDraftEvent.started()),
-                  child: _AddWordAiDialogContent(onSave: onSave),
-                ),
-              ),
+              Flexible(child: _AddWordAiDialogContent(onSave: onSave)),
             ],
           ),
         ),

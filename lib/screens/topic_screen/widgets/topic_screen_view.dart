@@ -52,17 +52,25 @@ class _TopicScreenViewState extends State<TopicScreenView> {
 
   void _onAddWithAi() async {
     closeFloatingActionButton();
+    final aiWordDraftBloc = context.read<AiWordDraftBloc>()
+      ..add(const AiWordDraftEvent.started());
 
     final result = await showDialog<Word>(
       context: context,
 
-      builder: (context) => AddWordAIDialog(
-        onSave: (Word newWord) async {
-          if (!context.mounted) return;
-          Navigator.of(context).pop(
-            newWord.copyWith(topic: widget.topicName, topicId: widget.topicId),
-          );
-        },
+      builder: (context) => BlocProvider.value(
+        value: aiWordDraftBloc,
+        child: AddWordAIDialog(
+          onSave: (Word newWord) async {
+            if (!context.mounted) return;
+            Navigator.of(context).pop(
+              newWord.copyWith(
+                topic: widget.topicName,
+                topicId: widget.topicId,
+              ),
+            );
+          },
+        ),
       ),
     );
     if (!mounted || result == null) return;

@@ -28,6 +28,7 @@ class TopicScreen extends StatelessWidget {
             ),
         ),
         BlocProvider(create: (_) => getIt<WordBloc>()),
+        BlocProvider(create: (_) => getIt<AiWordDraftBloc>()),
       ],
       child: TopicScreenView(
         topicName: topicName,

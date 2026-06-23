@@ -1,0 +1,159 @@
+{
+  "@@locale": "en",
+  "appTitle": "Flashy Learn",
+  "@appTitle": {
+    "description": "The application title shown by the root MaterialApp."
+  },
+  "commonAppBarStatistics": "Statistics",
+  "editFormLearningWordLabel": "Word to learn",
+  "editFormTranslationLabel": "Translation",
+  "editFormAdditionalSection": "Additional",
+  "editFormTranscriptionLabel": "Transcription",
+  "editFormPartOfSpeechLabel": "Part of speech",
+  "editFormUsageLabel": "Usage",
+  "editWordFormRequiredFieldsError": "Fill in the word and translation",
+  "editWordFormSavingButton": "Saving...",
+  "editWordFormSaveButton": "Save",
+  "aiWordFormInputRequiredError": "Enter a word or phrase",
+  "aiWordFormRequiredFieldsError": "Fill in the word and translation",
+  "aiWordFormSavingButton": "Saving...",
+  "aiWordFormSaveButton": "Save",
+  "aiDraftControlsTitle": "AI draft",
+  "aiDraftControlsGenerateTranslationButton": "Generate translation",
+  "wordDefinitionPartOfSpeechMissing": "Part of speech is not specified",
+  "wordDefinitionTranslationTitle": "Translation",
+  "wordDefinitionUsageTitle": "Word in use",
+  "wordDefinitionInfoMissing": "Information is not filled in",
+  "wordDefinitionScreenTitle": "Definition",
+  "wordDescriptionUsageTitle": "Word in use",
+  "wordDescriptionInfoMissing": "Information is not filled in",
+  "testScreenTitle": "Practice",
+  "finishedTestTitle": "Test completed",
+  "finishedTestCorrectCount": "Correct: {count}",
+  "@finishedTestCorrectCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "finishedTestIncorrectCount": "Incorrect: {count}",
+  "@finishedTestIncorrectCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "finishedTestTotalCount": "Total: {count}",
+  "@finishedTestTotalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "finishedTestOkButton": "OK",
+  "topicAddWordDialogTitle": "Add word",
+  "topicWordsEmpty": "No words",
+  "topicScreenWordsCount": "{count, plural, =0{0 words} =1{1 word} other{{count} words}}",
+  "@topicScreenWordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "topicScreenOverallProgressLabel": "Overall \nprogress",
+  "topicScreenAiAssistantButton": "AI assistant",
+  "topicScreenAddJsonFileButton": "Add JSON file",
+  "topicScreenAddWordButton": "Add word",
+  "editWordDialogTitle": "Edit word",
+  "slidableWordDeleteAction": "Delete",
+  "slidableWordEditAction": "Edit",
+  "deletionAcceptanceTitle": "Are you sure you want to delete “{topicName}”?",
+  "@deletionAcceptanceTitle": {
+    "placeholders": {
+      "topicName": {
+        "type": "String"
+      }
+    }
+  },
+  "deletionAcceptanceMessage": "All words and your progress will be permanently deleted",
+  "deletionAcceptanceCancelButton": "Cancel",
+  "deletionAcceptanceDeleteButton": "Delete",
+  "buttonsRowPracticeButton": "Practice",
+  "buttonsRowExamButton": "Exam",
+  "addWordAiDialogTitle": "AI assistant",
+  "aiModelSetupCheckingMessage": "Checking local model",
+  "aiModelSetupRequiredTitle": "Local model required",
+  "aiModelSetupDescription": "{modelName} (~{modelSize}) will be downloaded to the device. After that, the AI assistant will work locally on the device",
+  "@aiModelSetupDescription": {
+    "placeholders": {
+      "modelName": {
+        "type": "String"
+      },
+      "modelSize": {
+        "type": "String"
+      }
+    }
+  },
+  "aiModelSetupDownloadingButton": "Downloading...",
+  "aiModelSetupRetryButton": "Retry",
+  "aiModelSetupDownloadButton": "Download",
+  "aiModelSetupCancelButton": "Cancel",
+  "aiModelSetupNotNowButton": "Not now",
+  "editWordScreenTitle": "Edit word",
+  "examScreenLoadFailure": "Failed to load words for the exam",
+  "examScreenTitle": "Exam",
+  "examFinishedTitle": "Exam completed",
+  "examFinishedTotalCount": "Total: {count}",
+  "@examFinishedTotalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "examFinishedOkButton": "OK",
+  "mainAppBarSetGoalsPrompt": "Set your goals!",
+  "mainAppBarOverallProgressLabel": "Overall \nprogress",
+  "mainAppBarDailyGoalLabel": "Daily \ngoal",
+  "filterButtonTitleAscSort": "By name (A-Z)",
+  "filterButtonColorAscSort": "By color",
+  "filterButtonCreatedDescSort": "Newest first",
+  "filterButtonSortButton": "Sort by",
+  "filterButtonCurrentSort": "Current sort: {sortLabel}",
+  "@filterButtonCurrentSort": {
+    "placeholders": {
+      "sortLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "topicsListEmpty": "No topics yet",
+  "topicsExpansionJsonTopicsTitle": "Topics from JSON",
+  "restoreBackupTitle": "Restore data from backup?",
+  "restoreBackupMessage": "Current topics, words, and progress will be fully replaced with data from the backup",
+  "restoreBackupCancelButton": "Cancel",
+  "restoreBackupRestoreButton": "Restore",
+  "crashlyticsConsentTitle": "Allow anonymous analytics and crash reports?",
+  "crashlyticsConsentMessage": "This helps understand how you use the app and fix errors faster. You can change your choice later.",
+  "crashlyticsConsentNotNowButton": "Not now",
+  "crashlyticsConsentAllowButton": "Allow",
+  "goalsDialogTitle": "Learning goals",
+  "goalsDialogOverallGoalLabel": "Overall goal",
+  "goalsDialogDailyGoalLabel": "Daily goal",
+  "goalsDialogSaveButton": "Save",
+  "popUpBodyNewTopicTitle": "New topic",
+  "popUpBodyNameLabel": "Name",
+  "popUpBodyTopicColorLabel": "Topic color",
+  "popUpBodyUploadJsonButton": "Upload JSON file",
+  "popUpBodyCreateTopicButton": "Create topic",
+  "mainScreenRestoreBackupButton": "Restore from backup",
+  "mainScreenCreateBackupButton": "Create backup",
+  "mainScreenNewTopicButton": "New topic",
+  "sortMenuCreatedDescOption": "Newest first",
+  "sortMenuTitleAscOption": "By name (A-Z)",
+  "sortMenuColorAscOption": "By color"
+}

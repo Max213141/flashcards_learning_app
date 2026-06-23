@@ -44,9 +44,7 @@ void main() {
 
   Future<void> pumpExamScreen(WidgetTester tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 2200));
-    await tester.pumpWidget(
-      const MaterialApp(home: ExamScreen(topicId: 1)),
-    );
+    await tester.pumpWidget(const MaterialApp(home: ExamScreen(topicId: 1)));
   }
 
   testWidgets('dispatches started event on build', (tester) async {
@@ -59,7 +57,11 @@ void main() {
   testWidgets('shows loader for loading state', (tester) async {
     const loadingState = TestState.loading();
     when(() => testBloc.state).thenReturn(loadingState);
-    whenListen(testBloc, Stream.value(loadingState), initialState: loadingState);
+    whenListen(
+      testBloc,
+      Stream.value(loadingState),
+      initialState: loadingState,
+    );
 
     await pumpExamScreen(tester);
     await tester.pump();
@@ -76,7 +78,7 @@ void main() {
     await pumpExamScreen(tester);
     await tester.pump();
 
-    expect(find.text('Экзамен'), findsOneWidget);
+    expect(find.text('Exam'), findsOneWidget);
     expect(find.byType(ExamScreenBodyWidget), findsOneWidget);
     await tester.binding.setSurfaceSize(null);
   });
@@ -89,12 +91,16 @@ void main() {
       message: 'Не удалось загрузить слова для практики',
     );
     when(() => testBloc.state).thenReturn(failureState);
-    whenListen(testBloc, Stream.value(failureState), initialState: failureState);
+    whenListen(
+      testBloc,
+      Stream.value(failureState),
+      initialState: failureState,
+    );
 
     await pumpExamScreen(tester);
     await tester.pump();
 
-    expect(find.text('Не удалось загрузить слова для экзамена'), findsOneWidget);
+    expect(find.text('Failed to load words for the exam'), findsOneWidget);
     verify(() => testBloc.add(const TestEvent.statusConsumed())).called(1);
     await tester.binding.setSurfaceSize(null);
   });

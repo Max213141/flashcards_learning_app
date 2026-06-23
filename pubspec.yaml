@@ -8,7 +8,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # Translation to our native language IS  translation field
 # Word in foreign laguage IS  word field
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.10.0
@@ -16,6 +16,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
   flutter_svg: ^2.0.10
   lottie: ^3.3.2
   drift: ^2.20.0
@@ -61,6 +64,8 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

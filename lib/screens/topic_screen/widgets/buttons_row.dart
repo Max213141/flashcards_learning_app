@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class ButtonsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 30.0, bottom: 30),
       child: Row(
@@ -27,7 +30,7 @@ class ButtonsRow extends StatelessWidget {
           SizedBox(
             width: 145,
             child: CustomActionButton(
-              buttonText: 'Практика',
+              buttonText: l10n.buttonsRowPracticeButton,
               onTap: isTopicEmpty
                   ? null
                   : () {
@@ -47,7 +50,7 @@ class ButtonsRow extends StatelessWidget {
             width: 145,
 
             child: CustomActionButton(
-              buttonText: 'Экзамен',
+              buttonText: l10n.buttonsRowExamButton,
               onTap: isTopicEmpty
                   ? null
                   : () {

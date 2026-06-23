@@ -142,7 +142,7 @@ void main() {
     await tester.pump();
 
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
-    expect(find.text('Слово в употреблении'), findsOneWidget);
+    expect(find.text('Word in use'), findsOneWidget);
     expect(find.text('A cat sleeps on the sofa.'), findsNothing);
     await tester.binding.setSurfaceSize(null);
   });

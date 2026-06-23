@@ -7,3 +7,4 @@ export 'pluralization.dart';
 export 'logger.dart';
 export 'picker_util.dart';
 export 'scaled_text.dart';
+export 'app_locale_preferences.dart';

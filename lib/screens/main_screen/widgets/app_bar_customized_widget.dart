@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/blocs/goals_bloc/goals_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,8 @@ class AppBarCustomizedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GoalsBloc, GoalsState>(
       builder: (context, state) {
+        final l10n = l10nOf(context);
+
         if (state.isLoading &&
             state.currentGoals == null &&
             state.progressStats == null) {
@@ -52,7 +55,7 @@ class AppBarCustomizedWidget extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            'Поставь себе цели!',
+                            l10n.mainAppBarSetGoalsPrompt,
                             style: AppConst.text,
                           ),
                         ),
@@ -86,7 +89,10 @@ class AppBarCustomizedWidget extends StatelessWidget {
                       SizedBox(width: 10),
                       Expanded(
                         child: FittedBox(
-                          child: Text('Общий \nпрогресс', style: AppConst.text),
+                          child: Text(
+                            l10n.mainAppBarOverallProgressLabel,
+                            style: AppConst.text,
+                          ),
                         ),
                       ),
                     ],
@@ -108,7 +114,11 @@ class AppBarCustomizedWidget extends StatelessWidget {
                       SizedBox(width: 10),
                       Expanded(
                         child: FittedBox(
-                          child: Text('Дневная \nцель', style: AppConst.text),
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            l10n.mainAppBarDailyGoalLabel,
+                            style: AppConst.text,
+                          ),
                         ),
                       ),
                     ],

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/analytics_service.dart';
@@ -40,7 +41,12 @@ class _TopicWordsListWidgetState extends State<TopicWordsListWidget> {
           bottom: MediaQuery.of(context).padding.bottom + 85,
         ),
         child: widget.wordsList.isEmpty
-            ? const Center(child: Text('Нет слов', style: AppConst.text))
+            ? Center(
+                child: Text(
+                  l10nOf(context).topicWordsEmpty,
+                  style: AppConst.text,
+                ),
+              )
             : Scrollbar(
                 child: ListView.builder(
                   itemCount: widget.wordsList.length,

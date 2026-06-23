@@ -1,7 +1,7 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
-import 'package:flashcards_learning_app/utils/utils.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -18,6 +18,7 @@ class TopicBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
     final progress = topic.totalWords == 0
         ? 0.0
         : topic.learnedWords / topic.totalWords;
@@ -37,7 +38,7 @@ class TopicBodyWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      formatRussianWordCount(topic.totalWords),
+                      l10n.topicScreenWordsCount(topic.totalWords),
                       style: AppConst.additionalText,
                     ),
                     Text(topic.topicName, style: AppConst.h2),

@@ -79,8 +79,8 @@ void main() {
     await pumpWidgetUnderTest(tester);
     await tester.pump();
 
-    expect(find.text('Поставь себе цели!'), findsOneWidget);
-    expect(find.text('Дневная \nцель'), findsNothing);
+    expect(find.text('Set your goals!'), findsOneWidget);
+    expect(find.text('Daily \ngoal'), findsNothing);
   });
 
   testWidgets('renders overall and daily progress when goals exist', (
@@ -101,10 +101,10 @@ void main() {
     await pumpWidgetUnderTest(tester);
     await tester.pump();
 
-    expect(find.text('Общий \nпрогресс'), findsOneWidget);
-    expect(find.text('Дневная \nцель'), findsOneWidget);
+    expect(find.text('Overall \nprogress'), findsOneWidget);
+    expect(find.text('Daily \ngoal'), findsOneWidget);
     expect(find.text('25%'), findsOneWidget);
-    expect(find.text('Поставь себе цели!'), findsNothing);
+    expect(find.text('Set your goals!'), findsNothing);
   });
 
   testWidgets('tap opens goals dialog popup', (tester) async {
@@ -128,6 +128,6 @@ void main() {
 
     expect(find.byType(PopUpBox), findsOneWidget);
     expect(find.byType(GoalsDialogBodyWidget), findsOneWidget);
-    expect(find.text('Цели обучения'), findsOneWidget);
+    expect(find.text('Learning goals'), findsOneWidget);
   });
 }

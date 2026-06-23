@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/custom_action_button.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CrashlyticsConsentBody extends StatelessWidget {
@@ -7,12 +8,14 @@ class CrashlyticsConsentBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
           child: Text(
-            'Разрешить анонимную аналитику и отчёты о сбоях?',
+            l10n.crashlyticsConsentTitle,
             textAlign: TextAlign.center,
             style: AppConst.h1,
           ),
@@ -20,8 +23,7 @@ class CrashlyticsConsentBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            'Это помогает понять, как вы используете приложение, и быстрее исправлять ошибки. '
-            'Вы можете изменить выбор позже.',
+            l10n.crashlyticsConsentMessage,
             textAlign: TextAlign.center,
             style: AppConst.text,
           ),
@@ -31,7 +33,7 @@ class CrashlyticsConsentBody extends StatelessWidget {
           children: [
             Expanded(
               child: CustomActionButton(
-                buttonText: 'Не сейчас',
+                buttonText: l10n.crashlyticsConsentNotNowButton,
                 onTap: () => Navigator.of(context).pop(false),
                 borderColor: AppConst.transparent,
                 color: Color(0x99FF0A0A),
@@ -41,7 +43,7 @@ class CrashlyticsConsentBody extends StatelessWidget {
             const SizedBox(width: 15),
             Expanded(
               child: CustomActionButton(
-                buttonText: 'Разрешить',
+                buttonText: l10n.crashlyticsConsentAllowButton,
                 onTap: () => Navigator.of(context).pop(true),
                 borderColor: AppConst.black,
                 borderWidth: .5,

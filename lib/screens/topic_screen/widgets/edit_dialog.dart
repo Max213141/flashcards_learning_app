@@ -2,6 +2,7 @@ import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_blo
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,11 +14,10 @@ class EditWordDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
-    final maxHeight =
-        (media.size.height - media.viewInsets.bottom - 48).clamp(
-              280.0,
-              media.size.height * 0.95,
-            );
+    final maxHeight = (media.size.height - media.viewInsets.bottom - 48).clamp(
+      280.0,
+      media.size.height * 0.95,
+    );
 
     Widget dialogChild = Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -30,9 +30,11 @@ class EditWordDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Изменение слова', style: AppConst.h1),
+              Text(l10nOf(context).editWordDialogTitle, style: AppConst.h1),
               const SizedBox(height: 8),
-              Flexible(child: EditWordForm(word: word, onSave: onSave)),
+              Flexible(
+                child: EditWordForm(word: word, onSave: onSave),
+              ),
             ],
           ),
         ),
@@ -51,7 +53,8 @@ class EditWordDialog extends StatelessWidget {
           return;
         }
 
-        if (state.status == WordEditingStatus.failure && state.message != null) {
+        if (state.status == WordEditingStatus.failure &&
+            state.message != null) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message!)));

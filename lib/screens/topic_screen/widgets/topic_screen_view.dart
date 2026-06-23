@@ -3,12 +3,12 @@ import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 // import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/rotated_fab.dart';
 import 'package:flashcards_learning_app/screens/topic_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
-import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -186,6 +186,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
       ],
       child: BlocBuilder<TopicDetailBloc, TopicDetailState>(
         builder: (context, state) {
+          final l10n = l10nOf(context);
           final words = state.words;
           final totalWords = words.length;
           final learnedWords = words.where((w) => w.learned).length;
@@ -241,7 +242,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                         children: [
                           Text(widget.topicName, style: AppConst.h2),
                           Text(
-                            formatRussianWordCount(totalWords),
+                            l10n.topicScreenWordsCount(totalWords),
                             style: AppConst.additionalText,
                           ),
                         ],
@@ -262,7 +263,7 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                'Общий \nпрогресс',
+                                l10n.topicScreenOverallProgressLabel,
                                 style: AppConst.text,
                               ),
                             ),
@@ -295,19 +296,19 @@ class _TopicScreenViewState extends State<TopicScreenView> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         CustomActionButton(
-                          buttonText: 'ИИ ассистент',
+                          buttonText: l10n.topicScreenAiAssistantButton,
                           icon: 'assets/iconss/file_export.svg',
                           onTap: _onAddWithAi,
                         ),
                         SizedBox(height: 10),
                         CustomActionButton(
-                          buttonText: 'Добавить файл JSON',
+                          buttonText: l10n.topicScreenAddJsonFileButton,
                           icon: 'assets/iconss/file_export.svg',
                           onTap: _onAddJSON,
                         ),
                         SizedBox(height: 10),
                         CustomActionButton(
-                          buttonText: 'Добавить слово',
+                          buttonText: l10n.topicScreenAddWordButton,
                           icon: 'assets/iconss/plus.svg',
                           onTap: () {
                             getIt<AnalyticsService>().logWordAddRequested(

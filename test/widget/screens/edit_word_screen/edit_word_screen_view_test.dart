@@ -128,9 +128,9 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Изменение слова'), findsOneWidget);
-    expect(find.text('Сохранить'), findsOneWidget);
-    expect(find.text('Изучаемое слово'), findsOneWidget);
+    expect(find.text('Edit word'), findsOneWidget);
+    expect(find.text('Save'), findsOneWidget);
+    expect(find.text('Word to learn'), findsOneWidget);
     await tester.binding.setSurfaceSize(null);
   });
 

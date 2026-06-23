@@ -2,6 +2,7 @@ import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_blo
 import 'package:flashcards_learning_app/common_widgets/edit_form/word_form_controllers.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,7 +43,9 @@ class _EditWordFormState extends State<EditWordForm> {
   Future<void> _handleSave() async {
     if (_controllers.wordText.isEmpty || _controllers.translationText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните слово и перевод')),
+        SnackBar(
+          content: Text(l10nOf(context).editWordFormRequiredFieldsError),
+        ),
       );
       return;
     }
@@ -111,7 +114,9 @@ class _EditWordFormState extends State<EditWordForm> {
   Widget _buildSaveButton() {
     if (widget.onSave != null) {
       return CustomActionButton(
-        buttonText: _saving ? 'Сохранение...' : 'Сохранить',
+        buttonText: _saving
+            ? l10nOf(context).editWordFormSavingButton
+            : l10nOf(context).editWordFormSaveButton,
         onTap: _handleSave,
       );
     }
@@ -119,7 +124,9 @@ class _EditWordFormState extends State<EditWordForm> {
     return BlocBuilder<WordEditingBloc, WordEditingState>(
       builder: (context, state) {
         return CustomActionButton(
-          buttonText: state.isSaving ? 'Сохранение...' : 'Сохранить',
+          buttonText: state.isSaving
+              ? l10nOf(context).editWordFormSavingButton
+              : l10nOf(context).editWordFormSaveButton,
           onTap: state.isSaving ? null : _handleSave,
         );
       },

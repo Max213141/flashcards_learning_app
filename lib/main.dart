@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flashcards_learning_app/firebase_options.dart';
 import 'package:flashcards_learning_app/my_app.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
+import 'package:flashcards_learning_app/utils/app_locale_preferences.dart';
 import 'package:flashcards_learning_app/utils/crashlytics_consent_manager.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,8 @@ Future<void> main() async {
 
       await setupServiceLocator();
       final appRouter = AppRouter();
-      runApp(MyApp(appRouter: appRouter));
+      final locale = await AppLocalePreferences.getCurrentLocale();
+      runApp(MyApp(appRouter: appRouter, locale: locale));
     },
     (error, stackTrace) {
       unawaited(_recordUncaughtError(error, stackTrace));

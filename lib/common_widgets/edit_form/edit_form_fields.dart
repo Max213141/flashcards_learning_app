@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class EditFormFields extends StatefulWidget {
@@ -26,18 +27,20 @@ class _EditFormFieldsState extends State<EditFormFields> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
           alignment: Alignment.topLeft,
-          child: Text('Изучаемое слово', style: AppConst.h2),
+          child: Text(l10n.editFormLearningWordLabel, style: AppConst.h2),
         ),
         TextfieldPaddingWrapper(
           textField: CustomTextfield(controller: widget.learningWordController),
         ),
         const SizedBox(height: 20),
-        Text('Перевод', style: AppConst.h2),
+        Text(l10n.editFormTranslationLabel, style: AppConst.h2),
         TextfieldPaddingWrapper(
           textField: CustomTextfield(controller: widget.translationController),
         ),
@@ -49,7 +52,7 @@ class _EditFormFieldsState extends State<EditFormFields> {
           ),
           child: ExpansionTile(
             title: Text(
-              'Дополнительно',
+              l10n.editFormAdditionalSection,
               style: AppConst.h2,
               textAlign: TextAlign.left,
             ),
@@ -60,7 +63,7 @@ class _EditFormFieldsState extends State<EditFormFields> {
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              Text('Транскрипция', style: AppConst.h2),
+              Text(l10n.editFormTranscriptionLabel, style: AppConst.h2),
               TextfieldPaddingWrapper(
                 height: null,
                 textField: CustomTextfield(
@@ -71,7 +74,7 @@ class _EditFormFieldsState extends State<EditFormFields> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text('Часть речи', style: AppConst.h2),
+              Text(l10n.editFormPartOfSpeechLabel, style: AppConst.h2),
               TextfieldPaddingWrapper(
                 textField: CustomTextfield(
                   maxLength: 20,
@@ -79,7 +82,7 @@ class _EditFormFieldsState extends State<EditFormFields> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text('Употребление', style: AppConst.h2),
+              Text(l10n.editFormUsageLabel, style: AppConst.h2),
               TextfieldPaddingWrapper(
                 height: null,
                 textField: CustomTextfield(

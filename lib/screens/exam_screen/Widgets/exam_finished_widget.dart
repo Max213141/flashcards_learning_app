@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/exam_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -9,14 +10,19 @@ class ExamFinishedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SuccessWidget(),
         const SizedBox(height: 8),
-        Text('Экзамен завершен', style: AppConst.h1),
+        Text(l10n.examFinishedTitle, style: AppConst.h1),
         const SizedBox(height: 8),
-        Text('Всего: $wordsListLength', style: AppConst.text),
+        Text(
+          l10n.examFinishedTotalCount(wordsListLength),
+          style: AppConst.text,
+        ),
         const SizedBox(height: 16),
         SizedBox(
           height: 42,
@@ -25,7 +31,7 @@ class ExamFinishedWidget extends StatelessWidget {
             onTap: () async {
               Navigator.of(context, rootNavigator: true).pop();
             },
-            buttonText: 'Ок',
+            buttonText: l10n.examFinishedOkButton,
           ),
         ),
       ],

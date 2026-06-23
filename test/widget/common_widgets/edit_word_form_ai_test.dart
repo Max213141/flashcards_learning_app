@@ -65,12 +65,12 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextFormField).first, 'bonjour');
-    await tester.tap(find.text('Сгенерировать перевод'));
+    await tester.tap(find.text('Generate translation'));
     await tester.pumpAndSettle();
 
     expect(find.text('привет'), findsOneWidget);
 
-    await tester.tap(find.text('Сохранить'));
+    await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     final result = savedWord;
@@ -113,7 +113,7 @@ void main() {
     await tester.enterText(fields.at(0), 'hello');
     await tester.enterText(fields.at(2), 'английский');
     await tester.enterText(fields.at(3), 'немецкий');
-    await tester.tap(find.text('Сгенерировать перевод'));
+    await tester.tap(find.text('Generate translation'));
     await tester.pumpAndSettle();
 
     verify(

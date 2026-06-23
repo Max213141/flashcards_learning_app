@@ -3,6 +3,7 @@ import 'package:flashcards_learning_app/blocs/word_bloc/word_bloc.dart';
 import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_bloc.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
 import 'package:flashcards_learning_app/screens/word_definition_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +107,10 @@ class WordDefinitionScreenView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Center(
-                        child: Text('Определение', style: AppConst.h3),
+                        child: Text(
+                          l10nOf(context).wordDefinitionScreenTitle,
+                          style: AppConst.h3,
+                        ),
                       ),
                     ),
                     GestureDetector(

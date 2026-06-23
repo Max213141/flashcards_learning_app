@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -24,6 +25,7 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
     double bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Padding(
@@ -47,7 +49,7 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
           ),
           child: ExpansionTile(
             title: Text(
-              'Слово в употреблении',
+              l10n.wordDescriptionUsageTitle,
               style: AppConst.text.copyWith(fontWeight: FontWeight.w500),
             ),
             leading: SvgPicture.asset(
@@ -67,7 +69,7 @@ class _WordDescriptionWidgetState extends State<WordDescriptionWidget> {
                 child: Align(
                   alignment: AlignmentGeometry.centerLeft,
                   child: Text(
-                    widget.usage ?? 'Информация не заполнена',
+                    widget.usage ?? l10n.wordDescriptionInfoMissing,
                     style: widget.usage == null
                         ? AppConst.additionalText.copyWith(fontSize: 12)
                         : AppConst.text,

@@ -2,6 +2,7 @@ import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/core/local_ai_model_config.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +13,7 @@ class AiModelSetupContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
     final downloading = state.setupStatus == AiSetupStatus.downloading;
     final checking =
         state.setupStatus == AiSetupStatus.initial ||
@@ -28,15 +30,18 @@ class AiModelSetupContent extends StatelessWidget {
             const SizedBox(height: 24),
             Center(
               child: Text(
-                'Проверяем локальную модель',
+                l10n.aiModelSetupCheckingMessage,
                 style: AppConst.additionalText,
               ),
             ),
           ] else ...[
-            Text('Нужна локальная модель', style: AppConst.h2),
+            Text(l10n.aiModelSetupRequiredTitle, style: AppConst.h2),
             const SizedBox(height: 12),
             Text(
-              '${LocalAiModelConfig.displayName} (~${LocalAiModelConfig.approximateSize}) будет скачана на устройство. После этого AI ассистент будет работать локально на устройстве',
+              l10n.aiModelSetupDescription(
+                LocalAiModelConfig.displayName,
+                LocalAiModelConfig.approximateSize,
+              ),
               style: AppConst.text,
             ),
             if (failure && state.message != null) ...[
@@ -58,10 +63,10 @@ class AiModelSetupContent extends StatelessWidget {
                 Expanded(
                   child: CustomActionButton(
                     buttonText: downloading
-                        ? 'Скачивание...'
+                        ? l10n.aiModelSetupDownloadingButton
                         : failure
-                        ? 'Повторить'
-                        : 'Скачать',
+                        ? l10n.aiModelSetupRetryButton
+                        : l10n.aiModelSetupDownloadButton,
                     onTap: downloading
                         ? null
                         : () => context.read<AiWordDraftBloc>().add(
@@ -81,8 +86,10 @@ class AiModelSetupContent extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    downloading ? 'Отмена' : 'Не сейчас',
-                    style: AppConst.text,
+                    downloading
+                        ? l10n.aiModelSetupCancelButton
+                        : l10n.aiModelSetupNotNowButton,
+                    style: AppConst.text.copyWith(color: AppConst.black),
                   ),
                 ),
               ],

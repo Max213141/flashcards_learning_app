@@ -200,7 +200,7 @@ void main() {
 
     await tester.tap(find.byType(SortButtonSecondPart));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('По цвету'));
+    await tester.tap(find.text('By color'));
     await tester.pumpAndSettle();
 
     verify(

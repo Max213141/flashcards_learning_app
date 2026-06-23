@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,8 @@ class SortMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Container(
       width: 192,
       margin: const EdgeInsets.only(top: 8.0),
@@ -26,17 +29,17 @@ class SortMenuWidget extends StatelessWidget {
       child: Column(
         children: [
           SortOptionTile(
-            title: 'Сначала новые',
+            title: l10n.sortMenuCreatedDescOption,
             isSelected: selectedSort == TopicSortOption.createdDesc,
             onTap: () => selectSort(TopicSortOption.createdDesc),
           ),
           SortOptionTile(
-            title: 'По имени (А-Я)',
+            title: l10n.sortMenuTitleAscOption,
             isSelected: selectedSort == TopicSortOption.titleAsc,
             onTap: () => selectSort(TopicSortOption.titleAsc),
           ),
           SortOptionTile(
-            title: 'По цвету',
+            title: l10n.sortMenuColorAscOption,
             isSelected: selectedSort == TopicSortOption.colorAsc,
             onTap: () => selectSort(TopicSortOption.colorAsc),
           ),

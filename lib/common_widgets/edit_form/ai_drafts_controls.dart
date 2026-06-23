@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,11 +60,13 @@ class _AiDraftControlsState extends State<AiDraftControls> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        Text('AI черновик', style: AppConst.h2),
+        Text(l10n.aiDraftControlsTitle, style: AppConst.h2),
         const SizedBox(height: 8),
         Row(
           children: [
@@ -93,7 +96,7 @@ class _AiDraftControlsState extends State<AiDraftControls> {
         SizedBox(
           width: double.infinity,
           child: CustomActionButton(
-            buttonText: 'Сгенерировать перевод',
+            buttonText: l10n.aiDraftControlsGenerateTranslationButton,
             onTap: widget.onGenerate,
           ),
         ),

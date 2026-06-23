@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +20,8 @@ class SlidableWordWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Slidable(
       key: ValueKey(wordEntity.id ?? wordEntity.hashCode),
 
@@ -43,7 +46,7 @@ class SlidableWordWidget extends StatelessWidget {
                     width: 22,
                   ),
                   const SizedBox(height: 4),
-                  Text('Удалить', style: AppConst.text),
+                  Text(l10n.slidableWordDeleteAction, style: AppConst.text),
                 ],
               ),
             ),
@@ -70,7 +73,7 @@ class SlidableWordWidget extends StatelessWidget {
                     width: 22,
                   ),
                   const SizedBox(height: 4),
-                  Text('Редактировать', style: AppConst.text),
+                  Text(l10n.slidableWordEditAction, style: AppConst.text),
                 ],
               ),
             ),

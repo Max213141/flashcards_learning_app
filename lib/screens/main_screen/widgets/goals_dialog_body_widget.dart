@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/blocs/goals_bloc/goals_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -65,6 +66,7 @@ class _GoalsDialogBodyWidgetState extends State<GoalsDialogBodyWidget> {
         }
       },
       builder: (context, state) {
+        final l10n = l10nOf(context);
         final canSave =
             totalController.text.trim().isNotEmpty &&
             dailyController.text.trim().isNotEmpty &&
@@ -74,9 +76,9 @@ class _GoalsDialogBodyWidgetState extends State<GoalsDialogBodyWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: Text('Цели обучения', style: AppConst.h1)),
+            Center(child: Text(l10n.goalsDialogTitle, style: AppConst.h1)),
             const SizedBox(height: 24),
-            Text('Общая цель', style: AppConst.h2),
+            Text(l10n.goalsDialogOverallGoalLabel, style: AppConst.h2),
             CustomTextfield(
               controller: totalController,
               digitsOnly: true,
@@ -84,7 +86,7 @@ class _GoalsDialogBodyWidgetState extends State<GoalsDialogBodyWidget> {
               onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 16),
-            Text('Дневная цель', style: AppConst.h2),
+            Text(l10n.goalsDialogDailyGoalLabel, style: AppConst.h2),
             CustomTextfield(
               controller: dailyController,
               digitsOnly: true,
@@ -96,7 +98,7 @@ class _GoalsDialogBodyWidgetState extends State<GoalsDialogBodyWidget> {
               child: SizedBox(
                 width: 240,
                 child: CustomActionButton(
-                  buttonText: 'Сохранить',
+                  buttonText: l10n.goalsDialogSaveButton,
                   color: canSave
                       ? AppConst.buttonBackground
                       : const Color(0x40D7D7D7),

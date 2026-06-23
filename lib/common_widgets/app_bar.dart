@@ -1,4 +1,5 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget {
@@ -8,6 +9,8 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppConst.primary,
@@ -21,7 +24,7 @@ class AppBarWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(' Статистика', style: AppConst.text),
+            Text(l10n.commonAppBarStatistics, style: AppConst.text),
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0, top: 10),
               child: DecoratedBox(

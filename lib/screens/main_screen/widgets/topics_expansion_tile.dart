@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TopicsExpansionTile extends StatefulWidget {
@@ -32,7 +33,10 @@ class _TopicsExpansionTileState extends State<TopicsExpansionTile> {
       child: ExpansionTile(
         iconColor: AppConst.black,
 
-        title: Text('Темы из JSON', style: AppConst.text),
+        title: Text(
+          l10nOf(context).topicsExpansionJsonTopicsTitle,
+          style: AppConst.text,
+        ),
 
         tilePadding: EdgeInsets.all(0),
         shape: Border(),

@@ -3,6 +3,7 @@ import 'package:flashcards_learning_app/common_widgets/edit_form/ai_drafts_contr
 import 'package:flashcards_learning_app/common_widgets/edit_form/word_form_controllers.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,9 +31,9 @@ class _AiWordFormState extends State<AiWordForm> {
   Future<void> _requestAiDraft() async {
     final input = _wordControllers.wordText;
     if (input.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Введите слово или фразу')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10nOf(context).aiWordFormInputRequiredError)),
+      );
       return;
     }
 
@@ -45,7 +46,7 @@ class _AiWordFormState extends State<AiWordForm> {
     if (_wordControllers.wordText.isEmpty ||
         _wordControllers.translationText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните слово и перевод')),
+        SnackBar(content: Text(l10nOf(context).aiWordFormRequiredFieldsError)),
       );
       return;
     }
@@ -85,7 +86,9 @@ class _AiWordFormState extends State<AiWordForm> {
                   SizedBox(
                     width: double.infinity,
                     child: CustomActionButton(
-                      buttonText: _saving ? 'Сохранение...' : 'Сохранить',
+                      buttonText: _saving
+                          ? l10nOf(context).aiWordFormSavingButton
+                          : l10nOf(context).aiWordFormSaveButton,
                       onTap: _saving ? null : _handleSave,
                     ),
                   ),

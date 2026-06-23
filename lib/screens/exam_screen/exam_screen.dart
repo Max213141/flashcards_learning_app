@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flashcards_learning_app/blocs/test_bloc/test_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/exam_screen/widgets/exam_screen_body_widget.dart';
 import 'package:flashcards_learning_app/utils/derangement_shuffle.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
@@ -24,9 +25,7 @@ class ExamScreen extends StatelessWidget {
           state.whenOrNull(
             failure: (_, _) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Не удалось загрузить слова для экзамена'),
-                ),
+                SnackBar(content: Text(l10nOf(context).examScreenLoadFailure)),
               );
               context.read<TestBloc>().add(const TestEvent.statusConsumed());
             },
@@ -49,7 +48,7 @@ class ExamScreen extends StatelessWidget {
               ),
             ),
             centerTitle: true,
-            title: Text('Экзамен', style: AppConst.h3),
+            title: Text(l10nOf(context).examScreenTitle, style: AppConst.h3),
           ),
           body: BlocBuilder<TestBloc, TestState>(
             builder: (context, state) {

@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,19 +35,21 @@ class _FilterButtonWidgetState extends State<FilterButtonWidget> {
     });
   }
 
-  String _sortLabel(TopicSortOption option) {
+  String _sortLabel(AppLocalizations l10n, TopicSortOption option) {
     switch (option) {
       case TopicSortOption.titleAsc:
-        return 'По названию (A-Z)';
+        return l10n.filterButtonTitleAscSort;
       case TopicSortOption.colorAsc:
-        return 'По цвету';
+        return l10n.filterButtonColorAscSort;
       case TopicSortOption.createdDesc:
-        return 'Сначала новые';
+        return l10n.filterButtonCreatedDescSort;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 35.0, horizontal: 22.0),
       child: Column(
@@ -83,7 +86,11 @@ class _FilterButtonWidgetState extends State<FilterButtonWidget> {
                       Expanded(
                         flex: 2,
                         child: FittedBox(
-                          child: Text('Сортировать', style: AppConst.text),
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            l10n.filterButtonSortButton,
+                            style: AppConst.text,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -114,7 +121,7 @@ class _FilterButtonWidgetState extends State<FilterButtonWidget> {
           ),
           const SizedBox(height: 8.0),
           Text(
-            'Текущая сортировка: ${_sortLabel(widget.selectedSort)}',
+            l10n.filterButtonCurrentSort(_sortLabel(l10n, widget.selectedSort)),
             style: AppConst.additionalText.copyWith(
               fontWeight: FontWeight.w100,
               fontSize: 12,

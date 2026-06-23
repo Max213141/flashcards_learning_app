@@ -2,6 +2,7 @@
 import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:flashcards_learning_app/utils/crashlytics_consent_manager.dart';
@@ -82,6 +83,8 @@ class _MainScreenViewState extends State<MainScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return BlocListener<BackupBloc, BackupState>(
       listener: (context, state) {
         state.whenOrNull(
@@ -167,7 +170,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     CustomActionButton(
-                                      buttonText: 'Восстановление из копии',
+                                      buttonText:
+                                          l10n.mainScreenRestoreBackupButton,
                                       icon: 'assets/iconss/unarchive.svg',
                                       onTap: _onRestoreBackupTap,
                                     ),
@@ -176,7 +180,8 @@ class _MainScreenViewState extends State<MainScreenView> {
                                         vertical: 10.0,
                                       ),
                                       child: CustomActionButton(
-                                        buttonText: 'Создание резервной копии',
+                                        buttonText:
+                                            l10n.mainScreenCreateBackupButton,
                                         icon: 'assets/iconss/archive.svg',
                                         onTap: () {
                                           closeFloatingActionButton();
@@ -190,7 +195,7 @@ class _MainScreenViewState extends State<MainScreenView> {
                                       ),
                                     ),
                                     CustomActionButton(
-                                      buttonText: 'Новая тема',
+                                      buttonText: l10n.mainScreenNewTopicButton,
                                       icon: 'assets/iconss/plus.svg',
                                       onTap: () async {
                                         closeFloatingActionButton();

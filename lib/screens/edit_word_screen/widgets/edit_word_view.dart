@@ -2,6 +2,7 @@ import 'package:flashcards_learning_app/blocs/word_editing_bloc/word_editing_blo
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/word.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,7 +36,7 @@ class EditWordScreenView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppConst.background,
         appBar: AppBar(
-          title: Text('Изменение слова', style: AppConst.h1),
+          title: Text(l10nOf(context).editWordScreenTitle, style: AppConst.h1),
           backgroundColor: AppConst.background,
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,

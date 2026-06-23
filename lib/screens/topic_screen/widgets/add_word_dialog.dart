@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AddWordDialog extends StatelessWidget {
@@ -26,7 +27,7 @@ class AddWordDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Добавление слова', style: AppConst.h1),
+              Text(l10nOf(context).topicAddWordDialogTitle, style: AppConst.h1),
               const SizedBox(height: 8),
               Flexible(child: EditWordForm(onSave: onSave)),
             ],

@@ -1,5 +1,6 @@
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/entities/entities.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -21,6 +22,8 @@ class WordDefinitionScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -54,18 +57,22 @@ class WordDefinitionScreenBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        wordData.partOfSpeech ?? 'Часть речи не указана',
+                        wordData.partOfSpeech ??
+                            l10n.wordDefinitionPartOfSpeechMissing,
                         style: wordData.partOfSpeech == null
                             ? AppConst.additionalText.copyWith(fontSize: 12)
                             : AppConst.text,
                       ),
                       SizedBox(height: 15),
-                      Text('Перевод', style: AppConst.h2),
+                      Text(
+                        l10n.wordDefinitionTranslationTitle,
+                        style: AppConst.h2,
+                      ),
                       Text(wordData.translation, style: AppConst.text),
                       SizedBox(height: 15),
-                      Text('Слово в употреблении', style: AppConst.h2),
+                      Text(l10n.wordDefinitionUsageTitle, style: AppConst.h2),
                       Text(
-                        wordData.usage ?? 'Информация не заполнена',
+                        wordData.usage ?? l10n.wordDefinitionInfoMissing,
                         style: wordData.usage == null
                             ? AppConst.additionalText.copyWith(fontSize: 12)
                             : AppConst.text,

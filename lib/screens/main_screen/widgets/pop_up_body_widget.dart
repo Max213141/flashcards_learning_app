@@ -1,6 +1,7 @@
 import 'package:flashcards_learning_app/blocs/topic_creation_bloc/topic_creation_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
+import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +56,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
         }
       },
       builder: (context, state) {
+        final l10n = l10nOf(context);
         final selectedColor = Color(state.selectedColorValue);
         final canCreate = state.name.trim().isNotEmpty && !state.isLoading;
 
@@ -62,9 +64,11 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(child: Text('Новая тема', style: AppConst.h1)),
+              Center(
+                child: Text(l10n.popUpBodyNewTopicTitle, style: AppConst.h1),
+              ),
               SizedBox(height: 40),
-              Text('Название', style: AppConst.h2),
+              Text(l10n.popUpBodyNameLabel, style: AppConst.h2),
               Row(
                 children: [
                   Expanded(
@@ -94,7 +98,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                 ),
               ],
               SizedBox(height: 40),
-              Text('Цвет темы', style: AppConst.h2),
+              Text(l10n.popUpBodyTopicColorLabel, style: AppConst.h2),
               ColorSelector(
                 selectedColor: selectedColor,
                 onColorChange: (colorValue, color) {
@@ -126,7 +130,7 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                     SizedBox(width: 5),
                     Flexible(
                       child: Text(
-                        'Загрузить файл JSON',
+                        l10n.popUpBodyUploadJsonButton,
                         style: AppConst.text.copyWith(color: AppConst.black),
                       ),
                     ),
@@ -163,7 +167,10 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
                             width: 40,
                             child: FlashcardsLoader(),
                           )
-                        : Text('Создать тему', style: AppConst.text),
+                        : Text(
+                            l10n.popUpBodyCreateTopicButton,
+                            style: AppConst.text,
+                          ),
                   ),
                 ),
               ),

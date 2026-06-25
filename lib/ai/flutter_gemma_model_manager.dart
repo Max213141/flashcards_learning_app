@@ -1,28 +1,35 @@
-import 'package:background_downloader/background_downloader.dart';
+import 'dart:io';
+
 import 'package:flashcards_learning_app/core/interfaces/ai/local_ai_model_manager.dart';
 import 'package:flashcards_learning_app/core/local_ai_model_config.dart';
 import 'package:flutter_gemma/flutter_gemma.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 class FlutterGemmaModelManager implements LocalAiModelManager {
   CancelToken? _cancelToken;
 
   @override
-  Future<bool> isInstalled() {
-    return FlutterGemma.isModelInstalled(LocalAiModelConfig.fileName);
+  Future<bool> isInstalled() async {
+    if (await FlutterGemma.isModelInstalled(LocalAiModelConfig.fileName)) {
+      return true;
+    }
+
+    return (await _localModelFile()).exists();
   }
 
   @override
   Future<void> install({
     required void Function(int progress) onProgress,
   }) async {
-    await _prepareForegroundDownload();
     final token = CancelToken();
     _cancelToken = token;
     try {
-      await _installationBuilder()
-          .withProgress(onProgress)
-          .withCancelToken(token)
-          .install();
+      final modelFile = await _downloadModel(
+        onProgress: onProgress,
+        cancelToken: token,
+      );
+      await _fileInstallationBuilder(modelFile.path).install();
     } finally {
       if (identical(_cancelToken, token)) {
         _cancelToken = null;
@@ -32,8 +39,8 @@ class FlutterGemmaModelManager implements LocalAiModelManager {
 
   @override
   Future<void> activateInstalledModel() async {
-    _configureDownloadNotification();
-    await _installationBuilder().install();
+    final modelFile = await _localModelFile();
+    await _fileInstallationBuilder(modelFile.path).install();
   }
 
   @override
@@ -41,6 +48,11 @@ class FlutterGemmaModelManager implements LocalAiModelManager {
     try {
       if (await isInstalled()) {
         return;
+      }
+
+      final tempFile = await _temporaryModelFile();
+      if (await tempFile.exists()) {
+        await tempFile.delete();
       }
 
       final modelManager = FlutterGemmaPlugin.instance.modelManager;
@@ -56,11 +68,11 @@ class FlutterGemmaModelManager implements LocalAiModelManager {
     _cancelToken?.cancel('User cancelled local AI model download');
   }
 
-  InferenceInstallationBuilder _installationBuilder() {
+  InferenceInstallationBuilder _fileInstallationBuilder(String path) {
     return FlutterGemma.installModel(
       modelType: LocalAiModelConfig.modelType,
       fileType: LocalAiModelConfig.fileType,
-    ).fromNetwork(LocalAiModelConfig.downloadUrl, foreground: true);
+    ).fromFile(path);
   }
 
   InferenceModelSpec _modelSpec() {
@@ -72,35 +84,83 @@ class FlutterGemmaModelManager implements LocalAiModelManager {
     );
   }
 
-  Future<void> _prepareForegroundDownload() async {
-    _configureDownloadNotification();
+  Future<File> _downloadModel({
+    required void Function(int progress) onProgress,
+    required CancelToken cancelToken,
+  }) async {
+    final targetFile = await _localModelFile();
+    final tempFile = await _temporaryModelFile();
+    final client = HttpClient();
+    cancelToken.whenCancelled.then((_) => client.close(force: true));
 
-    final downloader = FileDownloader();
-    final status = await downloader.permissions.status(
-      PermissionType.notifications,
-    );
-    if (status == PermissionStatus.granted) {
-      return;
+    try {
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+
+      final request = await client.getUrl(
+        Uri.parse(LocalAiModelConfig.downloadUrl),
+      );
+      final response = await request.close();
+
+      if (response.statusCode < HttpStatus.ok ||
+          response.statusCode >= HttpStatus.multipleChoices) {
+        throw HttpException(
+          'Failed to download model: HTTP ${response.statusCode}',
+          uri: Uri.parse(LocalAiModelConfig.downloadUrl),
+        );
+      }
+
+      final totalBytes = response.contentLength;
+      var receivedBytes = 0;
+      var lastProgress = 0;
+      final sink = tempFile.openWrite();
+
+      try {
+        await for (final chunk in response) {
+          cancelToken.throwIfCancelled();
+          receivedBytes += chunk.length;
+          sink.add(chunk);
+
+          if (totalBytes > 0) {
+            final progress = ((receivedBytes * 100) ~/ totalBytes).clamp(0, 99);
+            if (progress > lastProgress) {
+              lastProgress = progress;
+              onProgress(progress);
+            }
+          }
+        }
+      } finally {
+        await sink.close();
+      }
+
+      cancelToken.throwIfCancelled();
+
+      if (await targetFile.exists()) {
+        await targetFile.delete();
+      }
+      await tempFile.rename(targetFile.path);
+      onProgress(100);
+
+      return targetFile;
+    } catch (_) {
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+      cancelToken.throwIfCancelled();
+      rethrow;
+    } finally {
+      client.close(force: true);
     }
-
-    await downloader.permissions.request(PermissionType.notifications);
   }
 
-  void _configureDownloadNotification() {
-    FileDownloader().configureNotification(
-      running: const TaskNotification(
-        'Downloading AI model',
-        '${LocalAiModelConfig.displayName}: {progress}',
-      ),
-      error: const TaskNotification(
-        'AI model download failed',
-        'Open the app to retry',
-      ),
-      canceled: const TaskNotification(
-        'AI model download canceled',
-        'Open the app to retry',
-      ),
-      progressBar: true,
-    );
+  Future<File> _localModelFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File(p.join(directory.path, LocalAiModelConfig.fileName));
+  }
+
+  Future<File> _temporaryModelFile() async {
+    final modelFile = await _localModelFile();
+    return File('${modelFile.path}.download');
   }
 }

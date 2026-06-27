@@ -106,6 +106,8 @@ PODS:
     - Flutter
     - MediaPipeTasksGenAI (= 0.10.33)
     - MediaPipeTasksGenAIC (= 0.10.33)
+  - flutter_native_splash (2.4.3):
+    - Flutter
   - GoogleAdsOnDeviceConversion (3.2.0):
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
@@ -195,6 +197,7 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
   - flutter_gemma (from `.symlinks/plugins/flutter_gemma/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - large_file_handler (from `.symlinks/plugins/large_file_handler/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -239,6 +242,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_gemma:
     :path: ".symlinks/plugins/flutter_gemma/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
   large_file_handler:
     :path: ".symlinks/plugins/large_file_handler/ios"
   path_provider_foundation:
@@ -265,6 +270,7 @@ SPEC CHECKSUMS:
   FirebaseSessions: a2d06fd980431fda934c7a543901aca05fc4edcc
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_gemma: 6bf34a12b45df17e3db9b33db7fea51506c8628f
+  flutter_native_splash: df59bb2e1421aa0282cb2e95618af4dcb0c56c29
   GoogleAdsOnDeviceConversion: d68c69dd9581a0f5da02617b6f377e5be483970f
   GoogleAppMeasurement: fce7c1c90640d2f9f5c56771f71deacb2ba3f98c
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7

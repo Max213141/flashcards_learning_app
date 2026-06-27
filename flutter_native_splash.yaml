@@ -1,0 +1,11 @@
+flutter_native_splash:
+  color: "#F4F2F0"
+  image: assets/iconss/launcher_icon_adaptive_foreground.png
+  android: true
+  ios: true
+  web: false
+  fullscreen: true
+
+  android_12:
+    color: "#F4F2F0"
+    image: assets/iconss/launcher_icon_adaptive_foreground.png

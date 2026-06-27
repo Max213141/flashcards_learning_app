@@ -1,0 +1,502 @@
+[
+  {
+    "word": "I",
+    "translation": "ich",
+    "topic": "Basic Vocabulary",
+    "transcription": "/aɪ/",
+    "partOfSpeech": "pronoun",
+    "usage": "I am a student. — Ich bin ein Student.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "you",
+    "translation": "du",
+    "topic": "Basic Vocabulary",
+    "transcription": "/ju/",
+    "partOfSpeech": "pronoun",
+    "usage": "You are my friend. — Du bist mein Freund.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "he",
+    "translation": "er",
+    "topic": "People",
+    "transcription": "/hi/",
+    "partOfSpeech": "pronoun",
+    "usage": "He lives in Berlin. — Er wohnt in Berlin.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "she",
+    "translation": "sie",
+    "topic": "People",
+    "transcription": "/ʃi/",
+    "partOfSpeech": "pronoun",
+    "usage": "She likes music. — Sie mag Musik.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "we",
+    "translation": "wir",
+    "topic": "Basic Vocabulary",
+    "transcription": "/wi/",
+    "partOfSpeech": "pronoun",
+    "usage": "We are at home. — Wir sind zu Hause.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "they",
+    "translation": "sie",
+    "topic": "Basic Vocabulary",
+    "transcription": "/ðeɪ/",
+    "partOfSpeech": "pronoun",
+    "usage": "They work together. — Sie arbeiten zusammen.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "man",
+    "translation": "Mann",
+    "topic": "People",
+    "transcription": "/mæn/",
+    "partOfSpeech": "noun",
+    "usage": "The man is tall. — Der Mann ist groß.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "woman",
+    "translation": "Frau",
+    "topic": "People",
+    "transcription": "/ˈwʊmən/",
+    "partOfSpeech": "noun",
+    "usage": "The woman reads a book. — Die Frau liest ein Buch.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "child",
+    "translation": "Kind",
+    "topic": "People",
+    "transcription": "/tʃaɪld/",
+    "partOfSpeech": "noun",
+    "usage": "The child plays outside. — Das Kind spielt draußen.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "friend",
+    "translation": "Freund",
+    "topic": "People",
+    "transcription": "/frɛnd/",
+    "partOfSpeech": "noun",
+    "usage": "My friend is kind. — Mein Freund ist nett.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "family",
+    "translation": "Familie",
+    "topic": "People",
+    "transcription": "/ˈfæməli/",
+    "partOfSpeech": "noun",
+    "usage": "My family is small. — Meine Familie ist klein.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "house",
+    "translation": "Haus",
+    "topic": "Home",
+    "transcription": "/haʊs/",
+    "partOfSpeech": "noun",
+    "usage": "This house is old. — Dieses Haus ist alt.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "room",
+    "translation": "Zimmer",
+    "topic": "Home",
+    "transcription": "/rum/",
+    "partOfSpeech": "noun",
+    "usage": "My room is clean. — Mein Zimmer ist sauber.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "door",
+    "translation": "Tür",
+    "topic": "Home",
+    "transcription": "/dɔr/",
+    "partOfSpeech": "noun",
+    "usage": "Please close the door. — Bitte schließ die Tür.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "window",
+    "translation": "Fenster",
+    "topic": "Home",
+    "transcription": "/ˈwɪndoʊ/",
+    "partOfSpeech": "noun",
+    "usage": "The window is open. — Das Fenster ist offen.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "table",
+    "translation": "Tisch",
+    "topic": "Home",
+    "transcription": "/ˈteɪbəl/",
+    "partOfSpeech": "noun",
+    "usage": "The keys are on the table. — Die Schlüssel liegen auf dem Tisch.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "chair",
+    "translation": "Stuhl",
+    "topic": "Home",
+    "transcription": "/tʃɛr/",
+    "partOfSpeech": "noun",
+    "usage": "Sit on this chair. — Setz dich auf diesen Stuhl.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bed",
+    "translation": "Bett",
+    "topic": "Home",
+    "transcription": "/bɛd/",
+    "partOfSpeech": "noun",
+    "usage": "The bed is comfortable. — Das Bett ist bequem.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "book",
+    "translation": "Buch",
+    "topic": "Everyday Objects",
+    "transcription": "/bʊk/",
+    "partOfSpeech": "noun",
+    "usage": "I have a new book. — Ich habe ein neues Buch.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "phone",
+    "translation": "Telefon",
+    "topic": "Everyday Objects",
+    "transcription": "/foʊn/",
+    "partOfSpeech": "noun",
+    "usage": "My phone is in my bag. — Mein Telefon ist in meiner Tasche.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bag",
+    "translation": "Tasche",
+    "topic": "Everyday Objects",
+    "transcription": "/bæɡ/",
+    "partOfSpeech": "noun",
+    "usage": "She carries a red bag. — Sie trägt eine rote Tasche.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "car",
+    "translation": "Auto",
+    "topic": "Travel",
+    "transcription": "/kɑr/",
+    "partOfSpeech": "noun",
+    "usage": "The car is very fast. — Das Auto ist sehr schnell.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bus",
+    "translation": "Bus",
+    "topic": "Travel",
+    "transcription": "/bʌs/",
+    "partOfSpeech": "noun",
+    "usage": "We take the bus to school. — Wir nehmen den Bus zur Schule.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "train",
+    "translation": "Zug",
+    "topic": "Travel",
+    "transcription": "/treɪn/",
+    "partOfSpeech": "noun",
+    "usage": "The train arrives at noon. — Der Zug kommt um zwölf Uhr an.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "street",
+    "translation": "Straße",
+    "topic": "Travel",
+    "transcription": "/strit/",
+    "partOfSpeech": "noun",
+    "usage": "This street is quiet. — Diese Straße ist ruhig.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "city",
+    "translation": "Stadt",
+    "topic": "Travel",
+    "transcription": "/ˈsɪti/",
+    "partOfSpeech": "noun",
+    "usage": "The city is beautiful. — Die Stadt ist schön.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "water",
+    "translation": "Wasser",
+    "topic": "Food",
+    "transcription": "/ˈwɔtər/",
+    "partOfSpeech": "noun",
+    "usage": "I drink water every day. — Ich trinke jeden Tag Wasser.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bread",
+    "translation": "Brot",
+    "topic": "Food",
+    "transcription": "/brɛd/",
+    "partOfSpeech": "noun",
+    "usage": "We eat bread for breakfast. — Wir essen Brot zum Frühstück.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "milk",
+    "translation": "Milch",
+    "topic": "Food",
+    "transcription": "/mɪlk/",
+    "partOfSpeech": "noun",
+    "usage": "The milk is cold. — Die Milch ist kalt.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "apple",
+    "translation": "Apfel",
+    "topic": "Food",
+    "transcription": "/ˈæpəl/",
+    "partOfSpeech": "noun",
+    "usage": "He eats an apple. — Er isst einen Apfel.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "food",
+    "translation": "Essen",
+    "topic": "Food",
+    "transcription": "/fud/",
+    "partOfSpeech": "noun",
+    "usage": "The food tastes good. — Das Essen schmeckt gut.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "day",
+    "translation": "Tag",
+    "topic": "Time",
+    "transcription": "/deɪ/",
+    "partOfSpeech": "noun",
+    "usage": "Today is a sunny day. — Heute ist ein sonniger Tag.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "night",
+    "translation": "Nacht",
+    "topic": "Time",
+    "transcription": "/naɪt/",
+    "partOfSpeech": "noun",
+    "usage": "The night is quiet. — Die Nacht ist ruhig.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "morning",
+    "translation": "Morgen",
+    "topic": "Time",
+    "transcription": "/ˈmɔrnɪŋ/",
+    "partOfSpeech": "noun",
+    "usage": "I run in the morning. — Ich laufe am Morgen.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "time",
+    "translation": "Zeit",
+    "topic": "Time",
+    "transcription": "/taɪm/",
+    "partOfSpeech": "noun",
+    "usage": "Do you have time now? — Hast du jetzt Zeit?",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "go",
+    "translation": "gehen",
+    "topic": "Actions",
+    "transcription": "/ɡoʊ/",
+    "partOfSpeech": "verb",
+    "usage": "I go to work early. — Ich gehe früh zur Arbeit.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "come",
+    "translation": "kommen",
+    "topic": "Actions",
+    "transcription": "/kʌm/",
+    "partOfSpeech": "verb",
+    "usage": "Please come here. — Bitte komm hierher.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "eat",
+    "translation": "essen",
+    "topic": "Actions",
+    "transcription": "/it/",
+    "partOfSpeech": "verb",
+    "usage": "They eat dinner at six. — Sie essen um sechs zu Abend.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "drink",
+    "translation": "trinken",
+    "topic": "Actions",
+    "transcription": "/drɪŋk/",
+    "partOfSpeech": "verb",
+    "usage": "She drinks tea. — Sie trinkt Tee.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "read",
+    "translation": "lesen",
+    "topic": "Actions",
+    "transcription": "/rid/",
+    "partOfSpeech": "verb",
+    "usage": "We read a story. — Wir lesen eine Geschichte.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "write",
+    "translation": "schreiben",
+    "topic": "Actions",
+    "transcription": "/raɪt/",
+    "partOfSpeech": "verb",
+    "usage": "I write my name. — Ich schreibe meinen Namen.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "speak",
+    "translation": "sprechen",
+    "topic": "Actions",
+    "transcription": "/spik/",
+    "partOfSpeech": "verb",
+    "usage": "Can you speak German? — Kannst du Deutsch sprechen?",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "see",
+    "translation": "sehen",
+    "topic": "Actions",
+    "transcription": "/si/",
+    "partOfSpeech": "verb",
+    "usage": "I see a bird. — Ich sehe einen Vogel.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "make",
+    "translation": "machen",
+    "topic": "Actions",
+    "transcription": "/meɪk/",
+    "partOfSpeech": "verb",
+    "usage": "They make coffee. — Sie machen Kaffee.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "good",
+    "translation": "gut",
+    "topic": "Basic Vocabulary",
+    "transcription": "/ɡʊd/",
+    "partOfSpeech": "adjective",
+    "usage": "This is a good idea. — Das ist eine gute Idee.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bad",
+    "translation": "schlecht",
+    "topic": "Basic Vocabulary",
+    "transcription": "/bæd/",
+    "partOfSpeech": "adjective",
+    "usage": "The weather is bad today. — Das Wetter ist heute schlecht.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "big",
+    "translation": "groß",
+    "topic": "Basic Vocabulary",
+    "transcription": "/bɪɡ/",
+    "partOfSpeech": "adjective",
+    "usage": "They live in a big house. — Sie wohnen in einem großen Haus.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "small",
+    "translation": "klein",
+    "topic": "Basic Vocabulary",
+    "transcription": "/smɔl/",
+    "partOfSpeech": "adjective",
+    "usage": "The dog is small. — Der Hund ist klein.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "new",
+    "translation": "neu",
+    "topic": "Basic Vocabulary",
+    "transcription": "/nu/",
+    "partOfSpeech": "adjective",
+    "usage": "I need a new pen. — Ich brauche einen neuen Stift.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "old",
+    "translation": "alt",
+    "topic": "Basic Vocabulary",
+    "transcription": "/oʊld/",
+    "partOfSpeech": "adjective",
+    "usage": "This old photo is important. — Dieses alte Foto ist wichtig.",
+    "learned": false,
+    "learnedAt": null
+  }
+]

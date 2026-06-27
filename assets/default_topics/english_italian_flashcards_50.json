@@ -1,0 +1,502 @@
+[
+  {
+    "word": "I",
+    "translation": "io",
+    "topic": "Basic Vocabulary",
+    "transcription": "/aɪ/",
+    "partOfSpeech": "pronoun",
+    "usage": "I am a student. — Io sono uno studente.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "you",
+    "translation": "tu",
+    "topic": "Basic Vocabulary",
+    "transcription": "/ju/",
+    "partOfSpeech": "pronoun",
+    "usage": "You are my friend. — Tu sei mio amico.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "he",
+    "translation": "lui",
+    "topic": "People",
+    "transcription": "/hi/",
+    "partOfSpeech": "pronoun",
+    "usage": "He lives in Rome. — Lui vive a Roma.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "she",
+    "translation": "lei",
+    "topic": "People",
+    "transcription": "/ʃi/",
+    "partOfSpeech": "pronoun",
+    "usage": "She likes music. — Lei ama la musica.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "we",
+    "translation": "noi",
+    "topic": "Basic Vocabulary",
+    "transcription": "/wi/",
+    "partOfSpeech": "pronoun",
+    "usage": "We are at home. — Noi siamo a casa.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "they",
+    "translation": "loro",
+    "topic": "Basic Vocabulary",
+    "transcription": "/ðeɪ/",
+    "partOfSpeech": "pronoun",
+    "usage": "They work together. — Loro lavorano insieme.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "man",
+    "translation": "uomo",
+    "topic": "People",
+    "transcription": "/mæn/",
+    "partOfSpeech": "noun",
+    "usage": "The man is tall. — L'uomo è alto.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "woman",
+    "translation": "donna",
+    "topic": "People",
+    "transcription": "/ˈwʊmən/",
+    "partOfSpeech": "noun",
+    "usage": "The woman reads a book. — La donna legge un libro.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "child",
+    "translation": "bambino",
+    "topic": "People",
+    "transcription": "/tʃaɪld/",
+    "partOfSpeech": "noun",
+    "usage": "The child plays outside. — Il bambino gioca fuori.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "friend",
+    "translation": "amico",
+    "topic": "People",
+    "transcription": "/frɛnd/",
+    "partOfSpeech": "noun",
+    "usage": "My friend is kind. — Il mio amico è gentile.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "family",
+    "translation": "famiglia",
+    "topic": "People",
+    "transcription": "/ˈfæməli/",
+    "partOfSpeech": "noun",
+    "usage": "My family is small. — La mia famiglia è piccola.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "house",
+    "translation": "casa",
+    "topic": "Home",
+    "transcription": "/haʊs/",
+    "partOfSpeech": "noun",
+    "usage": "This house is old. — Questa casa è vecchia.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "room",
+    "translation": "stanza",
+    "topic": "Home",
+    "transcription": "/rum/",
+    "partOfSpeech": "noun",
+    "usage": "My room is clean. — La mia stanza è pulita.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "door",
+    "translation": "porta",
+    "topic": "Home",
+    "transcription": "/dɔr/",
+    "partOfSpeech": "noun",
+    "usage": "Please close the door. — Per favore, chiudi la porta.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "window",
+    "translation": "finestra",
+    "topic": "Home",
+    "transcription": "/ˈwɪndoʊ/",
+    "partOfSpeech": "noun",
+    "usage": "The window is open. — La finestra è aperta.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "table",
+    "translation": "tavolo",
+    "topic": "Home",
+    "transcription": "/ˈteɪbəl/",
+    "partOfSpeech": "noun",
+    "usage": "The keys are on the table. — Le chiavi sono sul tavolo.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "chair",
+    "translation": "sedia",
+    "topic": "Home",
+    "transcription": "/tʃɛr/",
+    "partOfSpeech": "noun",
+    "usage": "Sit on this chair. — Siediti su questa sedia.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bed",
+    "translation": "letto",
+    "topic": "Home",
+    "transcription": "/bɛd/",
+    "partOfSpeech": "noun",
+    "usage": "The bed is comfortable. — Il letto è comodo.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "book",
+    "translation": "libro",
+    "topic": "Everyday Objects",
+    "transcription": "/bʊk/",
+    "partOfSpeech": "noun",
+    "usage": "I have a new book. — Ho un libro nuovo.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "phone",
+    "translation": "telefono",
+    "topic": "Everyday Objects",
+    "transcription": "/foʊn/",
+    "partOfSpeech": "noun",
+    "usage": "My phone is in my bag. — Il mio telefono è nella mia borsa.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bag",
+    "translation": "borsa",
+    "topic": "Everyday Objects",
+    "transcription": "/bæɡ/",
+    "partOfSpeech": "noun",
+    "usage": "She carries a red bag. — Lei porta una borsa rossa.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "car",
+    "translation": "auto",
+    "topic": "Travel",
+    "transcription": "/kɑr/",
+    "partOfSpeech": "noun",
+    "usage": "The car is very fast. — L'auto è molto veloce.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bus",
+    "translation": "autobus",
+    "topic": "Travel",
+    "transcription": "/bʌs/",
+    "partOfSpeech": "noun",
+    "usage": "We take the bus to school. — Prendiamo l'autobus per andare a scuola.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "train",
+    "translation": "treno",
+    "topic": "Travel",
+    "transcription": "/treɪn/",
+    "partOfSpeech": "noun",
+    "usage": "The train arrives at noon. — Il treno arriva a mezzogiorno.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "street",
+    "translation": "strada",
+    "topic": "Travel",
+    "transcription": "/strit/",
+    "partOfSpeech": "noun",
+    "usage": "This street is quiet. — Questa strada è tranquilla.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "city",
+    "translation": "città",
+    "topic": "Travel",
+    "transcription": "/ˈsɪti/",
+    "partOfSpeech": "noun",
+    "usage": "The city is beautiful. — La città è bella.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "water",
+    "translation": "acqua",
+    "topic": "Food",
+    "transcription": "/ˈwɔtər/",
+    "partOfSpeech": "noun",
+    "usage": "I drink water every day. — Bevo acqua ogni giorno.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bread",
+    "translation": "pane",
+    "topic": "Food",
+    "transcription": "/brɛd/",
+    "partOfSpeech": "noun",
+    "usage": "We eat bread for breakfast. — Mangiamo pane a colazione.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "milk",
+    "translation": "latte",
+    "topic": "Food",
+    "transcription": "/mɪlk/",
+    "partOfSpeech": "noun",
+    "usage": "The milk is cold. — Il latte è freddo.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "apple",
+    "translation": "mela",
+    "topic": "Food",
+    "transcription": "/ˈæpəl/",
+    "partOfSpeech": "noun",
+    "usage": "He eats an apple. — Lui mangia una mela.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "food",
+    "translation": "cibo",
+    "topic": "Food",
+    "transcription": "/fud/",
+    "partOfSpeech": "noun",
+    "usage": "The food tastes good. — Il cibo ha un buon sapore.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "day",
+    "translation": "giorno",
+    "topic": "Time",
+    "transcription": "/deɪ/",
+    "partOfSpeech": "noun",
+    "usage": "Today is a sunny day. — Oggi è una giornata di sole.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "night",
+    "translation": "notte",
+    "topic": "Time",
+    "transcription": "/naɪt/",
+    "partOfSpeech": "noun",
+    "usage": "The night is quiet. — La notte è silenziosa.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "morning",
+    "translation": "mattina",
+    "topic": "Time",
+    "transcription": "/ˈmɔrnɪŋ/",
+    "partOfSpeech": "noun",
+    "usage": "I run in the morning. — Corro la mattina.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "time",
+    "translation": "tempo",
+    "topic": "Time",
+    "transcription": "/taɪm/",
+    "partOfSpeech": "noun",
+    "usage": "Do you have time now? — Hai tempo adesso?",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "go",
+    "translation": "andare",
+    "topic": "Actions",
+    "transcription": "/ɡoʊ/",
+    "partOfSpeech": "verb",
+    "usage": "I go to work early. — Vado al lavoro presto.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "come",
+    "translation": "venire",
+    "topic": "Actions",
+    "transcription": "/kʌm/",
+    "partOfSpeech": "verb",
+    "usage": "Please come here. — Per favore, vieni qui.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "eat",
+    "translation": "mangiare",
+    "topic": "Actions",
+    "transcription": "/it/",
+    "partOfSpeech": "verb",
+    "usage": "They eat dinner at six. — Loro mangiano la cena alle sei.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "drink",
+    "translation": "bere",
+    "topic": "Actions",
+    "transcription": "/drɪŋk/",
+    "partOfSpeech": "verb",
+    "usage": "She drinks tea. — Lei beve tè.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "read",
+    "translation": "leggere",
+    "topic": "Actions",
+    "transcription": "/rid/",
+    "partOfSpeech": "verb",
+    "usage": "We read a story. — Leggiamo una storia.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "write",
+    "translation": "scrivere",
+    "topic": "Actions",
+    "transcription": "/raɪt/",
+    "partOfSpeech": "verb",
+    "usage": "I write my name. — Scrivo il mio nome.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "speak",
+    "translation": "parlare",
+    "topic": "Actions",
+    "transcription": "/spik/",
+    "partOfSpeech": "verb",
+    "usage": "Can you speak Italian? — Sai parlare italiano?",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "see",
+    "translation": "vedere",
+    "topic": "Actions",
+    "transcription": "/si/",
+    "partOfSpeech": "verb",
+    "usage": "I see a bird. — Vedo un uccello.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "make",
+    "translation": "fare",
+    "topic": "Actions",
+    "transcription": "/meɪk/",
+    "partOfSpeech": "verb",
+    "usage": "They make coffee. — Loro fanno il caffè.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "good",
+    "translation": "buono",
+    "topic": "Basic Vocabulary",
+    "transcription": "/ɡʊd/",
+    "partOfSpeech": "adjective",
+    "usage": "This is a good idea. — Questa è una buona idea.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "bad",
+    "translation": "cattivo",
+    "topic": "Basic Vocabulary",
+    "transcription": "/bæd/",
+    "partOfSpeech": "adjective",
+    "usage": "The weather is bad today. — Il tempo è cattivo oggi.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "big",
+    "translation": "grande",
+    "topic": "Basic Vocabulary",
+    "transcription": "/bɪɡ/",
+    "partOfSpeech": "adjective",
+    "usage": "They live in a big house. — Loro vivono in una casa grande.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "small",
+    "translation": "piccolo",
+    "topic": "Basic Vocabulary",
+    "transcription": "/smɔl/",
+    "partOfSpeech": "adjective",
+    "usage": "The dog is small. — Il cane è piccolo.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "new",
+    "translation": "nuovo",
+    "topic": "Basic Vocabulary",
+    "transcription": "/nu/",
+    "partOfSpeech": "adjective",
+    "usage": "I need a new pen. — Ho bisogno di una penna nuova.",
+    "learned": false,
+    "learnedAt": null
+  },
+  {
+    "word": "old",
+    "translation": "vecchio",
+    "topic": "Basic Vocabulary",
+    "transcription": "/oʊld/",
+    "partOfSpeech": "adjective",
+    "usage": "This old photo is important. — Questa vecchia foto è importante.",
+    "learned": false,
+    "learnedAt": null
+  }
+]

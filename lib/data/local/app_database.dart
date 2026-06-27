@@ -184,6 +184,28 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
+  Future<int?> createTopicWithWordsIfMissing({
+    required Topic topic,
+    required List<Word> words,
+  }) async {
+    return transaction(() async {
+      final existingTopic = await (select(
+        topics,
+      )..where((tbl) => tbl.name.equals(topic.topicName))).getSingleOrNull();
+      if (existingTopic != null) {
+        return null;
+      }
+
+      final topicId = await createTopic(topic);
+      await insertWords(
+        topicId: topicId,
+        topicName: topic.topicName,
+        wordList: words,
+      );
+      return topicId;
+    });
+  }
+
   Future<String?> getTopicName(int topicId) async {
     final topic = await (select(
       topics,

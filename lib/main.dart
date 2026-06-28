@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flashcards_learning_app/firebase_options.dart';
 import 'package:flashcards_learning_app/my_app.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
+import 'package:flashcards_learning_app/utils/app_preferences_store.dart';
 import 'package:flashcards_learning_app/utils/app_locale_preferences.dart';
 import 'package:flashcards_learning_app/utils/crashlytics_consent_manager.dart';
 import 'package:flashcards_learning_app/utils/default_topics_seeder.dart';
@@ -32,7 +33,13 @@ Future<void> main() async {
 
       await setupServiceLocator();
       await getIt<DefaultTopicsSeeder>().seedIfNeeded();
-      final appRouter = AppRouter();
+      final preferencesStore = await AppPreferencesStore.create();
+      final isFirstLaunch = preferencesStore.isFirstLaunch;
+      if (isFirstLaunch) {
+        await preferencesStore.setFirstLaunchComplete();
+      }
+
+      final appRouter = AppRouter(showOnboarding: isFirstLaunch);
       final locale = await AppLocalePreferences.getCurrentLocale();
       runApp(MyApp(appRouter: appRouter, locale: locale));
     },

@@ -12,6 +12,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'Flashy Learn';
 
   @override
+  String get onboardingSkipButton => 'Пропустить';
+
+  @override
+  String get onboardingNextButton => 'Далее';
+
+  @override
+  String get onboardingStartButton => 'Начать обучение';
+
+  @override
+  String get onboardingCreateDecksTitle => 'Создавайте удобные наборы';
+
+  @override
+  String get onboardingCreateDecksDescription =>
+      'Группируйте слова по темам и держите каждую коллекцию готовой для коротких занятий.';
+
+  @override
+  String get onboardingPracticeCardsTitle => 'Тренируйтесь с карточками';
+
+  @override
+  String get onboardingPracticeCardsDescription =>
+      'Листайте карточки, проверяйте определения и повторяйте слова, которым нужно больше внимания.';
+
+  @override
+  String get onboardingTrackProgressTitle => 'Следите за прогрессом';
+
+  @override
+  String get onboardingTrackProgressDescription =>
+      'Ставьте учебные цели и отслеживайте, как растет ваш словарный запас.';
+
+  @override
   String get commonAppBarStatistics => 'Статистика';
 
   @override

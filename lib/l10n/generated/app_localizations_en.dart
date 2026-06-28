@@ -12,6 +12,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Flashy Learn';
 
   @override
+  String get onboardingSkipButton => 'Skip';
+
+  @override
+  String get onboardingNextButton => 'Next';
+
+  @override
+  String get onboardingStartButton => 'Start learning';
+
+  @override
+  String get onboardingCreateDecksTitle => 'Create focused decks';
+
+  @override
+  String get onboardingCreateDecksDescription =>
+      'Group words by topic and keep each collection ready for quick study sessions.';
+
+  @override
+  String get onboardingPracticeCardsTitle => 'Practice with cards';
+
+  @override
+  String get onboardingPracticeCardsDescription =>
+      'Swipe through flashcards, check definitions, and repeat the words that need more attention.';
+
+  @override
+  String get onboardingTrackProgressTitle => 'Track your progress';
+
+  @override
+  String get onboardingTrackProgressDescription =>
+      'Set learning goals and review your progress as your vocabulary grows.';
+
+  @override
   String get commonAppBarStatistics => 'Statistics';
 
   @override

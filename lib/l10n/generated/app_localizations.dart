@@ -104,6 +104,60 @@ abstract class AppLocalizations {
   /// **'Flashy Learn'**
   String get appTitle;
 
+  /// No description provided for @onboardingSkipButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkipButton;
+
+  /// No description provided for @onboardingNextButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNextButton;
+
+  /// No description provided for @onboardingStartButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Start learning'**
+  String get onboardingStartButton;
+
+  /// No description provided for @onboardingCreateDecksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create focused decks'**
+  String get onboardingCreateDecksTitle;
+
+  /// No description provided for @onboardingCreateDecksDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Group words by topic and keep each collection ready for quick study sessions.'**
+  String get onboardingCreateDecksDescription;
+
+  /// No description provided for @onboardingPracticeCardsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice with cards'**
+  String get onboardingPracticeCardsTitle;
+
+  /// No description provided for @onboardingPracticeCardsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe through flashcards, check definitions, and repeat the words that need more attention.'**
+  String get onboardingPracticeCardsDescription;
+
+  /// No description provided for @onboardingTrackProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your progress'**
+  String get onboardingTrackProgressTitle;
+
+  /// No description provided for @onboardingTrackProgressDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set learning goals and review your progress as your vocabulary grows.'**
+  String get onboardingTrackProgressDescription;
+
   /// No description provided for @commonAppBarStatistics.
   ///
   /// In en, this message translates to:

@@ -4,6 +4,15 @@
   "@appTitle": {
     "description": "The application title shown by the root MaterialApp."
   },
+  "onboardingSkipButton": "Skip",
+  "onboardingNextButton": "Next",
+  "onboardingStartButton": "Start learning",
+  "onboardingCreateDecksTitle": "Create focused decks",
+  "onboardingCreateDecksDescription": "Group words by topic and keep each collection ready for quick study sessions.",
+  "onboardingPracticeCardsTitle": "Practice with cards",
+  "onboardingPracticeCardsDescription": "Swipe through flashcards, check definitions, and repeat the words that need more attention.",
+  "onboardingTrackProgressTitle": "Track your progress",
+  "onboardingTrackProgressDescription": "Set learning goals and review your progress as your vocabulary grows.",
   "commonAppBarStatistics": "Statistics",
   "editFormLearningWordLabel": "Word to learn",
   "editFormTranslationLabel": "Translation",

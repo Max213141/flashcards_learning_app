@@ -8,9 +8,22 @@ part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
 class AppRouter extends RootStackRouter {
+  AppRouter({required this.showOnboarding});
+
+  final bool showOnboarding;
+
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: MainRoute.page, initial: true),
+    AutoRoute(
+      page: OnboardingRoute.page,
+      path: '/intro',
+      initial: showOnboarding,
+    ),
+    AutoRoute(
+      page: MainRoute.page,
+      path: '/initial_page',
+      initial: !showOnboarding,
+    ),
     AutoRoute(page: EditWordRoute.page),
     AutoRoute(page: TestRoute.page),
     AutoRoute(page: TopicRoute.page),

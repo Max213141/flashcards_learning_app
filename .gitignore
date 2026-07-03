@@ -56,3 +56,5 @@ android/build/
 ios/Pods/
 ios/.symlinks/
 ios/Flutter/ephemeral/
+
+performance_reports

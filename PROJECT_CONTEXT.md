@@ -25,6 +25,7 @@ This document is the working reference for current development. It reflects the 
 - Test screen is DB-backed and loads words by `topicId`.
 - Single-word create/edit flows are wired to the database.
 - Topic screen has separate manual and AI-assisted add-word flows.
+- Manual word creation, topic creation/JSON import, and backup restore dialogs now include reusable in-dialog info panels.
 - Local AI setup is implemented with `flutter_gemma` and an explicit just-in-time model download step.
 - Current local AI model is `Gemma 4 E2B` (`gemma-4-E2B-it.litertlm`, `ModelType.gemma4`, about `2.6GB`).
 - AI-generated drafts fill the add-word form only after user review; DB saving still goes through `TopicDetailBloc.addWordRequested`.
@@ -59,6 +60,7 @@ Routing:
   - Exports backup JSON
   - Restores backup JSON after confirmation dialog
   - Opens topic-creation popup from the FAB menu
+  - Topic creation and restore dialogs expose top-right info panels. The JSON import panel includes a copyable AI prompt and warns users to fill source language, target language, and topic placeholders before use.
 
 - `lib/screens/main_screen/widgets/app_bar_customized_widget.dart`
   - Reads user goals from `AppDatabase.watchUserGoals()`
@@ -75,6 +77,7 @@ Routing:
     - delete word
     - delete topic
   - Recomputes progress from `Word.learned`
+  - Manual add-word dialog includes a top-right info panel explaining required word/translation fields and optional additional fields.
 
 - `lib/screens/test_screen/test_screen.dart`
   - Loads words from DB using `topicId`
@@ -203,10 +206,14 @@ Failure behavior:
 - `lib/common_widgets/widgets.dart`
   - central exports for shared widgets
   - now exports:
+    - `info_button_stack.dart`
     - `edit_form/edit_word_form.dart`
     - `edit_form/edit_form_fields.dart`
     - `edit_form/ai_word_form.dart`
     - popup and action widgets
+
+- `lib/common_widgets/info_button_stack.dart`
+  - reusable wrapper for dialog content with a top-right info button
 
 - `lib/common_widgets/edit_form/`
   - contains shared manual and AI-assisted word form pieces:
@@ -217,7 +224,10 @@ Failure behavior:
     - `word_form_controllers.dart`
 
 - `lib/screens/main_screen/widgets/`
-  - contains topic list UI, sort widgets, create-topic popup, and restore confirmation body
+  - contains topic list UI, sort widgets, create-topic popup, restore confirmation body, and their info-panel widgets
+
+- `lib/screens/topic_screen/widgets/add_word_info_widget/`
+  - contains the manual add-word info panel and row widget
 
 ## Assets
 

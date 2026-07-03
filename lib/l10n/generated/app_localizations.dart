@@ -338,6 +338,72 @@ abstract class AppLocalizations {
   /// **'Add word'**
   String get topicAddWordDialogTitle;
 
+  /// No description provided for @topicAddWordInfoTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'How word creation works'**
+  String get topicAddWordInfoTooltip;
+
+  /// No description provided for @topicAddWordInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Word creation'**
+  String get topicAddWordInfoTitle;
+
+  /// No description provided for @topicAddWordInfoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a word manually when you want to create a single flashcard in this topic.'**
+  String get topicAddWordInfoDescription;
+
+  /// No description provided for @topicAddWordInfoWordRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Word to learn is required. Use the foreign word or phrase you want to practice.'**
+  String get topicAddWordInfoWordRule;
+
+  /// No description provided for @topicAddWordInfoTranslationRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation is required. Use the meaning in your native or target translation language.'**
+  String get topicAddWordInfoTranslationRule;
+
+  /// No description provided for @topicAddWordInfoOptionalFieldsRule.
+  ///
+  /// In en, this message translates to:
+  /// **'The Additional section is optional. You can leave it empty and save the word.'**
+  String get topicAddWordInfoOptionalFieldsRule;
+
+  /// No description provided for @topicAddWordInfoTranscriptionRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcription is optional and is useful for pronunciation notes.'**
+  String get topicAddWordInfoTranscriptionRule;
+
+  /// No description provided for @topicAddWordInfoPartOfSpeechRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of speech is optional, for example noun, verb, adjective, phrase, or idiom.'**
+  String get topicAddWordInfoPartOfSpeechRule;
+
+  /// No description provided for @topicAddWordInfoUsageRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage is optional. Add a short example sentence if it helps you remember the word.'**
+  String get topicAddWordInfoUsageRule;
+
+  /// No description provided for @topicAddWordInfoSaveRule.
+  ///
+  /// In en, this message translates to:
+  /// **'After saving, the word is added to the current topic and becomes available for practice.'**
+  String get topicAddWordInfoSaveRule;
+
+  /// No description provided for @topicAddWordInfoBackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to word'**
+  String get topicAddWordInfoBackButton;
+
   /// No description provided for @topicWordsEmpty.
   ///
   /// In en, this message translates to:
@@ -602,6 +668,54 @@ abstract class AppLocalizations {
   /// **'Restore'**
   String get restoreBackupRestoreButton;
 
+  /// No description provided for @restoreBackupInfoTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'How backup restoration works'**
+  String get restoreBackupInfoTooltip;
+
+  /// No description provided for @restoreBackupInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restoration'**
+  String get restoreBackupInfoTitle;
+
+  /// No description provided for @restoreBackupInfoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring backup data loads a saved JSON backup and uses it as the current app data.'**
+  String get restoreBackupInfoDescription;
+
+  /// No description provided for @restoreBackupInfoFileRule.
+  ///
+  /// In en, this message translates to:
+  /// **'After you confirm, choose a backup .json file created by this app.'**
+  String get restoreBackupInfoFileRule;
+
+  /// No description provided for @restoreBackupInfoReplacementRule.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected backup replaces the current topics and words on this device.'**
+  String get restoreBackupInfoReplacementRule;
+
+  /// No description provided for @restoreBackupInfoProgressRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Learning progress saved in the backup, such as learned words and learned dates, is restored with the words.'**
+  String get restoreBackupInfoProgressRule;
+
+  /// No description provided for @restoreBackupInfoCancelRule.
+  ///
+  /// In en, this message translates to:
+  /// **'If you cancel the file picker, nothing is changed.'**
+  String get restoreBackupInfoCancelRule;
+
+  /// No description provided for @restoreBackupInfoBackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to restore'**
+  String get restoreBackupInfoBackButton;
+
   /// No description provided for @crashlyticsConsentTitle.
   ///
   /// In en, this message translates to:
@@ -679,6 +793,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create topic'**
   String get popUpBodyCreateTopicButton;
+
+  /// No description provided for @popUpBodyJsonInfoTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'How JSON import works'**
+  String get popUpBodyJsonInfoTooltip;
+
+  /// No description provided for @popUpBodyJsonInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic creation and JSON import'**
+  String get popUpBodyJsonInfoTitle;
+
+  /// No description provided for @popUpBodyJsonInfoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can create a topic manually or import a prepared JSON file when you want to add many flashcards at once.'**
+  String get popUpBodyJsonInfoDescription;
+
+  /// No description provided for @popUpBodyJsonInfoManualTopicFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple flow: enter a topic name, choose a color, then tap Create topic. This creates an empty topic that you can fill later.'**
+  String get popUpBodyJsonInfoManualTopicFlow;
+
+  /// No description provided for @popUpBodyJsonInfoImportFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'JSON flow: tap Upload JSON file, select a .json file, review the detected topic name if the file contains one, then create the topic with all imported words.'**
+  String get popUpBodyJsonInfoImportFlow;
+
+  /// No description provided for @popUpBodyJsonInfoArrayRule.
+  ///
+  /// In en, this message translates to:
+  /// **'The file must contain one JSON array, not a single object.'**
+  String get popUpBodyJsonInfoArrayRule;
+
+  /// No description provided for @popUpBodyJsonInfoRequiredFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Every item must include word and translation as text values.'**
+  String get popUpBodyJsonInfoRequiredFields;
+
+  /// No description provided for @popUpBodyJsonInfoOptionalFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional fields: topic, transcription, partOfSpeech, usage, learned, learnedAt.'**
+  String get popUpBodyJsonInfoOptionalFields;
+
+  /// No description provided for @popUpBodyJsonInfoTopicRule.
+  ///
+  /// In en, this message translates to:
+  /// **'If the file contains topic values, you can pick one of them as the new topic name before creating it.'**
+  String get popUpBodyJsonInfoTopicRule;
+
+  /// No description provided for @popUpBodyJsonInfoPromptRule.
+  ///
+  /// In en, this message translates to:
+  /// **'The Copy AI prompt button copies a ready prompt for generating a JSON file. BEFORE USING IT, FILL SOURCE LANGUAGE, TARGET LANGUAGE, AND TOPIC.'**
+  String get popUpBodyJsonInfoPromptRule;
+
+  /// No description provided for @popUpBodyJsonExampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Example format'**
+  String get popUpBodyJsonExampleTitle;
+
+  /// No description provided for @popUpBodyJsonCopyPromptButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy AI prompt'**
+  String get popUpBodyJsonCopyPromptButton;
+
+  /// No description provided for @popUpBodyJsonPromptCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt copied'**
+  String get popUpBodyJsonPromptCopied;
+
+  /// No description provided for @popUpBodyJsonBackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to topic'**
+  String get popUpBodyJsonBackButton;
 
   /// No description provided for @mainScreenRestoreBackupButton.
   ///

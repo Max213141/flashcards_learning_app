@@ -4,6 +4,7 @@ export 'flashcards_loader.dart';
 export 'app_bar.dart';
 export 'custom_textfield.dart';
 export 'fancy_accomplishment_text.dart';
+export 'info_button_stack.dart';
 export 'pop_up_box.dart';
 export 'textfield_padding_wrapper.dart';
 export 'custom_fliping_icon.dart';

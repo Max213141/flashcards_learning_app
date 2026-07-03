@@ -141,6 +141,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topicAddWordDialogTitle => 'Add word';
 
   @override
+  String get topicAddWordInfoTooltip => 'How word creation works';
+
+  @override
+  String get topicAddWordInfoTitle => 'Word creation';
+
+  @override
+  String get topicAddWordInfoDescription =>
+      'Add a word manually when you want to create a single flashcard in this topic.';
+
+  @override
+  String get topicAddWordInfoWordRule =>
+      'Word to learn is required. Use the foreign word or phrase you want to practice.';
+
+  @override
+  String get topicAddWordInfoTranslationRule =>
+      'Translation is required. Use the meaning in your native or target translation language.';
+
+  @override
+  String get topicAddWordInfoOptionalFieldsRule =>
+      'The Additional section is optional. You can leave it empty and save the word.';
+
+  @override
+  String get topicAddWordInfoTranscriptionRule =>
+      'Transcription is optional and is useful for pronunciation notes.';
+
+  @override
+  String get topicAddWordInfoPartOfSpeechRule =>
+      'Part of speech is optional, for example noun, verb, adjective, phrase, or idiom.';
+
+  @override
+  String get topicAddWordInfoUsageRule =>
+      'Usage is optional. Add a short example sentence if it helps you remember the word.';
+
+  @override
+  String get topicAddWordInfoSaveRule =>
+      'After saving, the word is added to the current topic and becomes available for practice.';
+
+  @override
+  String get topicAddWordInfoBackButton => 'Back to word';
+
+  @override
   String get topicWordsEmpty => 'No words';
 
   @override
@@ -292,6 +333,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get restoreBackupRestoreButton => 'Restore';
 
   @override
+  String get restoreBackupInfoTooltip => 'How backup restoration works';
+
+  @override
+  String get restoreBackupInfoTitle => 'Backup restoration';
+
+  @override
+  String get restoreBackupInfoDescription =>
+      'Restoring backup data loads a saved JSON backup and uses it as the current app data.';
+
+  @override
+  String get restoreBackupInfoFileRule =>
+      'After you confirm, choose a backup .json file created by this app.';
+
+  @override
+  String get restoreBackupInfoReplacementRule =>
+      'The selected backup replaces the current topics and words on this device.';
+
+  @override
+  String get restoreBackupInfoProgressRule =>
+      'Learning progress saved in the backup, such as learned words and learned dates, is restored with the words.';
+
+  @override
+  String get restoreBackupInfoCancelRule =>
+      'If you cancel the file picker, nothing is changed.';
+
+  @override
+  String get restoreBackupInfoBackButton => 'Back to restore';
+
+  @override
   String get crashlyticsConsentTitle =>
       'Allow anonymous analytics and crash reports?';
 
@@ -331,6 +401,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get popUpBodyCreateTopicButton => 'Create topic';
+
+  @override
+  String get popUpBodyJsonInfoTooltip => 'How JSON import works';
+
+  @override
+  String get popUpBodyJsonInfoTitle => 'Topic creation and JSON import';
+
+  @override
+  String get popUpBodyJsonInfoDescription =>
+      'You can create a topic manually or import a prepared JSON file when you want to add many flashcards at once.';
+
+  @override
+  String get popUpBodyJsonInfoManualTopicFlow =>
+      'Simple flow: enter a topic name, choose a color, then tap Create topic. This creates an empty topic that you can fill later.';
+
+  @override
+  String get popUpBodyJsonInfoImportFlow =>
+      'JSON flow: tap Upload JSON file, select a .json file, review the detected topic name if the file contains one, then create the topic with all imported words.';
+
+  @override
+  String get popUpBodyJsonInfoArrayRule =>
+      'The file must contain one JSON array, not a single object.';
+
+  @override
+  String get popUpBodyJsonInfoRequiredFields =>
+      'Every item must include word and translation as text values.';
+
+  @override
+  String get popUpBodyJsonInfoOptionalFields =>
+      'Optional fields: topic, transcription, partOfSpeech, usage, learned, learnedAt.';
+
+  @override
+  String get popUpBodyJsonInfoTopicRule =>
+      'If the file contains topic values, you can pick one of them as the new topic name before creating it.';
+
+  @override
+  String get popUpBodyJsonInfoPromptRule =>
+      'The Copy AI prompt button copies a ready prompt for generating a JSON file. BEFORE USING IT, FILL SOURCE LANGUAGE, TARGET LANGUAGE, AND TOPIC.';
+
+  @override
+  String get popUpBodyJsonExampleTitle => 'Example format';
+
+  @override
+  String get popUpBodyJsonCopyPromptButton => 'Copy AI prompt';
+
+  @override
+  String get popUpBodyJsonPromptCopied => 'Prompt copied';
+
+  @override
+  String get popUpBodyJsonBackButton => 'Back to topic';
 
   @override
   String get mainScreenRestoreBackupButton => 'Restore from backup';

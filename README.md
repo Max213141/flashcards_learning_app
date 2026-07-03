@@ -11,6 +11,15 @@ Flutter mobile app for learning languages with topic-based flashcards.
 - Import words from JSON.
 - Export and restore a full local JSON backup.
 - Generate word drafts locally with an on-device AI model.
+- In-dialog info panels explain topic creation, JSON import prompts, backup restore, and manual word creation.
+
+## In-Dialog Help
+
+Several dialogs include a top-right info button powered by `InfoButtonStack`.
+These panels document required/optional fields and risky flows inline. The JSON
+import panel also provides a copyable AI prompt and clearly marks the source
+language, target language, and topic placeholders that users must fill before
+generating a file.
 
 ## Local AI Word Drafts
 

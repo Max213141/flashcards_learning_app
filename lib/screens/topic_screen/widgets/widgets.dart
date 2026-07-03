@@ -3,6 +3,7 @@ export 'slidable_word_widget.dart';
 export 'topic_words_list_widget.dart';
 export 'edit_dialog.dart';
 export 'add_word_dialog.dart';
+export 'add_word_info_widget/add_word_info_widget.dart';
 export 'deletion_acceptance_body.dart';
 export 'topic_screen_view.dart';
 export 'ai_dialog/add_word_ai_dialog.dart';

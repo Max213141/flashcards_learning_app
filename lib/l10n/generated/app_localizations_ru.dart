@@ -139,6 +139,47 @@ class AppLocalizationsRu extends AppLocalizations {
   String get topicAddWordDialogTitle => 'Добавление слова';
 
   @override
+  String get topicAddWordInfoTooltip => 'Как работает добавление слова';
+
+  @override
+  String get topicAddWordInfoTitle => 'Добавление слова';
+
+  @override
+  String get topicAddWordInfoDescription =>
+      'Добавляйте слово вручную, когда хотите создать одну карточку в этой теме.';
+
+  @override
+  String get topicAddWordInfoWordRule =>
+      'Изучаемое слово обязательно. Укажите иностранное слово или фразу для тренировки.';
+
+  @override
+  String get topicAddWordInfoTranslationRule =>
+      'Перевод обязателен. Укажите значение на вашем родном языке или языке перевода.';
+
+  @override
+  String get topicAddWordInfoOptionalFieldsRule =>
+      'Раздел «Дополнительно» необязательный. Его можно оставить пустым и сохранить слово.';
+
+  @override
+  String get topicAddWordInfoTranscriptionRule =>
+      'Транскрипция необязательна и полезна для заметок о произношении.';
+
+  @override
+  String get topicAddWordInfoPartOfSpeechRule =>
+      'Часть речи необязательна, например существительное, глагол, прилагательное, фраза или идиома.';
+
+  @override
+  String get topicAddWordInfoUsageRule =>
+      'Употребление необязательно. Добавьте короткий пример, если он помогает запомнить слово.';
+
+  @override
+  String get topicAddWordInfoSaveRule =>
+      'После сохранения слово добавится в текущую тему и станет доступно для тренировки.';
+
+  @override
+  String get topicAddWordInfoBackButton => 'Назад к слову';
+
+  @override
   String get topicWordsEmpty => 'Нет слов';
 
   @override
@@ -292,6 +333,35 @@ class AppLocalizationsRu extends AppLocalizations {
   String get restoreBackupRestoreButton => 'Восстановить';
 
   @override
+  String get restoreBackupInfoTooltip => 'Как работает восстановление';
+
+  @override
+  String get restoreBackupInfoTitle => 'Восстановление из копии';
+
+  @override
+  String get restoreBackupInfoDescription =>
+      'Восстановление загружает сохраненный JSON-файл резервной копии и использует его как текущие данные приложения.';
+
+  @override
+  String get restoreBackupInfoFileRule =>
+      'После подтверждения выберите файл .json, созданный этим приложением.';
+
+  @override
+  String get restoreBackupInfoReplacementRule =>
+      'Выбранная копия заменяет текущие темы и слова на этом устройстве.';
+
+  @override
+  String get restoreBackupInfoProgressRule =>
+      'Учебный прогресс из копии, например изученные слова и даты изучения, восстанавливается вместе со словами.';
+
+  @override
+  String get restoreBackupInfoCancelRule =>
+      'Если отменить выбор файла, данные не изменятся.';
+
+  @override
+  String get restoreBackupInfoBackButton => 'Назад к восстановлению';
+
+  @override
   String get crashlyticsConsentTitle =>
       'Разрешить анонимную аналитику и отчёты о сбоях?';
 
@@ -331,6 +401,56 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get popUpBodyCreateTopicButton => 'Создать тему';
+
+  @override
+  String get popUpBodyJsonInfoTooltip => 'Как работает импорт JSON';
+
+  @override
+  String get popUpBodyJsonInfoTitle => 'Создание темы и импорт JSON';
+
+  @override
+  String get popUpBodyJsonInfoDescription =>
+      'Вы можете создать тему вручную или импортировать готовый JSON-файл, когда нужно добавить сразу много карточек.';
+
+  @override
+  String get popUpBodyJsonInfoManualTopicFlow =>
+      'Простой сценарий: введите название темы, выберите цвет и нажмите «Создать тему». Так создается пустая тема, которую можно заполнить позже.';
+
+  @override
+  String get popUpBodyJsonInfoImportFlow =>
+      'Сценарий JSON: нажмите «Загрузить файл JSON», выберите .json-файл, проверьте найденное название темы, если оно есть в файле, затем создайте тему со всеми импортированными словами.';
+
+  @override
+  String get popUpBodyJsonInfoArrayRule =>
+      'Файл должен содержать один JSON-массив, а не отдельный объект.';
+
+  @override
+  String get popUpBodyJsonInfoRequiredFields =>
+      'В каждом элементе должны быть текстовые поля word и translation.';
+
+  @override
+  String get popUpBodyJsonInfoOptionalFields =>
+      'Необязательные поля: topic, transcription, partOfSpeech, usage, learned, learnedAt.';
+
+  @override
+  String get popUpBodyJsonInfoTopicRule =>
+      'Если в файле есть значения topic, вы сможете выбрать одно из них как название новой темы перед созданием.';
+
+  @override
+  String get popUpBodyJsonInfoPromptRule =>
+      'Кнопка «Скопировать промпт» копирует готовый промпт для создания JSON-файла. ПЕРЕД ИСПОЛЬЗОВАНИЕМ ЗАПОЛНИТЕ ИСХОДНЫЙ ЯЗЫК, ЯЗЫК ПЕРЕВОДА И ТЕМУ.';
+
+  @override
+  String get popUpBodyJsonExampleTitle => 'Пример формата';
+
+  @override
+  String get popUpBodyJsonCopyPromptButton => 'Скопировать промпт';
+
+  @override
+  String get popUpBodyJsonPromptCopied => 'Промпт скопирован';
+
+  @override
+  String get popUpBodyJsonBackButton => 'Назад к теме';
 
   @override
   String get mainScreenRestoreBackupButton => 'Восстановление из копии';

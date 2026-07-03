@@ -13,30 +13,20 @@ class AddWordAIDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final media = MediaQuery.of(context);
-    final maxHeight = (media.size.height - media.viewInsets.bottom - 48).clamp(
-      280.0,
-      media.size.height * 0.95,
-    );
+    // final media = MediaQuery.of(context);
+    // final maxHeight = (media.size.height - media.viewInsets.bottom - 48).clamp(
+    //   280.0,
+    //   media.size.height * 0.95,
+    // );
 
-    return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      backgroundColor: AppConst.background,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: 520),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(l10nOf(context).addWordAiDialogTitle, style: AppConst.h1),
-              const SizedBox(height: 8),
-              Flexible(child: _AddWordAiDialogContent(onSave: onSave)),
-            ],
-          ),
-        ),
+    return PopUpBox(
+      popupContent: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(l10nOf(context).addWordAiDialogTitle, style: AppConst.h1),
+          const SizedBox(height: 8),
+          Flexible(child: _AddWordAiDialogContent(onSave: onSave)),
+        ],
       ),
     );
   }

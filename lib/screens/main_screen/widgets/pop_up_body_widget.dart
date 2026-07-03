@@ -16,6 +16,7 @@ class PopUpBodyWidget extends StatefulWidget {
 
 class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
   final TextEditingController _topicController = TextEditingController();
+  bool _showJsonImportInfo = false;
 
   @override
   void dispose() {
@@ -60,121 +61,147 @@ class _PopUpBodyWidgetState extends State<PopUpBodyWidget> {
         final selectedColor = Color(state.selectedColorValue);
         final canCreate = state.name.trim().isNotEmpty && !state.isLoading;
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Text(l10n.popUpBodyNewTopicTitle, style: AppConst.h1),
-              ),
-              SizedBox(height: 40),
-              Text(l10n.popUpBodyNameLabel, style: AppConst.h2),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomTextfield(
-                      controller: _topicController,
-                      maxLength: 30,
-                      onChanged: (value) {
-                        context.read<TopicCreationBloc>().add(
-                          TopicCreationEvent.nameChanged(name: value),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              if (state.topicSuggestions.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                TopicsExpansionTile(
-                  onTap: (String topicSuggestion) {
-                    context.read<TopicCreationBloc>().add(
-                      TopicCreationEvent.topicSuggestionSelected(
-                        name: topicSuggestion,
-                      ),
-                    );
-                  },
-                  topicSuggestions: state.topicSuggestions,
+        if (_showJsonImportInfo) {
+          return JsonImportInfoWidget(
+            onBack: () {
+              setState(() {
+                _showJsonImportInfo = false;
+              });
+            },
+          );
+        }
+
+        return InfoButtonStack(
+          tooltip: l10n.popUpBodyJsonInfoTooltip,
+          onTap: () {
+            setState(() {
+              _showJsonImportInfo = true;
+            });
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(l10n.popUpBodyNewTopicTitle, style: AppConst.h1),
                 ),
-              ],
-              SizedBox(height: 40),
-              Text(l10n.popUpBodyTopicColorLabel, style: AppConst.h2),
-              ColorSelector(
-                selectedColor: selectedColor,
-                onColorChange: (colorValue, color) {
-                  context.read<TopicCreationBloc>().add(
-                    TopicCreationEvent.colorChanged(colorValue: colorValue),
-                  );
-                },
-              ),
-              SizedBox(height: 40),
-              TextButton(
-                onPressed: state.isLoading
-                    ? null
-                    : () {
-                        context.read<TopicCreationBloc>().add(
-                          const TopicCreationEvent.jsonImportRequested(),
-                        );
-                      },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                SizedBox(height: 40),
+                Text(l10n.popUpBodyNameLabel, style: AppConst.h2),
+                Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/iconss/file_export.svg',
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(
-                        AppConst.black,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Flexible(
-                      child: Text(
-                        l10n.popUpBodyUploadJsonButton,
-                        style: AppConst.text.copyWith(color: AppConst.black),
+                    Expanded(
+                      child: CustomTextfield(
+                        controller: _topicController,
+                        maxLength: 30,
+                        onChanged: (value) {
+                          context.read<TopicCreationBloc>().add(
+                            TopicCreationEvent.nameChanged(name: value),
+                          );
+                        },
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: SizedBox(
-                  width: 350,
-                  height: 55,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppConst.buttonBackground,
-                      foregroundColor: AppConst.black,
-                      disabledBackgroundColor: Color(0x40D7D7D7),
-                      side: canCreate
-                          ? BorderSide(color: AppConst.primary, width: 2)
-                          : BorderSide.none,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(35),
+                if (state.topicSuggestions.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  TopicsExpansionTile(
+                    onTap: (String topicSuggestion) {
+                      context.read<TopicCreationBloc>().add(
+                        TopicCreationEvent.topicSuggestionSelected(
+                          name: topicSuggestion,
+                        ),
+                      );
+                    },
+                    topicSuggestions: state.topicSuggestions,
+                  ),
+                ],
+                SizedBox(height: 40),
+                Text(l10n.popUpBodyTopicColorLabel, style: AppConst.h2),
+                ColorSelector(
+                  selectedColor: selectedColor,
+                  onColorChange: (colorValue, color) {
+                    context.read<TopicCreationBloc>().add(
+                      TopicCreationEvent.colorChanged(colorValue: colorValue),
+                    );
+                  },
+                ),
+                SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: state.isLoading
+                          ? null
+                          : () {
+                              context.read<TopicCreationBloc>().add(
+                                const TopicCreationEvent.jsonImportRequested(),
+                              );
+                            },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/iconss/file_export.svg',
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(
+                              AppConst.black,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Flexible(
+                            child: Text(
+                              l10n.popUpBodyUploadJsonButton,
+                              style: AppConst.text.copyWith(
+                                color: AppConst.black,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    onPressed: canCreate
-                        ? () {
-                            context.read<TopicCreationBloc>().add(
-                              const TopicCreationEvent.createSubmitted(),
-                            );
-                          }
-                        : null,
-                    child: state.isLoading
-                        ? const SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: FlashcardsLoader(),
-                          )
-                        : Text(
-                            l10n.popUpBodyCreateTopicButton,
-                            style: AppConst.text,
-                          ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: SizedBox(
+                    width: 350,
+                    height: 55,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppConst.buttonBackground,
+                        foregroundColor: AppConst.black,
+                        disabledBackgroundColor: Color(0x40D7D7D7),
+                        side: canCreate
+                            ? BorderSide(color: AppConst.primary, width: 2)
+                            : BorderSide.none,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(35),
+                        ),
+                      ),
+                      onPressed: canCreate
+                          ? () {
+                              context.read<TopicCreationBloc>().add(
+                                const TopicCreationEvent.createSubmitted(),
+                              );
+                            }
+                          : null,
+                      child: state.isLoading
+                          ? const SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: FlashcardsLoader(),
+                            )
+                          : Text(
+                              l10n.popUpBodyCreateTopicButton,
+                              style: AppConst.text,
+                            ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

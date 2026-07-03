@@ -7,6 +7,7 @@ import 'package:flashcards_learning_app/data/local/topic_summary.dart';
 import 'package:flashcards_learning_app/screens/main_screen/main_screen.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/main_screen_view.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/sort_widget/sort_button_second_part.dart';
+import 'package:flashcards_learning_app/screens/main_screen/widgets/topic_body_widget.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/topics_list_widget.dart';
 import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +131,46 @@ void main() {
     await tester.pump();
 
     expect(find.byType(TopicsListWidget), findsOneWidget);
+  });
+
+  testWidgets('topics list builds only visible overlapping cards', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(400, 600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final topics = List.generate(
+      20,
+      (index) => TopicSummary(
+        id: index,
+        topicName: 'Topic $index',
+        colorValue: 0xFFA89DEF,
+        totalWords: 10,
+        learnedWords: 0,
+      ),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: TopicsListWidget(topics: topics)),
+      ),
+    );
+
+    expect(find.byType(TopicBodyWidget), findsNWidgets(5));
+    expect(find.text('Topic 0'), findsOneWidget);
+    expect(find.text('Topic 10'), findsNothing);
+
+    await tester.drag(
+      find.byType(SingleChildScrollView),
+      const Offset(0, -600),
+    );
+    await tester.pump();
+
+    expect(find.byType(TopicBodyWidget), findsNWidgets(8));
+    expect(find.text('Topic 0'), findsNothing);
+    expect(find.text('Topic 10'), findsOneWidget);
   });
 
   testWidgets('shows error text for error state without previous topics', (

@@ -9,7 +9,7 @@ import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flashcards_learning_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class TopicsListWidget extends StatelessWidget {
+class TopicsListWidget extends StatefulWidget {
   final List<TopicSummary> topics;
   const TopicsListWidget({super.key, required this.topics});
 
@@ -17,7 +17,47 @@ class TopicsListWidget extends StatelessWidget {
   static const double overlap = 100;
 
   @override
+  State<TopicsListWidget> createState() => _TopicsListWidgetState();
+}
+
+class _TopicsListWidgetState extends State<TopicsListWidget> {
+  static const double _cardOffset =
+      TopicsListWidget.cardHeight - TopicsListWidget.overlap;
+
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_handleScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    final nextOffset = _scrollController.hasClients
+        ? _scrollController.offset
+        : 0.0;
+    if (nextOffset == _scrollOffset) {
+      return;
+    }
+
+    setState(() {
+      _scrollOffset = nextOffset;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final topics = widget.topics;
+
     if (topics.isEmpty) {
       return Padding(
         padding: const EdgeInsets.only(top: 150.0),
@@ -26,51 +66,99 @@ class TopicsListWidget extends StatelessWidget {
     }
 
     final totalHeight =
-        cardHeight + (topics.length - 1) * (cardHeight - overlap);
+        TopicsListWidget.cardHeight + (topics.length - 1) * _cardOffset;
+    final viewportHeight = MediaQuery.sizeOf(context).height * .45;
+    final visibleCards = _visibleCards(
+      topics: topics,
+      viewportHeight: viewportHeight,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0),
-      child: ClipRRect(
-        borderRadius: BorderRadiusGeometry.circular(18),
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height * .45,
-          child: SingleChildScrollView(
-            child: SizedBox(
-              height: totalHeight,
-              child: Stack(
-                children: List.generate(topics.length, (index) {
-                  final topic = topics[index];
+      child: SizedBox(
+        height: viewportHeight,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: SizedBox(
+            height: totalHeight,
+            child: Stack(
+              children: visibleCards.map(_buildPositionedTopic).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-                  final Color color = topic.colorValue != null
-                      ? Color(topic.colorValue!)
-                      : Colors.white;
-                  return Positioned(
-                    top: index * (cardHeight - overlap),
-                    left: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        getIt<AnalyticsService>().logTopicOpened(topic: topic);
-                        AutoRouter.of(context).push(
-                          TopicRoute(
-                            topicName: topic.topicName,
-                            topicId: topic.id,
-                            topicColor: color,
-                          ),
-                        );
-                      },
-                      child: CustomPaint(
-                        painter: MyPainter(initialColor: color),
-                        child: TopicBodyWidget(
-                          topic: topic,
-                          color: color,
-                          cardHeight: cardHeight,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+  Iterable<({int index, TopicSummary topic})> _visibleCards({
+    required List<TopicSummary> topics,
+    required double viewportHeight,
+  }) sync* {
+    final firstVisibleIndex = _firstVisibleIndex(topics.length);
+    final lastVisibleIndex = _lastVisibleIndex(topics.length, viewportHeight);
+
+    for (var index = firstVisibleIndex; index <= lastVisibleIndex; index++) {
+      yield (index: index, topic: topics[index]);
+    }
+  }
+
+  int _firstVisibleIndex(int topicCount) {
+    final firstPaintedOffset = _scrollOffset - TopicsListWidget.cardHeight;
+    final firstIndex = (firstPaintedOffset / _cardOffset).floor();
+
+    return _clampTopicIndex(firstIndex, topicCount);
+  }
+
+  int _lastVisibleIndex(int topicCount, double viewportHeight) {
+    final lastPaintedOffset = _scrollOffset + viewportHeight;
+    final lastIndex = (lastPaintedOffset / _cardOffset).ceil();
+
+    return _clampTopicIndex(lastIndex, topicCount);
+  }
+
+  int _clampTopicIndex(int index, int topicCount) {
+    if (index < 0) {
+      return 0;
+    }
+
+    final lastIndex = topicCount - 1;
+    if (index > lastIndex) {
+      return lastIndex;
+    }
+
+    return index;
+  }
+
+  Widget _buildPositionedTopic(({int index, TopicSummary topic}) visibleCard) {
+    final topic = visibleCard.topic;
+    final color = topic.colorValue != null
+        ? Color(topic.colorValue!)
+        : Colors.white;
+
+    return Positioned(
+      top: visibleCard.index * _cardOffset,
+      left: 0,
+      right: 0,
+      child: RepaintBoundary(
+        child: GestureDetector(
+          onTap: () {
+            getIt<AnalyticsService>().logTopicOpened(topic: topic);
+            AutoRouter.of(context).push(
+              TopicRoute(
+                topicName: topic.topicName,
+                topicId: topic.id,
+                topicColor: color,
               ),
+            );
+          },
+          child: CustomPaint(
+            isComplex: true,
+            willChange: false,
+            painter: MyPainter(initialColor: color),
+            child: TopicBodyWidget(
+              topic: topic,
+              color: color,
+              cardHeight: TopicsListWidget.cardHeight,
             ),
           ),
         ),

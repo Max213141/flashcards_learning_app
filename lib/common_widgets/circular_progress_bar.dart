@@ -29,19 +29,21 @@ class CircularProgressBar extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(7.0),
-          child: Stack(
-            alignment: AlignmentGeometry.center,
-            children: [
-              CircularProgressIndicator(
-                value: progress,
-                strokeWidth: 4,
-                strokeCap: StrokeCap.round,
+          child: progress == 0
+              ? Center(child: accomplishment)
+              : Stack(
+                  alignment: AlignmentGeometry.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: progress,
+                      strokeWidth: 4,
+                      strokeCap: StrokeCap.round,
 
-                color: indicatorColor,
-              ),
-              accomplishment,
-            ],
-          ),
+                      color: indicatorColor,
+                    ),
+                    accomplishment,
+                  ],
+                ),
         ),
       ),
     );

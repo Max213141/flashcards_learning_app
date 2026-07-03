@@ -126,7 +126,7 @@ class MyPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(covariant MyPainter oldDelegate) {
+    return oldDelegate.initialColor != initialColor;
   }
 }

@@ -25,7 +25,7 @@ class WordDefinitionScreenBody extends StatelessWidget {
     final l10n = l10nOf(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,8 +42,8 @@ class WordDefinitionScreenBody extends StatelessWidget {
           ),
           Text(wordData.transcription ?? '', style: AppConst.text),
           SizedBox(height: 15),
-          ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 355, height: 475),
+          Expanded(
+            // constraints: BoxConstraints.expand(width: 355, height: 475),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: AppConst.white,

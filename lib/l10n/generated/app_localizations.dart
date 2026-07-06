@@ -602,6 +602,24 @@ abstract class AppLocalizations {
   /// **'Daily \ngoal'**
   String get mainAppBarDailyGoalLabel;
 
+  /// No description provided for @languageSwitchTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change language'**
+  String get languageSwitchTooltip;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageRussian.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get languageRussian;
+
   /// No description provided for @filterButtonTitleAscSort.
   ///
   /// In en, this message translates to:

@@ -8,10 +8,26 @@ Flutter mobile app for learning languages with topic-based flashcards.
 - Add, edit, and delete flashcards.
 - Practice words from a topic.
 - Track learned words and daily progress.
+- Switch the app UI language between English and Russian.
 - Import words from JSON.
 - Export and restore a full local JSON backup.
 - Generate word drafts locally with an on-device AI model.
 - In-dialog info panels explain topic creation, JSON import prompts, backup restore, and manual word creation.
+
+## Localization
+
+The app uses Flutter gen-l10n with English and Russian ARB files. The selected
+locale is controlled by `LocaleBloc`, persisted through
+`AppLocalePreferences`, and applied at the `MaterialApp.router` level so the UI
+rebuilds immediately after a language change.
+
+- Bloc: `lib/blocs/locale_bloc/locale_bloc.dart`
+- Preferences: `lib/utils/app_locale_preferences.dart`
+- Switch UI: `lib/screens/main_screen/widgets/languge_switch/language_switch_button.dart`
+
+The main-screen app bar includes a styled rounded language popup using app
+colors from `AppConst`; default Material tap splash/highlight overlays are
+disabled so selected language styling stays visually stable while pressed.
 
 ## In-Dialog Help
 

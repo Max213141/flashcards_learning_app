@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flashcards_learning_app/blocs/backup_bloc/backup_bloc.dart';
 import 'package:flashcards_learning_app/blocs/goals_bloc/goals_bloc.dart';
+import 'package:flashcards_learning_app/blocs/locale_bloc/locale_bloc.dart';
 import 'package:flashcards_learning_app/blocs/topic_bloc/topic_bloc.dart';
 import 'package:flashcards_learning_app/common_widgets/flashcards_loader.dart';
 import 'package:flashcards_learning_app/data/local/topic_summary.dart';
@@ -24,21 +25,29 @@ class MockBackupBloc extends MockBloc<BackupEvent, BackupState>
 class MockGoalsBloc extends MockBloc<GoalsEvent, GoalsState>
     implements GoalsBloc {}
 
+class MockLocaleBloc extends MockBloc<LocaleEvent, LocaleState>
+    implements LocaleBloc {}
+
 void main() {
   late MockTopicBloc topicBloc;
   late MockBackupBloc backupBloc;
   late MockGoalsBloc goalsBloc;
+  late MockLocaleBloc localeBloc;
 
   setUpAll(() {
     registerFallbackValue(const TopicEvent.started());
     registerFallbackValue(const BackupEvent.statusConsumed());
     registerFallbackValue(const GoalsEvent.started());
+    registerFallbackValue(
+      const LocaleEvent.localeChanged(locale: Locale('en')),
+    );
   });
 
   setUp(() async {
     topicBloc = MockTopicBloc();
     backupBloc = MockBackupBloc();
     goalsBloc = MockGoalsBloc();
+    localeBloc = MockLocaleBloc();
 
     when(() => topicBloc.state).thenReturn(const TopicState.initial());
     whenListen(
@@ -61,6 +70,15 @@ void main() {
       initialState: const GoalsState.initial(),
     );
 
+    when(
+      () => localeBloc.state,
+    ).thenReturn(const LocaleState(locale: Locale('en')));
+    whenListen(
+      localeBloc,
+      const Stream<LocaleState>.empty(),
+      initialState: const LocaleState(locale: Locale('en')),
+    );
+
     await getIt.reset();
   });
 
@@ -76,6 +94,7 @@ void main() {
             BlocProvider<TopicBloc>.value(value: topicBloc),
             BlocProvider<BackupBloc>.value(value: backupBloc),
             BlocProvider<GoalsBloc>.value(value: goalsBloc),
+            BlocProvider<LocaleBloc>.value(value: localeBloc),
           ],
           child: const MainScreenView(),
         ),
@@ -90,7 +109,14 @@ void main() {
     getIt.registerFactory<BackupBloc>(() => backupBloc);
     getIt.registerFactory<GoalsBloc>(() => goalsBloc);
 
-    await tester.pumpWidget(const MaterialApp(home: MainScreen()));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: BlocProvider<LocaleBloc>.value(
+          value: localeBloc,
+          child: const MainScreen(),
+        ),
+      ),
+    );
 
     verify(() => topicBloc.add(const TopicEvent.started())).called(1);
     verify(() => goalsBloc.add(const GoalsEvent.started())).called(1);
@@ -248,6 +274,37 @@ void main() {
       () => topicBloc.add(
         const TopicEvent.sortChanged(sortOption: TopicSortOption.colorAsc),
       ),
+    ).called(1);
+  });
+
+  testWidgets('language switch dispatches selected locale', (tester) async {
+    final loadedState = TopicState.loaded(
+      selectedSort: TopicSortOption.createdDesc,
+      topics: const [
+        TopicSummary(
+          id: 1,
+          topicName: 'Animals',
+          colorValue: 0xFFA89DEF,
+          totalWords: 2,
+          learnedWords: 1,
+        ),
+      ],
+    );
+
+    when(() => topicBloc.state).thenReturn(loadedState);
+    whenListen(topicBloc, Stream.value(loadedState), initialState: loadedState);
+
+    await pumpMainScreenView(tester);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('language_switch_button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Russian'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () =>
+          localeBloc.add(const LocaleEvent.localeChanged(locale: Locale('ru'))),
     ).called(1);
   });
 

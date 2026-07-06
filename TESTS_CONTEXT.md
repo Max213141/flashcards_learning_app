@@ -9,6 +9,7 @@ This file summarizes the main test additions currently present under `test/`.
   - pure utils
   - entities
 - Local AI coverage is in place for parser validation, setup/download/generation bloc behavior, and the AI form draft-fill/save flow.
+- Locale switching coverage is in place for preference-backed locale state changes and main-screen language switch dispatch.
 - Phase 2 widget coverage is started for key screens and their main state/listener behaviors.
 
 ## Test Folder Structure
@@ -40,6 +41,7 @@ This file summarizes the main test additions currently present under `test/`.
   - `test/mocks/mock_app_database.dart`
 - Unit blocs:
   - `test/unit/blocs/ai_word_draft_bloc_test.dart`
+  - `test/unit/blocs/locale_bloc_test.dart`
   - `test/unit/blocs/topic_bloc_test.dart`
   - `test/unit/blocs/topic_creation_bloc_test.dart`
   - `test/unit/blocs/backup_bloc_test.dart`
@@ -70,6 +72,17 @@ This file summarizes the main test additions currently present under `test/`.
 - Unit tests are prioritized for business logic and edge cases.
 - Widget tests stay compact and stable, validating screen wiring and user-visible state transitions.
 - Tests avoid deep layout assertions and focus on behavior contracts.
+
+## Locale Switch Test Coverage
+
+- `LocaleBloc`
+  - loads a stored locale on `started`
+  - persists and emits a selected locale
+  - emits nothing when the selected locale is unchanged
+  - falls back to English for unsupported locales
+- `MainScreenView`
+  - provides the app-level locale bloc in the widget harness
+  - verifies the language switch dispatches `LocaleEvent.localeChanged(locale: Locale('ru'))`
 
 ## Local AI Test Coverage
 

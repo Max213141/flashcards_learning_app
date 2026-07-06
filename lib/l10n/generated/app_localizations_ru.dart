@@ -297,6 +297,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mainAppBarDailyGoalLabel => 'Дневная \nцель';
 
   @override
+  String get languageSwitchTooltip => 'Сменить язык';
+
+  @override
+  String get languageEnglish => 'Английский';
+
+  @override
+  String get languageRussian => 'Русский';
+
+  @override
   String get filterButtonTitleAscSort => 'По названию (A-Z)';
 
   @override

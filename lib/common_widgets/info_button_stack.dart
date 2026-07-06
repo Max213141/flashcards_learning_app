@@ -26,8 +26,8 @@ class InfoButtonStack extends StatelessWidget {
       children: [
         child,
         Positioned(
-          top: -24,
-          right: -24,
+          top: -10,
+          right: -12,
           child: IconButton(
             tooltip: tooltip,
             onPressed: onTap,

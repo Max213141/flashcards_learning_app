@@ -6,22 +6,27 @@ class AppLocalePreferences {
   static const Locale defaultLocale = Locale('en');
   static const Set<String> supportedLanguageCodes = {'en', 'ru'};
 
+  static Locale supportedLocaleOrDefault(Locale locale) {
+    if (!supportedLanguageCodes.contains(locale.languageCode)) {
+      return defaultLocale;
+    }
+
+    return Locale(locale.languageCode);
+  }
+
   static Future<Locale> getCurrentLocale() async {
     final prefs = await SharedPreferences.getInstance();
     final languageCode = prefs.getString(_localeCodeKey);
 
-    if (languageCode == null ||
-        !supportedLanguageCodes.contains(languageCode)) {
+    if (languageCode == null) {
       return defaultLocale;
     }
 
-    return Locale(languageCode);
+    return supportedLocaleOrDefault(Locale(languageCode));
   }
 
   static Future<void> setCurrentLocale(Locale locale) async {
-    final languageCode = supportedLanguageCodes.contains(locale.languageCode)
-        ? locale.languageCode
-        : defaultLocale.languageCode;
+    final languageCode = supportedLocaleOrDefault(locale).languageCode;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_localeCodeKey, languageCode);
   }

@@ -17,7 +17,7 @@ This document is the working reference for current development. It reflects the 
   - backup all words to JSON
   - restore backup JSON by fully replacing local data
 
-## Current State (as of 2026-06-22)
+## Current State (as of 2026-07-06)
 
 - Local persistence is implemented with Drift (SQLite).
 - Main screen topic list is DB-backed and driven by a stream.
@@ -32,6 +32,8 @@ This document is the working reference for current development. It reflects the 
 - Backup export is implemented from current DB data.
 - Backup restore is implemented as a full replace operation (delete existing local data, recreate topics + words from backup JSON).
 - Main-screen goal widgets are now reactive and update from DB streams.
+- App locale is now reactive. `LocaleBloc` owns the selected locale, persists it through `AppLocalePreferences`, and rebuilds `MaterialApp.router` when the language changes.
+- The main-screen app bar includes a rounded English/Russian language switch popup styled with `AppConst` colors and no default grey Material press overlay.
 - Feature workflows use `flutter_bloc` blocs registered through `get_it`.
 - Navigation uses `auto_route`.
 
@@ -40,7 +42,16 @@ This document is the working reference for current development. It reflects the 
 Entry:
 
 - `lib/main.dart`: app entry point
-- `lib/my_app.dart`: `MaterialApp.router` setup
+- `lib/my_app.dart`: `MaterialApp.router` setup and app-level `LocaleBloc` provider
+
+Localization:
+
+- `lib/l10n/app_en.arb`
+- `lib/l10n/app_ru.arb`
+- `lib/l10n/generated/`
+- `lib/utils/app_locale_preferences.dart`
+- `lib/blocs/locale_bloc/locale_bloc.dart`
+- `lib/screens/main_screen/widgets/languge_switch/language_switch_button.dart`
 
 Routing:
 
@@ -57,6 +68,7 @@ Routing:
 - `lib/screens/main_screen/main_screen.dart`
   - Reads topic summaries from `AppDatabase.watchTopicSummaries(...)`
   - Supports sorting topic list
+  - Shows the app bar language switch for English/Russian UI locale changes
   - Exports backup JSON
   - Restores backup JSON after confirmation dialog
   - Opens topic-creation popup from the FAB menu
@@ -224,7 +236,7 @@ Failure behavior:
     - `word_form_controllers.dart`
 
 - `lib/screens/main_screen/widgets/`
-  - contains topic list UI, sort widgets, create-topic popup, restore confirmation body, and their info-panel widgets
+  - contains topic list UI, sort widgets, language switch, create-topic popup, restore confirmation body, and their info-panel widgets
 
 - `lib/screens/topic_screen/widgets/add_word_info_widget/`
   - contains the manual add-word info panel and row widget

@@ -100,7 +100,13 @@ class SlidableWordWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Center(
-                        child: Text(wordEntity.word, style: AppConst.h2),
+                        child: Text(
+                          wordEntity.word,
+                          style: AppConst.h2,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     const VerticalDivider(

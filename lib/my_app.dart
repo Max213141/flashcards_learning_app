@@ -1,7 +1,10 @@
+import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/l10n/l10n.dart';
 import 'package:flashcards_learning_app/router/app_router.dart';
+import 'package:flashcards_learning_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 
 class MyApp extends StatelessWidget {
@@ -21,28 +24,36 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: appRouter.config(),
-      locale: locale,
-      onGenerateTitle: (context) => l10nOf(context).appTitle,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          bodySmall: TextStyle(color: AppConst.black),
-          bodyMedium: TextStyle(color: AppConst.black),
-          bodyLarge: TextStyle(color: AppConst.black),
-        ),
-        scaffoldBackgroundColor: AppConst.background,
-        appBarTheme: AppBarTheme(backgroundColor: AppConst.background),
-      ),
+    return BlocProvider(
+      create: (_) => getIt<LocaleBloc>(param1: locale),
+      child: BlocBuilder<LocaleBloc, LocaleState>(
+        buildWhen: (previous, current) => previous.locale != current.locale,
+        builder: (context, state) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: appRouter.config(),
+            locale: state.locale,
+            onGenerateTitle: (context) => l10nOf(context).appTitle,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodySmall: TextStyle(color: AppConst.black),
+                bodyMedium: TextStyle(color: AppConst.black),
+                bodyLarge: TextStyle(color: AppConst.black),
+              ),
+              scaffoldBackgroundColor: AppConst.background,
+              appBarTheme: AppBarTheme(backgroundColor: AppConst.background),
+            ),
 
-      // WordDefinitionScreen(
-      //   word: 'lkgr',
-      //   word: 'lkgrw',
-      //   topic: 'nkgrkgrkl',
-      // ),
+            // WordDefinitionScreen(
+            //   word: 'lkgr',
+            //   word: 'lkgrw',
+            //   topic: 'nkgrkgrkl',
+            // ),
+          );
+        },
+      ),
     );
   }
 }

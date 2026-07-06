@@ -1,6 +1,6 @@
 # Bloc Layer Context
 
-This file documents the current bloc layer used by the app. It reflects the active uncommitted workspace state, including topic/word workflows, backup/restore, goals, tests, and local AI setup/generation.
+This file documents the current bloc layer used by the app. It reflects the active uncommitted workspace state, including topic/word workflows, backup/restore, goals, locale switching, tests, and local AI setup/generation.
 
 ## General Rules
 
@@ -196,6 +196,43 @@ Single state object with:
 - Parses dialog inputs to integers before saving.
 - Calls `AppDatabase.saveUserGoals(...)`.
 - Cancels both stream subscriptions and the timer in `close()`.
+
+## LocaleBloc
+
+**Purpose**
+
+Owns the app-wide selected UI locale.
+
+**Main responsibilities**
+
+- Loads the persisted locale from `AppLocalePreferences`
+- Persists user-selected locale changes
+- Emits the active `Locale` so `MaterialApp.router` rebuilds with the selected l10n
+- Falls back to the default English locale for unsupported language codes
+
+**Events**
+
+- `started()`: loads the currently stored locale from preferences
+- `localeChanged(locale)`: validates, persists, and emits a newly selected locale
+
+**State**
+
+Single state object with:
+
+- `locale`
+
+**Main logic**
+
+- The bloc starts with an injected initial locale, usually the value read in `main.dart` before `runApp`.
+- `MyApp` provides `LocaleBloc` above `MaterialApp.router` and reads `state.locale` for the `locale` property.
+- `AppLocalePreferences.supportedLocaleOrDefault(...)` normalizes locales and limits supported language codes to English and Russian.
+- Selecting the already-active locale emits no new state.
+
+**UI integration**
+
+- `MainScreenView` exposes `LanguageSwitchButton` in the app bar.
+- `LanguageSwitchButton` dispatches `LocaleEvent.localeChanged(...)`.
+- The popup is styled with `AppConst` colors and rounded borders; local `Theme` overrides remove the default grey Material splash/highlight while pressing menu items.
 
 ## TopicDetailBloc
 

@@ -3,6 +3,7 @@ import 'package:flashcards_learning_app/blocs/blocs.dart';
 import 'package:flashcards_learning_app/common_widgets/widgets.dart';
 import 'package:flashcards_learning_app/core/app_constants.dart';
 import 'package:flashcards_learning_app/l10n/l10n.dart';
+import 'package:flashcards_learning_app/screens/main_screen/widgets/languge_switch/widgets.dart';
 import 'package:flashcards_learning_app/screens/main_screen/widgets/widgets.dart';
 import 'package:flashcards_learning_app/utils/analytics_service.dart';
 import 'package:flashcards_learning_app/utils/crashlytics_consent_manager.dart';
@@ -108,6 +109,7 @@ class _MainScreenViewState extends State<MainScreenView> {
           backgroundColor: AppConst.primary,
           elevation: 0,
           scrolledUnderElevation: 0,
+          actions: const [LanguageSwitchButton()],
         ),
         backgroundColor: AppConst.background,
         floatingActionButton: RotatingFab(
